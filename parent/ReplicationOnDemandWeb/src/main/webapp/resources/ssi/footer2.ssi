@@ -1,0 +1,65 @@
+<!--vv  footer vv-->
+<table width="100%" border="0" style="min-width:1020px;" cellpadding="0" cellspacing="0" summary="container for NGA footer">
+	<tr>
+		<td width="100%">
+<div class="noWrappingF">
+
+	<!--- --- --- Footer --- --- --->
+	<div id="FooterContainer">
+		<div id="Footer">
+
+			<div id="footerLeft" class="FooterLinks">
+				<div id="footermenuid" class="FooterMenu">
+						  <!--
+						  <div class="BottomLink">
+							  <a class="FooterContactInfo" href="">Link 1</a>
+						  </div>
+						  <div class="BottomLinkBar">
+							  &nbsp;
+						  </div>
+						  <div class="BottomLink">
+							  <a class="FooterContactInfo" href="">Link 2</a>
+						  </div>
+						  <div class="BottomLinkBar">
+							  &nbsp;
+						  </div>
+						  <div class="BottomLink">
+							  <a class="FooterContactInfo" href="">Link 3</a>
+						  </div>
+						  -->
+				</div>
+			</div>
+
+			<div id="footerRight" class="FooterLinks">
+				<div id="footermenuid" class="FooterMenu">
+				  <div id="NGABottomLinks">
+					  <div id="NGABottomLinksContainer">
+						  <div class="BottomLink">
+							  <a class="FooterContactInfo" href="https://www1.geoint.nga.mil/Support/Pages/default.aspx" title="Support">Support</a>
+						  </div>
+						  <div class="BottomLinkBar">
+							  &nbsp;
+						  </div>
+						  <div class="BottomLink">
+							  <a class="FooterContactInfo" style="cursor:default; text-decoration:none;">800-455-0899</a>
+						  </div>
+						  <div class="BottomLinkBar">
+							  &nbsp;
+						  </div>
+						  <div class="BottomLink">
+							  <a class="FooterContactInfo" href="https://www1.geointel.nga.mil/feedback/" title="Feedback">Feedback</a>
+						  </div>
+					</div>
+				</div>
+			  </div>
+		   </div>
+
+	    </div>
+	</div>
+	<!--- --- --- Footer --- --- --->
+</div>
+		</td>
+	</tr>
+</table>
+<!--^^  footer ^^-->
+

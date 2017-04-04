@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Replication on Demand</title>
+    <link rel="shortcut icon" type="image/x-icon" href="#{resource['images/favicon.ico']}" />
+    <h:outputStylesheet name="css/default.css" />
+    <h:outputStylesheet name="css/agency.css" />
+    <script type="text/javascript">
+        function start() {
+		    PF('statusDialog').show();
+        }
+        function stop() {
+		    PF('statusDialog').hide();
+        }
+    </script>
+</h:head>
+<h:body>
+    <!-- vvvv Template header data vvvv -->
+    <div class="classif">
+        <a name="top"></a>
+		Dynamic content highest classification up to <b>UNCLASSIFIED</b>
+	</div>
+	<style>
+	    body { min-width:1020px; }
+    </style>
+    <form  method="get" 
+           action="http://search.nga.mil/search" 
+           name="searchform" 
+           onsubmit="if (document.searchform.q.value=='')  { alert('Please enter search query.'); document.getElementById('search').value='Search'; return false;}" style="margin:0px;">
+        <table style="background: url(#{resource['icons/bannerBackDropUWP.gif']} repeat-x;" 
+               width="100%" 
+               border="0" 
+               cellpadding="0" 
+               cellspacing="0" summary="Container for NGA logo"> 
+	    <tr>
+            <td>
+	  	        <map name="nga_circle_map_coords">
+			        <area shape="circle" coords="58,32,31" href="http://www.nga.mil/index.php" />
+		        </map>
+		        <img src="#{resource['icons/NGA_BannerUWP.png']}" border="0" usemap="#nga_circle_map_coords" alt="NGA Home" />
+            </td>
+            <td class="alignMiddle" nowrap="nowrap">
+		        <div id="NGATopLinks">
+			        <div id="NGATopLinksContainer">
+				        <div class="TopLink">
+					        <a href="https://www1.geoint.nga.mil" title="NGA" target="_blank">NGA</a>
+				        </div>
+				        <div class="TopLinkBar">&nbsp;</div>
+				        <div class="TopLink">
+					        <a href="https://www1.geoint.nga.mil/Location/Countries/Pages/default.aspx" title="Map of the World" target="_blank">Map</a>
+				        </div>
+				        <div class="TopLinkBar">&nbsp;</div>
+				        <div class="TopLink">
+					        <a href="https://apps.nga.mil/" title="Apps" target="_blank">Apps</a>
+				        </div>
+				        <div class="TopLinkBar">&nbsp;</div>
+				        <div class="TopLink">
+					        <a href="https://www1.geoint.nga.mil/Support/SiteIndex/Pages/SiteIndex.aspx" title="Index" target="_blank">Index</a>
+				        </div>
+			        </div>
+		        </div>
+	        </td>
+            <td class="alignMiddle" nowrap="nowrap">
+		        <div id="SearchBox">
+			        <div id="SearchBoxRow">
+			            <input name="q" id="search" value="Search"  onclick="javascript:return clearField(this);" />
+			            <input name="SearchSubmitButton"
+			                   onmouseover="this.src='#{resource['icons/search_hover.png']}" 
+			                   onmouseout="this.src='#{resource['icons/search_button.png']}" 
+			                   onclick='return true;' 
+			                   src="#{resource['icons/search_button.png']}" type="image"  />
+			            <input type="hidden" name="site" value="default_collection" />
+			            <input type="hidden" name="client" value="default_frontend" />
+			            <input type="hidden" name="proxystylesheet" value="default_frontend" />
+			            <input type="hidden" name="as_sitesearch" value="" />
+			            <input type="hidden" name="output" value="xml_no_dtd" />
+			            <span>&nbsp;&nbsp;
+			                <a title="Advanced Search" 
+			                   href="http://search.nga.mil/search?access=p&amp;output=xml_no_dtd&amp;sort=&amp;ie=UTF-8&amp;as_sitesearch=&amp;SearchSubmitButton.y=13&amp;client=default_frontend&amp;q=&amp;ud=1&amp;site=default_collection&amp;SearchSubmitButton.x=13&amp;oe=UTF-8&amp;proxystylesheet=default_frontend&amp;ip=&amp;proxycustom=%3CADVANCED&amp;entqr=0">Advanced Search</a> </span>
+			        </div>
+		        </div>
+		        <script type="text/javascript">
+			        function clearField(input) {
+				        document.getElementById('search').value='';
+				        return true;
+			        }
+		        </script>
+	        </td>
+        </tr>
+	</table>
+	</form>
+	<div id="bread-crumbs">
+        <a href="/">NGA</a> &gt; 
+	</div>
+	<div id="content">
+		<h1 class="page-title"><img src="#{resource['icons/agency-bullet.gif']}" alt="" /> 
+Replication on Demand
+		</h1>
+	</div>
+	<br clear="all" />
+	<!-- ^^^^ Template header data ^^^^ -->
+	<!-- vvvv Content Section vvvv -->
+	<h:form id="facesContentForm"> <!-- Enclose the content section in a form -->
+	<p:growl id="messages"  
+	    	 showDetail="true" 
+	    	            sticky="true" 
+	    	            closeable="true" />
+              
+	  <p:panel styleClass="top-aligned">
+	    <p:dataTable id="filteredProductListDT"
+	                 widgetVar="filteredProductsDataTable"
+    	             value="#{filteredProductTypeView.products}"
+    	             rowKey="#{product.NSN}" 
+                     var="product"
+                     paginator="true" 
+                     rows="15"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15"
+                     selectionMode="single" 
+                     selection="#{filteredProductTypeView.selectedProduct}"
+                     styleClass="top-aligned"
+                     filteredValue="#{filteredProductTypeView.filteredProducts}">
+          <f:facet name="header">
+            <h:outputText value="Available ISOs"></h:outputText>
+          </f:facet>
+          <p:column headerText="Product" 
+                    filterMatchMode="exact"
+                    sortBy="#{product.productType}"
+                    filterBy="#{product.productType}">
+            <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('filteredProductsDataTable').filter()" >
+                	<f:selectItem itemLabel="Select One" 
+                	              itemValue="#{null}" 
+                	              noSelectionOption="true"/>
+                    <f:selectItems value="#{filteredProductTypeView.availableProductTypes}" />
+                </p:selectOneMenu>
+            </f:facet>
+            <h:outputText value="#{product.productType}" style="center" />
+          </p:column>
+          <p:column headerText="Country" 
+                    filterMatchMode="exact"
+                    sortBy="#{product.countryName}"
+                    filterBy="#{product.countryName}">
+            <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('filteredProductsDataTable').filter()" >
+                	<f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{filteredProductTypeView.availableCountryNames}" />
+                </p:selectOneMenu>
+            </f:facet>
+            <h:outputText value="#{product.countryName}" />
+          </p:column>
+          <p:column headerText="AOR" 
+                    filterMatchMode="exact"
+                    sortBy="#{product.aorCode}"
+                    filterBy="#{product.aorCode}">
+              <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('filteredProductsDataTable').filter()" >
+                	<f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{filteredProductTypeView.availableAORs}" />
+                </p:selectOneMenu>
+              </f:facet>
+            <h:outputText value="#{product.aorCode}" />
+          </p:column>
+          <p:column headerText="NSN" 
+                    sortBy="#{product.NSN}"
+                    filterBy="#{product.NSN}"
+                    filterMatchMode="contains">
+            <h:outputText value="#{product.NSN}"></h:outputText>
+          </p:column>
+          <p:column headerText="NRN" 
+                    sortBy="#{product.NRN}"
+                    filterBy="#{product.NRN}"
+                    filterMatchMode="contains">
+            <h:outputText value="#{product.NRN}"></h:outputText>
+          </p:column>
+          <p:column headerText="Edition"
+                    sortBy="#{product.edition}">
+            <h:outputText value="#{product.edition}"></h:outputText>
+          </p:column>
+          <p:column headerText="Media Name"
+                    sortBy="#{product.mediaName}">
+            <h:outputText value="#{product.mediaName}"></h:outputText>
+          </p:column>
+          <p:column headerText="Load Date" 
+                    filterBy="#{product.loadDateString}"
+                    sortBy="#{product.loadDateString}"
+                    filterMatchMode="contains">
+            <h:outputText value="#{product.loadDateString}"></h:outputText>
+          </p:column>
+                    <p:column headerText="File Date" 
+                    filterBy="#{product.fileDateString}"
+                    sortBy="#{product.fileDateString}"
+                    filterMatchMode="contains">
+            <h:outputText value="#{product.fileDateString}"></h:outputText>
+          </p:column>
+          <p:column headerText="Download">
+              <p:commandButton value="Download" 
+                               ajax="false" 
+                               icon="ui-icon-arrowthick-1-s"
+                               onClick="PrimeFaces.monitorDownload(start, stop);">
+                  <p:fileDownload value="#{downloadBean.getFile(product)}" />
+              </p:commandButton>
+          </p:column>
+      </p:dataTable>
+	
+	
+	         </p:panel>
+	</h:form>
+	<!-- Dialog box -->
+	<p:dialog widgetVar="statusDialog" 
+    		  modal="true"
+    		  draggable="false"
+    		  closeable="false"
+    		  resizable="false"
+    		  showHeader="false">
+        <p:graphicImage value="#{resource['images/loading.gif']}"></p:graphicImage>
+    </p:dialog>
+    
+<!-- ^^^^ Content Section ^^^^ -->
+	<!-- vvvv Template footer data vvvv -->
+	    <br clear="all" />
+            <div class="poc-info">
+	            <strong>Point of Contact:</strong> Replication on Demand<br />
+                L. Craig Carpenter TICP<br />
+	            phone 636-321-5503, DSN 577-5503<br />
+	            <a href="mailto:Email@xxx.xxx">Email@lester.c.carpenter.ctr@nga.mil</a> 
+	            <br /><br />
+	            <strong>Web Page Point of Contact:</strong><br />
+                NGA Enterprise Service Center Desk<br />
+                Commercial 1-800-455-0899<br />
+                DSN 547-5555<br />
+                Secure 578-5555<br />
+                <a href="mailto:EnterpriseServiceCenter@nga.mil">EnterpriseServiceCenter@nga.mil</a> 
+           </div>
+	<table width="100%" border="0" style="min-width:1020px;" cellpadding="0" cellspacing="0" summary="container for NGA footer">
+	    <tr>
+		    <td width="100%">
+		        <div class="noWrappingF">
+		            <div id="FooterContainer">
+		                <div id="Footer">
+			                <div id="footerLeft" class="FooterLinks">
+				                <div id="footermenuid" class="FooterMenu">
+				                </div>
+				            </div>
+				            <div id="footerRight" class="FooterLinks">
+				                <div id="footermenuid" class="FooterMenu">
+				                    <div id="NGABottomLinks">
+					                    <div id="NGABottomLinksContainer">
+						                    <div class="BottomLink">
+							                    <a class="FooterContactInfo" 
+							                       href="https://www1.geoint.nga.mil/Support/Pages/default.aspx" 
+							                       title="Support">Support</a>
+						                    </div>
+						                <div class="BottomLinkBar">&nbsp;</div>
+						                <div class="BottomLink">
+							                <a class="FooterContactInfo" 
+							                   style="cursor:default; text-decoration:none;">800-455-0899</a>
+						                </div>
+						                <div class="BottomLinkBar">&nbsp;</div>
+						                <div class="BottomLink">
+							                <a class="FooterContactInfo" 
+							                   href="https://www1.geointel.nga.mil/feedback/" 
+							                   title="Feedback">Feedback</a>
+						                </div>
+				                    </div>
+				                </div>
+			                </div>
+			            </div>
+			        </div>
+		         </div>
+		       </div>
+		    </td>
+		</tr>
+    </table>
+    <div class="classif">
+		Dynamic content highest classification up to <b>UNCLASSIFIED</b>
+	</div>	
+	<!-- ^^^^ Template footer data ^^^^ -->
+</h:body>
+</html>

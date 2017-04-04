@@ -1,0 +1,27 @@
+@CHARSET "UTF-8";
+
+.ui-widget, .ui-widget, .ui-widget {
+	font-size: 75%;
+}
+
+.ui-panel {
+	vertical-align: top !important;
+}
+
+.ui-panelgrid > * > tr, .ui-panelgrid > * > tr > td.ui-panelgrid-cell {
+	border: none !important;
+}
+
+.ui-growl {
+    position: fixed !important;
+	top: 40% !important;
+	left: 37% !important;
+	width: 360px !important;
+	height: 110px !important;
+	z-index: 9999 !important;
+}
+
+.ui-picklist-list {
+	width: 150px !important;
+	height: 175px !important;
+}

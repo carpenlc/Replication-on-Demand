@@ -1,0 +1,131 @@
+<table width="100%" border="0" style="min-width:1020px;" cellpadding="0" cellspacing="0" summary="container for NGA header">
+	<tr>
+		<td width="100%">
+<div class="noWrappingH">
+  
+        <!--- --- --- Branding --- --- --->
+        <div id="Branding">
+            <div id="BrandingInner">
+                <div id="BrandingContainer">
+                    <!-- Logo -->
+                    <div id="NGAHeaderLogo">
+                        <a id="imgAnchrLogo" href="http://www.nga.mil/index.php">
+                            <img alt="NGA Banner" title="NGA Banner" src="/test/icons/NGAWebheader_logo.png" id="imgLogo" class="LogoWrapper"
+                                border="0" /></a>
+                    </div>
+                    <!-- End Logo -->
+                    <div id="RightBranding">
+                        <!-- Top Links -->
+                        
+						<div id="NGATopLinks">
+                            <div id="NGATopLinksContainer">
+                                <div class="TopLink">
+                                    <a href="https://www1.geoint.nga.mil" title="NGA" target="_blank">NGA</a>
+                                </div>
+                                <div class="TopLinkBar">
+                                    &nbsp;
+								</div>
+                                <div class="TopLink">
+                                    <a href="https://www1.geoint.nga.mil/Location/Countries/Pages/default.aspx" title="Map of the World" target="_blank">Map</a>
+								</div>
+                                <div class="TopLinkBar">
+                                    &nbsp;
+								</div>
+                                <div class="TopLink">
+                                    <a href="https://apps.nga.mil/" title="Apps" target="_blank">Apps</a>
+								</div>
+								<div class="TopLinkBar">
+									&nbsp;
+								</div>
+								<div class="TopLink">
+									<a href="https://www1.geoint.nga.mil/Support/SiteIndex/Pages/SiteIndex.aspx" title="Index" target="_blank">Index</a>
+								</div>
+				
+                            </div>
+                        </div>
+
+                        <!-- End Top Links -->
+
+				        <!-- Search -->									
+
+                        <div id="SearchBoxDiv" class="SearchBoxDiv">
+
+						<!-- Search on NIPRNet using Google Search Appliance -->
+						<!--form  method="get" action="http://search.nga.mil/search" name="searchform" onsubmit="if (document.searchform.q.value=='')  { alert('Please enter search query.'); document.getElementById('search').value='Search'; return false;}"-->
+                        <form name="aspnetForm" method="post" action="SearchCenter.aspx?k=test" onsubmit="javascript:return WebForm_OnSubmit();" id="aspnetForm">
+								  <div id="SearchBox">
+									  <div id="SearchBoxRow">
+										  <table><tr><td>
+										  <input name="q" id="search" value="Search"  onclick="javascript:return clearField(this);" />
+										  </td><td>
+										  <input style="" onmouseover="this.src='/test/icons/search_hover.png'" onmouseout="this.src='/test/icons/search_button.png'" onclick='return true;' src="/test/icons/search_button.png" type="image" name="SearchSubmitButton" />
+										  </td><td>
+										  <input type="hidden" name="site" value="default_collection" />
+										  <input type="hidden" name="client" value="default_frontend" />
+										  <input type="hidden" name="proxystylesheet" value="default_frontend" />
+										  <input type="hidden" name="as_sitesearch" value="" />
+										  <input type="hidden" name="output" value="xml_no_dtd" />
+
+										  <span>&nbsp;&nbsp;<a title="Advanced Search" href="http://search.nga.mil/search?access=p&entqr=0&output=xml_no_dtd&sort=&ie=UTF-8&as_sitesearch=&SearchSubmitButton.y=13&client=default_frontend&q=&ud=1&site=default_collection&SearchSubmitButton.x=13&oe=UTF-8&proxystylesheet=default_frontend&ip=&proxycustom=%3CADVANCED/%3E">
+											  Advanced Search</a> </span>
+										  </td></tr></table>
+									  </div>
+								  </div>
+							  </div>
+							  <script type="text/javascript">
+								  function clearField(input) {
+									  document.getElementById('search').value='';
+									  return true;
+								  }
+							  </script>
+						</form>			
+						
+
+  <!--   optional SEARCH using Autonomy below  
+                                 
+						  <div id="SearchBox" >
+							  <div id="SearchBoxRow">
+							  	<form name="aspnetForm"  method="post" onsubmit="javascript:return WebForm_OnSubmit(this);" id="aspnetForm">
+								  <span>
+								  <input name="ctl00$SearchBox1$SearchTextBox" type="text" id="ctl00_SearchBox1_SearchTextBox" value="Search" onclick="javascript:return clearField(this);"/>
+								  <input type="image" name="ctl00$SearchBox1$SearchSubmitButton" id="ctl00_SearchBox1_SearchSubmitButton" onmouseover="this.src='/test/icons/search_hover.png'" onmouseout="this.src='/test/icons/search_button.png'" src="/test/icons/search_button.png" style="border-width:0px;" />
+								   &nbsp;&nbsp;<a href="http://www1.nga.mil/SearchCenter/Pages/SearchCenter.aspx?showAdvanced=true" title="Advanced Search">Advanced Search</a>
+								  </span>
+						  		</form>
+							  </div>
+						  </div>  
+						  <script type="text/javascript">
+						  	  function clearField(input) {
+							  	  document.getElementById('ctl00_SearchBox1_SearchTextBox').value='';
+								  return true;
+							  }
+							  
+							  function WebForm_OnSubmit(form) {
+							  	  var uSearchTerm = document.getElementById('ctl00_SearchBox1_SearchTextBox').value;
+								  if (uSearchTerm=='')  { 
+								  		alert('Please enter search query.'); 
+										document.getElementById('ctl00_SearchBox1_SearchTextBox').value='Search';
+										return false;
+								 } else {
+								  		var searchUrl = "http://www1.nga.mil/SearchCenter/Pages/SearchCenter.aspx?k\=" + uSearchTerm;
+							  	  		form.action = searchUrl;  
+							  	  		return true;
+							  	 }
+							  }
+						</script>
+
+                        </div>
+  -->
+									
+                        <!-- End of Search -->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--- --- --- End of Branding --- --- --->
+</div>
+		</td>
+	</tr>
+</table>
