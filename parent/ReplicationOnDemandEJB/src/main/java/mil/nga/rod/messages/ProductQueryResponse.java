@@ -22,48 +22,48 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductQueryResponse implements Serializable {
 
-	/**
-	 * Eclipse-generated serialVersionUID
-	 */
-	private static final long serialVersionUID = -2146231769774999045L;
-	
-	/**
-	 * Private internal list containing the ISO files matching the client
-	 * initiated product query.
-	 */
-	@JsonProperty(value="iso_files")
-	private List<ISOFile> queryResponse = new ArrayList<ISOFile>();
-	
-	/**
-	 * Default constructor.
-	 */
-	public ProductQueryResponse() {}
-	
-	/**
-	 * Getter method for the list ISO files.
-	 * @return The list of ISO files.  Will not be null, but may be empty.
-	 */
-	public List<ISOFile> getISOFiles() {
-		return queryResponse;
-	}
-	
-	/**
-	 * Method allowing users to add individual ISO file objects to the 
-	 * list that will be returned to the client.
-	 * 
-	 * @param file A populated ISOFile object.
-	 */
-	public void addISOFile(ISOFile file) {
-		if (file != null) {
-			queryResponse.add(file);
-		}
-	}
-	
-	/**
-	 * Convert the object into a human-readable string.
-	 */
-	public String toString() {
-		String newLine = System.getProperty("line.separator");
+    /**
+     * Eclipse-generated serialVersionUID
+     */
+    private static final long serialVersionUID = -2146231769774999045L;
+    
+    /**
+     * Private internal list containing the ISO files matching the client
+     * initiated product query.
+     */
+    @JsonProperty(value="iso_files")
+    private List<ISOFile> queryResponse = new ArrayList<ISOFile>();
+    
+    /**
+     * Default constructor.
+     */
+    public ProductQueryResponse() {}
+    
+    /**
+     * Getter method for the list ISO files.
+     * @return The list of ISO files.  Will not be null, but may be empty.
+     */
+    public List<ISOFile> getISOFiles() {
+        return queryResponse;
+    }
+    
+    /**
+     * Method allowing users to add individual ISO file objects to the 
+     * list that will be returned to the client.
+     * 
+     * @param file A populated ISOFile object.
+     */
+    public void addISOFile(ISOFile file) {
+        if (file != null) {
+            queryResponse.add(file);
+        }
+    }
+    
+    /**
+     * Convert the object into a human-readable string.
+     */
+    public String toString() {
+        String newLine = System.getProperty("line.separator");
         StringBuilder sb = new StringBuilder();
         sb.append(newLine);
         sb.append("----------------------------------------");
@@ -76,8 +76,8 @@ public class ProductQueryResponse implements Serializable {
         sb.append("----------------------------------------");
         sb.append("----------------------------------------");
         for (ISOFile file : getISOFiles()) {
-        	sb.append(file.toString());
+            sb.append(file.toString());
         }
         return sb.toString();
-	}
+    }
 }

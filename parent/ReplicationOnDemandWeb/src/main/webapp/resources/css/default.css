@@ -8,12 +8,12 @@
 	vertical-align: top !important;
 }
 
-.ui-panelgrid > * > tr, .ui-panelgrid > * > tr > td.ui-panelgrid-cell {
+.ui-panelgrid>*>tr, .ui-panelgrid>*>tr>td.ui-panelgrid-cell {
 	border: none !important;
 }
 
 .ui-growl {
-    position: fixed !important;
+	position: fixed !important;
 	top: 40% !important;
 	left: 37% !important;
 	width: 360px !important;

@@ -1,36 +1,35 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>mil.nga.rod</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>mil.nga.rod</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
 
-    <groupId>mil.nga.rod</groupId>
-    <artifactId>ReplicationOnDemandWeb</artifactId>
-    <name>Replication on Demand - Web WAR</name>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+	<groupId>mil.nga.rod.web</groupId>
+	<artifactId>ReplicationOnDemandWeb</artifactId>
+	<name>Replication on Demand - Web WAR</name>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>war</packaging>
 
-    <dependencies>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>mil.nga.rod</groupId>
-            <artifactId>ReplicationOnDemandEJB</artifactId>
-            <version>${application.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <version>${primefaces.version}</version>
-        </dependency>
-    </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.rod.ejb</groupId>
+			<artifactId>ReplicationOnDemandEJB</artifactId>
+			<version>${application.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>${primefaces.version}</version>
+		</dependency>
+	</dependencies>
 
 </project>

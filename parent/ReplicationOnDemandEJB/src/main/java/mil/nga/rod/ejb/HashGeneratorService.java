@@ -32,16 +32,16 @@ import org.slf4j.LoggerFactory;
 @LocalBean
 public class HashGeneratorService implements Serializable {
 
-	/**
-	 * Eclipse-generated serialVersionUID
-	 */
-	private static final long serialVersionUID = -6014171633753227310L;
-	
-	/**
-	 * Set up the Log4j system for use throughout the class
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			HashGeneratorService.class);
+    /**
+     * Eclipse-generated serialVersionUID
+     */
+    private static final long serialVersionUID = -6014171633753227310L;
+    
+    /**
+     * Set up the Log4j system for use throughout the class
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(
+            HashGeneratorService.class);
     
     /**
      * Default constructor. 
@@ -60,50 +60,50 @@ public class HashGeneratorService implements Serializable {
      * @return The hash value as a hex string.
      */
     public String getHash(String inputFile, HashType hashType) {
-    	
-    	String hash = null;
+        
+        String hash = null;
 
-    	if ((inputFile != null) && (!inputFile.isEmpty())) { 
-    		File file = new File(inputFile);
+        if ((inputFile != null) && (!inputFile.isEmpty())) { 
+            File file = new File(inputFile);
             if (file.exists()) {
-            	
-            	if (LOGGER.isDebugEnabled()) {
-            		LOGGER.debug("Generating [ "
-            				+ hashType.getText()
-            				+ " ] hash for file [ "
-            				+ file.getAbsolutePath()
-            				+ " ].");
-            	}
-            	
-            	long startTime = System.currentTimeMillis();
-	    		switch (hashType) {
-		    		case MD5 : 
-		    			hash = getMD5Hash(file);
-		    			break;
-		    		case SHA1:
-		    			hash = getSHA1Hash(file);
-		    			break;
-		    		case SHA256:
-		    			hash = getSHA256Hash(file);
-		    			break;
-		    		case SHA384:
-		    			hash = getSHA384Hash(file);		    			
-		    			break;
-		    		case SHA512:
-		    			hash = getSHA512Hash(file);		    			
-		    			break;
-	    		}
-	    		
+                
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Generating [ "
+                            + hashType.getText()
+                            + " ] hash for file [ "
+                            + file.getAbsolutePath()
+                            + " ].");
+                }
+                
+                long startTime = System.currentTimeMillis();
+                switch (hashType) {
+                    case MD5 : 
+                        hash = getMD5Hash(file);
+                        break;
+                    case SHA1:
+                        hash = getSHA1Hash(file);
+                        break;
+                    case SHA256:
+                        hash = getSHA256Hash(file);
+                        break;
+                    case SHA384:
+                        hash = getSHA384Hash(file);                        
+                        break;
+                    case SHA512:
+                        hash = getSHA512Hash(file);                        
+                        break;
+                }
+                
                 long elapsedTime = System.currentTimeMillis() - startTime;
                 if (LOGGER.isDebugEnabled()) {
-	                LOGGER.debug(
-	                       "Hash type [ "
-	                		+ hashType.getText()
-	                		+ " ] for file [ "
-	                        + file.getAbsolutePath()
-	                        + " ] created in [ "
-	                        + Long.toString(elapsedTime)
-	                        + " ] ms.");
+                    LOGGER.debug(
+                           "Hash type [ "
+                            + hashType.getText()
+                            + " ] for file [ "
+                            + file.getAbsolutePath()
+                            + " ] created in [ "
+                            + Long.toString(elapsedTime)
+                            + " ] ms.");
                 }
             }
             else {
@@ -112,12 +112,12 @@ public class HashGeneratorService implements Serializable {
                         + inputFile
                         + " ].");
             }
-    	}
-    	else {
+        }
+        else {
             LOGGER.error("The require input file parameter is null or empty. "
                     + " The output hash file will not be generated.");
         }
-    	return hash;
+        return hash;
     }
     
     /**
@@ -128,7 +128,7 @@ public class HashGeneratorService implements Serializable {
      * @deprecated Use <code>getHash(String, HashType)</code>
      */
     public String generate(String inputFile) {
-    	return getHash(inputFile, HashType.SHA1);
+        return getHash(inputFile, HashType.SHA1);
     }
     
     /**
@@ -140,15 +140,15 @@ public class HashGeneratorService implements Serializable {
      */
     public void generate(String inputFile, String outputFile) {
         
-    	String method = "generate() - ";
-    	
-    	if (LOGGER.isDebugEnabled()) {
-	    	LOGGER.debug("Creating hash for file [ "
-	    			+ inputFile 
-	    			+ " ].");
-    	}
+        String method = "generate() - ";
         
-    	if ((inputFile != null) && (!inputFile.isEmpty())) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Creating hash for file [ "
+                    + inputFile 
+                    + " ].");
+        }
+        
+        if ((inputFile != null) && (!inputFile.isEmpty())) {
             if ((outputFile != null) && (!outputFile.isEmpty())) {
                 File file = new File(inputFile);
                 if (file.exists()) {
@@ -194,7 +194,7 @@ public class HashGeneratorService implements Serializable {
             hash = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
         }
         catch (IOException ioe) {
-       	 LOGGER.error(
+            LOGGER.error(
                  "Unexpected IOException encountered while generating "
                  + "the [ " 
                  + HashType.MD5.getText() 
@@ -230,7 +230,7 @@ public class HashGeneratorService implements Serializable {
             hash = org.apache.commons.codec.digest.DigestUtils.sha1Hex(is);
         }
         catch (IOException ioe) {
-        	 LOGGER.error(
+             LOGGER.error(
                      "Unexpected IOException encountered while generating "
                      + "the [ " 
                      + HashType.SHA1.getText() 
@@ -364,7 +364,7 @@ public class HashGeneratorService implements Serializable {
         BufferedWriter writer = null;
 
         try {
-        	
+            
             writer = new BufferedWriter(new FileWriter(filename));
             writer.write(hash);
             writer.flush();
@@ -378,9 +378,9 @@ public class HashGeneratorService implements Serializable {
             }
             else {
                 LOGGER.warn(method
-	                    + "Expected hash file does not exist.  Filename [ "
-	                    + filename
-	                    + " ].");
+                        + "Expected hash file does not exist.  Filename [ "
+                        + filename
+                        + " ].");
             }
         }
         catch (IOException ioe) {

@@ -1,493 +1,441 @@
+/* -------- overall page settings ----------   */
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 0px 0px;
+	padding: 0px;
+	background-image: url("../icons/background_content.png");
+	background-repeat: repeat;
+}
 
-	/* -------- overall page settings ----------   */
+/************ wrap header and footer ***************/
+.noWrappingH {
+	text-align: center;
+	white-space: nowrap;
+	min-width: 1020px;
+	background-color: white;
+}
 
-	body {
-		font-family:Helvetica, Arial, sans-serif;
-		margin:0px 0px;
-		padding: 0px;
-		background-image:url("../icons/background_content.png");
-		background-repeat: repeat;
-	}
-	
-	 
-	/************ wrap header and footer ***************/
+.noWrappingF {
+	white-space: nowrap;
+	min-width: 1020px;
+}
 
-	.noWrappingH {
-		text-align:center;
-		white-space: nowrap;
-		min-width: 1020px;
-		background-color:white;
-	}
+/************ classification ***************/
+.wrapClassific {
+	text-align: center;
+	background-color: #1c7b2a !important;
+	_width: expression(( documentElement.clientWidth < 1020)? "100%": "100%")
+		!important;
+}
 
-	.noWrappingF {
-		white-space: nowrap;
-		min-width: 1020px;
-	}
+.classific {
+	background-color: white;
+	border-top: gray 1px solid;
+	border-bottom: gray 1px solid;
+	color: #FFFFFF;
+	font-size: 12px;
+	text-align: center;
+	padding-bottom: 2px;
+	padding-top: 2px;
+	background-color: #1c7b2a !important;
+	background-image: url('../icons/classific.png') !important;
+	background-repeat: repeat-x !important;
+	white-space: nowrap !important;
+	min-width: 1020px !important;
+	_width: expression(( documentElement.clientWidth < 1020)? "1020px": "100%")
+		!important;
+}
 
-	/************ classification ***************/
-	.wrapClassific {
-		text-align:center;
-		background-color:#1c7b2a!important;
-		_width: expression((documentElement.clientWidth < 1020) ? "100%" : "100%")!important;
-	}
-	
-	.classific
-	{
-		background-color: white;
-		border-top: gray 1px solid;
-		border-bottom: gray 1px solid;
-		color: #FFFFFF;
-		font-size: 12px;
-		text-align: center;
-		padding-bottom:2px;
-		padding-top:2px;
-		background-color:#1c7b2a!important; 
-		background-image: url('../icons/classific.png')!important;
-		background-repeat: repeat-x!important;
-		white-space: nowrap!important;
-		min-width:1020px!important;		
-		_width: expression((documentElement.clientWidth < 1020) ? "1020px" : "100%")!important;
-	}	
-	
-	/* force min-width for IE6 */
-	* html, .footerDiv {
-		_width: expression((documentElement.clientWidth < 1020) ? "100%" : "100%");
-	}
-	
- 	/* ------- wrap bread-crumbs and top-nav ----- */
-	#topHorizontalBar {
-		text-align:center;
-		white-space: nowrap;
-		min-width:1020px;
-		background-color:#808080;
-		background: url("../icons/background_breadcrumbs.png") repeat-x; 
-		height:24px; 
-	}
-	
-	#wrapLine {
-		/* uncomment below to center the footer */
-		/*width: 1020px; */
-		min-width:1020px;
-		margin: 0px auto; 
-	}	
-	
-	/* --------  optional links at top of page ---------  */
+/* force min-width for IE6 */
+* html, .footerDiv {
+	_width: expression(( documentElement.clientWidth < 1020)? "100%": "100%");
+}
 
-	#navTopRight {
-		color: #334960;
-		display: inline;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		text-align: center;
-		white-space: nowrap;
-		float:right;
-		padding-right:20px;
-		padding-top:4px;
-	}
-	
-	#navTopRight a:link, #navTopRight a:visited {
-		color: #334960;
-		text-decoration:none;
-	}
-	
-	#navTopRight a:hover {
-		color: #334960;
-		text-decoration: underline;
-	}
-	
-	/* -------  bread crumbs ------ */
-	
-	#breadCrumbs {
-		color: #334960;
-		display: block;
-		float:left;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		text-align: center;
-		white-space: nowrap;
-		padding-left:20px;
-		padding-top:4px;
-	}
+/* ------- wrap bread-crumbs and top-nav ----- */
+#topHorizontalBar {
+	text-align: center;
+	white-space: nowrap;
+	min-width: 1020px;
+	background-color: #808080;
+	background: url("../icons/background_breadcrumbs.png") repeat-x;
+	height: 24px;
+}
 
-	#breadCrumbs a:link, #breadCrumbs a:visited {
-		color: #334960;
-		text-decoration: none;
-	}
+#wrapLine {
+	/* uncomment below to center the footer */
+	/*width: 1020px; */
+	min-width: 1020px;
+	margin: 0px auto;
+}
 
-	#breadCrumbs a:hover {
-		color: #334960;
-		text-decoration: underline;
-	}
-	
+/* --------  optional links at top of page ---------  */
+#navTopRight {
+	color: #334960;
+	display: inline;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	text-align: center;
+	white-space: nowrap;
+	float: right;
+	padding-right: 20px;
+	padding-top: 4px;
+}
 
-	
-	/* -------- wrap page content - center it on page ----------   */
+#navTopRight a:link, #navTopRight a:visited {
+	color: #334960;
+	text-decoration: none;
+}
 
-	div#wrapContent {
-		text-align:center;
-	}
-	
-	div#contentOfPage {
-		text-align: left;
-		padding: 0px;
-		border: 0px solid #000;
-		background-color: #fff;	
-		min-width:1020px;
-		/* uncomment below to center the content */
-		/*width: 1020px; */
-		margin: 0px auto;
-	}
-	
-	
-	/* --------  common page contents -------- */
-	
-	.pocInfo {
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 10px;
-		float:right;
-		padding-right:6px;
-	}
-	
-	.classifBlock {
-		border: 1px solid black;
-		width:147px;
-		_width:155px;
-		font-size:10px;
-		margin-top:10px;
-		padding-top:0px;
-		padding-left:3px;
-	}
-	
-	.modified {
-		font-size:10px;
-		color:#aaa;
-		text-align: right;
-		padding-right:30px;
-	}
+#navTopRight a:hover {
+	color: #334960;
+	text-decoration: underline;
+}
 
-	
-	/* Master Page styles */
-	/*************** Header  *********************************/
-		
-	.headerDiv {
-		white-space: nowrap!important;
-		min-width:1020px!important;
-		background-color:white !important;
-	}
-		
-	div#Branding
-	{
-		background-image: url('../icons/dot_clear.gif');
-		background-repeat: repeat-x;
-		padding: 0px;
-		height: 72px;
-		text-align: left;
-		background-color:white;
-		/* uncomment below to center the header */
-		/*width: 1020px;*/
-		margin: 0px auto;
-	}
-	
-	div#NGAHeaderLogo
-	{
-		display: inline;
-		float: left;
-		padding: 5px 89px 0px 33px;
-		text-align: left;
-	}
-	
-	div#NGAHeaderLogo img
-	{
-		height: auto;
-		margin: 0;
-		width: auto;
-		padding-top:5px;
-	}
-	
-	.LogoWrapper
-	{
-		width: 100%;
-	}
-	
-	div#RightBranding
-	{
-		float: right;
-	}
-	
-	div#NGATopLinks
-	{
-		color: #334960;
-		display: inline;
-		float: left;
-		font-family: Arial, Tahoma, Verdana;
+/* -------  bread crumbs ------ */
+#breadCrumbs {
+	color: #334960;
+	display: block;
+	float: left;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	text-align: center;
+	white-space: nowrap;
+	padding-left: 20px;
+	padding-top: 4px;
+}
 
-		font-size: 11px;
-		height: 42px;
-		margin-right: 21px;
-		padding-top: 28px;
-		text-align: center;
-		white-space: nowrap;
-		width:190px;
-	}
-	
-	div#NGATopLinks a:hover
-	{
-		color: #334960;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		height: 18px;
-		text-decoration: underline;
-		vertical-align: middle;
-	}
-	
-	div#NGATopLinks a
-	{
-		color: #334960;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		height: 18px;
-		text-decoration: none;
-		vertical-align: middle;
-	}
-	
-	div#NGATopLinksContainer
-	{
-		display: inline-block;
-		height: 21px;
-		text-align: center;
-		vertical-align: middle;
-	}
-	
-	div.TopLinkBar
-	{
-		border-right: 1px solid #334960;
-		display: inline;
-		float: left;
-		line-height: 18px;
-	}
-	
-	div.TopLink
-	{
-		display: inline;
-		float: left;
-		padding-left: 5px;
-		padding-right: 5px;
-		padding-top: 2px;
-		vertical-align: middle;
-	}
-	
-	div.topLinksControl
-	{
-		display: inline;
-		float: left;
-	}
-	
-	/* Search Box Styles */
+#breadCrumbs a:link, #breadCrumbs a:visited {
+	color: #334960;
+	text-decoration: none;
+}
 
- 	#search {
-		color: #00396D !important;
-		font-size: 11px;
-		text-decoration: none;	
-		width: 120px;
-		height: 15px;
-		margin-bottom: 0px;
-		margin-right:0px;
-   		display: inline-block;
-    	font-family: Arial, Tahoma, Verdana;
-		border: 1px solid  #aaa;
-	}
-		
-	div#SearchBoxDiv
-	{
-		display: inline-block;
-		float: left;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		height: 46px;
-		padding-top: 26px;
-		width: 280px;
-	}
-	
-	.SearchBoxDiv a:link, .SearchBoxDiv a:visited
-	{
-		color: #00396D !important;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		text-decoration: none;
-	}
-	
-	.SearchBoxDiv a:hover
-	{
-		color: #00396D !important;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		text-decoration: underline;
-	}
-	
-	div#SearchBox
-	{
-		display: inline-table;
-		float: left;
-		vertical-align: middle;
-		white-space:nowrap;
-	}
-	
-	div#SearchBox a:link, div#AdvancedSearch a:visited
-	{
-		color: #00396D !important;
-	}
-	
-	div#SearchBoxRow
-	{
-		display: table-row;
-		vertical-align: middle;
-	}
-	
-	div#SearchBoxRow input, div#SearchBoxRow span
-	{
-		display: table-cell;
-		vertical-align: middle;
-		color: #334960;
-    	font-family: Arial,Tahoma,Verdana;
-	    font-size: 11px;
-	}
+#breadCrumbs a:hover {
+	color: #334960;
+	text-decoration: underline;
+}
 
+/* -------- wrap page content - center it on page ----------   */
+div#wrapContent {
+	text-align: center;
+}
 
-	/*************** Footer  *********************************/
-		
-	.footerDiv {
-		white-space: nowrap!important;
-		min-width:1020px!important;
-	}
-		
-	div#FooterContainer
-	{
-		background-image: url('../icons/background_footerReduced.png');
-		background-repeat: repeat-x;
-		height: 57px;
-		padding: 0px;
-		text-align: center !important;
-		margin-top:0px;
-	}
-	
-	div#Footer
-	{
-		background-image: url('../icons/background_fullfooterReduced.png');
-		background-position: center;
-		background-repeat: no-repeat;
-		height: 57px;
-		margin: 0px;
-		padding: 0px;
-		width: 100%;
-		z-index: 10;
-		/* uncomment below to center the footer */
-		width: 1020px;
-		margin: 0px auto; 
-	}
-	
-	div#footerLeft
-	{
-		float:left;
-		padding-left:50px;
-		width:400px\9;
-	}
-	
-	div#footerRight
-	{
-		float:right;
-		padding-right:50px;
-		width:300px\9;
-	}
-	
-	.FooterMenu
-	{
-		margin: 0px;
-		padding: 0px;
-		text-align: center;
-		width: 100%;
-	}
+div#contentOfPage {
+	text-align: left;
+	padding: 0px;
+	border: 0px solid #000;
+	background-color: #fff;
+	min-width: 1020px;
+	/* uncomment below to center the content */
+	/*width: 1020px; */
+	margin: 0px auto;
+}
 
- 	div#NGABottomLinks
-	{
-		color: #FFF;
-		display: inline;
-		float: left;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 11px;
-		margin-right: 21px;
-		text-align: center;
-		white-space: nowrap;
-	}
+/* --------  common page contents -------- */
+.pocInfo {
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 10px;
+	float: right;
+	padding-right: 6px;
+}
 
-	div#NGABottomLinks a:hover
-	{
-		color: #FFF;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 12px;
-		height: 18px;
-		text-decoration: underline;
-		vertical-align: middle;
-	}
+.classifBlock {
+	border: 1px solid black;
+	width: 147px;
+	_width: 155px;
+	font-size: 10px;
+	margin-top: 10px;
+	padding-top: 0px;
+	padding-left: 3px;
+}
 
-	div#NGABottomLinks a
-	{
-		color: #FFF;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 12px;
-		height: 18px;
-		text-decoration: none;
-		vertical-align: middle;
-	}
+.modified {
+	font-size: 10px;
+	color: #aaa;
+	text-align: right;
+	padding-right: 30px;
+}
 
-	div#NGABottomLinksContainer
-	{
-		display: inline-block;
-		height: 21px;
-		text-align: center;
-		vertical-align: middle;
-	}
+/* Master Page styles */
+/*************** Header  *********************************/
+.headerDiv {
+	white-space: nowrap !important;
+	min-width: 1020px !important;
+	background-color: white !important;
+}
 
-	div.BottomLinkBar
-	{
-		display: inline;
-		float: left;
-		line-height: 18px;
-		border-right: 1px solid #FFF;
-	}
+div#Branding {
+	background-image: url('../icons/dot_clear.gif');
+	background-repeat: repeat-x;
+	padding: 0px;
+	height: 72px;
+	text-align: left;
+	background-color: white;
+	/* uncomment below to center the header */
+	/*width: 1020px;*/
+	margin: 0px auto;
+}
 
-	div.BottomLink
-	{
-		display: inline;
-		float: left;
-		padding-left: 5px;
-		padding-right: 5px;
-		padding-top: 2px;
-		vertical-align: middle;
-	}
-	
-	.FooterLinks
-	{
-		color: #fff;
-		display: inline;
-		font-family: Arial, Tahoma, Verdana;
-		font-size: 14px;
-		margin: 0px;
-		padding-left: 0px;
-		padding-right: 0px;
-		padding-top: 20px;
-	}
-	.FooterLinks a
-	{
-		color: #fff;
-		text-decoration: none;
-	}
-	.FooterLinks a:hover
-	{
-		color: #fff;
-		text-decoration: underline;
-	}
-	
+div#NGAHeaderLogo {
+	display: inline;
+	float: left;
+	padding: 5px 89px 0px 33px;
+	text-align: left;
+}
 
-		
+div#NGAHeaderLogo img {
+	height: auto;
+	margin: 0;
+	width: auto;
+	padding-top: 5px;
+}
 
+.LogoWrapper {
+	width: 100%;
+}
 
+div#RightBranding {
+	float: right;
+}
+
+div#NGATopLinks {
+	color: #334960;
+	display: inline;
+	float: left;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	height: 42px;
+	margin-right: 21px;
+	padding-top: 28px;
+	text-align: center;
+	white-space: nowrap;
+	width: 190px;
+}
+
+div#NGATopLinks a:hover {
+	color: #334960;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	height: 18px;
+	text-decoration: underline;
+	vertical-align: middle;
+}
+
+div#NGATopLinks a {
+	color: #334960;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	height: 18px;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+div#NGATopLinksContainer {
+	display: inline-block;
+	height: 21px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+div.TopLinkBar {
+	border-right: 1px solid #334960;
+	display: inline;
+	float: left;
+	line-height: 18px;
+}
+
+div.TopLink {
+	display: inline;
+	float: left;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 2px;
+	vertical-align: middle;
+}
+
+div.topLinksControl {
+	display: inline;
+	float: left;
+}
+
+/* Search Box Styles */
+#search {
+	color: #00396D !important;
+	font-size: 11px;
+	text-decoration: none;
+	width: 120px;
+	height: 15px;
+	margin-bottom: 0px;
+	margin-right: 0px;
+	display: inline-block;
+	font-family: Arial, Tahoma, Verdana;
+	border: 1px solid #aaa;
+}
+
+div#SearchBoxDiv {
+	display: inline-block;
+	float: left;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	height: 46px;
+	padding-top: 26px;
+	width: 280px;
+}
+
+.SearchBoxDiv a:link, .SearchBoxDiv a:visited {
+	color: #00396D !important;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	text-decoration: none;
+}
+
+.SearchBoxDiv a:hover {
+	color: #00396D !important;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	text-decoration: underline;
+}
+
+div#SearchBox {
+	display: inline-table;
+	float: left;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+div#SearchBox a:link, div#AdvancedSearch a:visited {
+	color: #00396D !important;
+}
+
+div#SearchBoxRow {
+	display: table-row;
+	vertical-align: middle;
+}
+
+div#SearchBoxRow input, div#SearchBoxRow span {
+	display: table-cell;
+	vertical-align: middle;
+	color: #334960;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+}
+
+/*************** Footer  *********************************/
+.footerDiv {
+	white-space: nowrap !important;
+	min-width: 1020px !important;
+}
+
+div#FooterContainer {
+	background-image: url('../icons/background_footerReduced.png');
+	background-repeat: repeat-x;
+	height: 57px;
+	padding: 0px;
+	text-align: center !important;
+	margin-top: 0px;
+}
+
+div#Footer {
+	background-image: url('../icons/background_fullfooterReduced.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	height: 57px;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	z-index: 10;
+	/* uncomment below to center the footer */
+	width: 1020px;
+	margin: 0px auto;
+}
+
+div#footerLeft {
+	float: left;
+	padding-left: 50px;
+	width: 400px\9;
+}
+
+div#footerRight {
+	float: right;
+	padding-right: 50px;
+	width: 300px\9;
+}
+
+.FooterMenu {
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+	width: 100%;
+}
+
+div#NGABottomLinks {
+	color: #FFF;
+	display: inline;
+	float: left;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 11px;
+	margin-right: 21px;
+	text-align: center;
+	white-space: nowrap;
+}
+
+div#NGABottomLinks a:hover {
+	color: #FFF;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 12px;
+	height: 18px;
+	text-decoration: underline;
+	vertical-align: middle;
+}
+
+div#NGABottomLinks a {
+	color: #FFF;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 12px;
+	height: 18px;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+div#NGABottomLinksContainer {
+	display: inline-block;
+	height: 21px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+div.BottomLinkBar {
+	display: inline;
+	float: left;
+	line-height: 18px;
+	border-right: 1px solid #FFF;
+}
+
+div.BottomLink {
+	display: inline;
+	float: left;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 2px;
+	vertical-align: middle;
+}
+
+.FooterLinks {
+	color: #fff;
+	display: inline;
+	font-family: Arial, Tahoma, Verdana;
+	font-size: 14px;
+	margin: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 20px;
+}
+
+.FooterLinks a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.FooterLinks a:hover {
+	color: #fff;
+	text-decoration: underline;
+}

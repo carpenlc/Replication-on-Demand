@@ -3,23 +3,22 @@
 	
 */
 
-	/* --------  optional links at top of page ---------  */
+/* --------  optional links at top of page ---------  */
+#nav-top, #nav_top {
+	width: 100%;
+}
 
-	#nav-top, #nav_top {
-		width: 100%;
+div#content {
+	/*width: 828px;*/
+	width: 100%;
+}
 
-	}
-
-	div#content {
-		/*width: 828px;*/
-		width: 100%;
-	}
-	
-div.classif_block { 
+div.classif_block {
 	width: 135px;
 	padding: 1px;
 	margin: 3px;
 }
+
 div.classif-block {
 	width: 135px;
 	padding: 1px;
@@ -28,7 +27,7 @@ div.classif-block {
 
 p.classif-block, p.classif_block {
 	border: 1px solid black;
-	font-family:Helvetica, Arial, sans-serif;
+	font-family: Helvetica, Arial, sans-serif;
 	font-size: 0.6em;
 	margin-left: 3px;
 	margin-top: 0px;
@@ -40,12 +39,13 @@ p.classif-block, p.classif_block {
 	width: 20em;
 	/* */
 	position: inherit;
-	bottom:-41px; 
-
+	bottom: -41px;
 }
+
 .page_title {
 	margin: 0px;
 }
+
 .page-title {
 	margin: 0px;
 }
@@ -58,80 +58,79 @@ p.classif-block, p.classif_block {
 	margin: 0px;
 }
 
+/* ------ modified menu -------   */
+#menu {
+	background: #000;
+	width: 143px;
+	border: 1px solid #111;
+	margin-top: -1px;
+}
 
-	  /* ------ modified menu -------   */
-	  #menu {
-			background: #000;
-			width:143px;
-			border: 1px solid #111;
-			margin-top:-1px;
-	  }
+#menu h1, #menu h2, #menu h3, #menu h4, #menu h5, #menu h6 {
+	list-style: none;
+	/* background: #333 url("../icons/sidenav_bg_title.gif") repeat-x; */
+	background-color: #213654;
+	padding: 9px 5px 5px 1px;
+	margin: 0px;
+	font-size: 12px;
+	cursor: default;
+	color: #FFD800;
+	font-weight: normal;
+}
 
-	
-	  #menu h1, #menu h2,#menu h3,#menu h4,#menu h5,#menu h6 {
-		  list-style: none;
-		  /* background: #333 url("../icons/sidenav_bg_title.gif") repeat-x; */
-		  background-color: #213654;
-		  padding: 9px 5px 5px 1px;
-		  margin:0px;
-		  font-size: 12px;
-		  cursor:default;
-		  color: #FFD800;
-		  font-weight:normal;
-	  }
+#menu h1 a, #menu h2 a, #menu h3 a, #menu h4 a, #menu h5 a, #menu h6 a {
+	color: #FFD800;
+	text-decoration: none;
+}
 
-	  #menu h1 a, #menu h2 a, #menu h3 a, #menu h4 a, #menu h5 a, #menu h6 a {
-		  color: #FFD800;
-		  text-decoration: none;
-	  }
-	  
-	  #menu h1 a:hover, #menu h2 a:hover, #menu h3 a:hover, #menu h4 a:hover, #menu h5 a:hover, #menu h6 a:hover {
-		  color: #FFF;
-		  text-decoration: none;
-	  }
-	  
-	  #menu p {
-		  margin-left: 6px;
-	  }
-	  
-	  #menu dl {
-		  margin-top: 0px;
-		  margin-bottom: 0px;
-	  }
-	  
-	  #menu dd {
-		 /* background: #333 url("../icons/topnav_bg_dkr.gif") repeat-x; */
-		 /* background: #213654 url("../icons/background_TopNav.png") repeat-x; */
-		  background-color: #213654;
-		  border: 1px solid #000;
-		  list-style: none;
-		  font-size: 13px;
-		  _margin-right:-5px;  
-		  padding: 0px 5px 5px 0px;
-		  *padding: 0px 5px 5px 0px;
-		  _padding: 0px 5px 5px 0px;
-	  	  margin:0; 
-	  }
-	  
-	  #menu dd a { 
-		  color: #FFF;
-		  text-decoration: none; 
-	  }
-	  
-	  #menu dd a:hover {
-		  color: #FFD800;
-	  }
-		  
-	  #menu dd img {
-		  padding-right: 3px;
-	  }
-	  
-	  #menu dt {
-		  list-style: none;
-		  background: #333 url("../icons/sidenav_bg_title.gif") repeat-x;
-		  padding: 9px 5px 5px 1px;
-		  _margin-right:-5px; 
-		  font-size: 15px;
-		  cursor:default;
-		  color: #FFD800; 
-	  }
+#menu h1 a:hover, #menu h2 a:hover, #menu h3 a:hover, #menu h4 a:hover,
+	#menu h5 a:hover, #menu h6 a:hover {
+	color: #FFF;
+	text-decoration: none;
+}
+
+#menu p {
+	margin-left: 6px;
+}
+
+#menu dl {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+#menu dd {
+	/* background: #333 url("../icons/topnav_bg_dkr.gif") repeat-x; */
+	/* background: #213654 url("../icons/background_TopNav.png") repeat-x; */
+	background-color: #213654;
+	border: 1px solid #000;
+	list-style: none;
+	font-size: 13px;
+	_margin-right: -5px;
+	padding: 0px 5px 5px 0px;
+	*padding: 0px 5px 5px 0px;
+	_padding: 0px 5px 5px 0px;
+	margin: 0;
+}
+
+#menu dd a {
+	color: #FFF;
+	text-decoration: none;
+}
+
+#menu dd a:hover {
+	color: #FFD800;
+}
+
+#menu dd img {
+	padding-right: 3px;
+}
+
+#menu dt {
+	list-style: none;
+	background: #333 url("../icons/sidenav_bg_title.gif") repeat-x;
+	padding: 9px 5px 5px 1px;
+	_margin-right: -5px;
+	font-size: 15px;
+	cursor: default;
+	color: #FFD800;
+}
