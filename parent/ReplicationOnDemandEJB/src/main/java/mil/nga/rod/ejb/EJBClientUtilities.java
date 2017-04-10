@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author L. Craig Carpenter
  */
-public class EJBClientUtilities {
+public class EJBClientUtilities implements RoDVersionInfoI {
 
     /**
      * Set up the LogBack system for use throughout the class
@@ -37,33 +37,20 @@ public class EJBClientUtilities {
      * Handle to the container JNDI Context.
      */
     private static Context initialContext;
-    
-    /**
-     * The specific JNDI interface to look up.
-     */
-    private static final String PKG_INTERFACES = "org.jboss.ejb.client.naming";
-    
-    /**
-     * The server MBean name used for obtaining information about the running 
-     * server. 
-     */
-    private static final String SERVER_MBEAN_OBJECT_NAME = 
-            "jboss.as:management-root=server";
 
     /**
-     * MBean attribute that contains the JVM server name.
+     * Method added after we "mavenized" the project to ensure that the 
+     * EJB lookups work correctly.
+     * @return The application name containing the maven-added version 
+     * information.
      */
-    private static final String SERVER_NAME_ATTRIBUTE = "name";
-    
-    /**
-     * The name of the EAR file in which the EJBs are packaged.
-     */
-    private static final String EAR_APPLICATION_NAME = "ReplicationOnDemand";
-    
-    /**
-     * The name of the module (i.e. JAR) containing the EJBs
-     */
-    private static final String EJB_MODULE_NAME = "ReplicationOnDemandEJB";
+    private String getApplicationName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(EAR_APPLICATION_NAME.trim());
+        sb.append("-");
+        sb.append(APPLICATION_VERSION.trim());
+        return sb.toString();
+    }
     
     /**
      * Construct the JBoss appropriate JNDI lookup name for the input Class
@@ -74,7 +61,7 @@ public class EJBClientUtilities {
      */
     private String getJNDIName(Class<?> clazz) {
         
-        String appName = EAR_APPLICATION_NAME;
+        String appName = getApplicationName();
         String moduleName = EJB_MODULE_NAME;
         // String distinctName = "";
         String beanName = clazz.getSimpleName();

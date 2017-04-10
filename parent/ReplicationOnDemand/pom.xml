@@ -15,17 +15,38 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>mil.nga.rod.ejb</groupId>
-			<artifactId>ReplicationOnDemandEJB</artifactId>
-			<version>${application.version}</version>
-			<type>ejb</type>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+	    </dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+        </dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.rod.web</groupId>
-			<artifactId>ReplicationOnDemandWeb</artifactId>
-			<version>${application.version}</version>
-			<type>war</type>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-access</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -35,10 +56,45 @@
 				<artifactId>maven-ear-plugin</artifactId>
 				<version>${maven-ear-plugin.version}</version>
 				<configuration>
+				    <skinnywars>true</skinnywars>
 					<fileNameMapping>no-version</fileNameMapping>
 					<version>7</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<libraryDirectoryMode>NONE</libraryDirectoryMode>
+					<modules>
+					    <jarModule>
+					        <groupId>org.slf4j</groupId>
+					        <artifactId>slf4j-api</artifactId>
+					    </jarModule>
+					    <jarModule>
+			                <groupId>com.fasterxml.jackson.core</groupId>
+			                <artifactId>jackson-core</artifactId>
+			            </jarModule>
+		                <jarModule>
+							<groupId>com.fasterxml.jackson.core</groupId>
+							<artifactId>jackson-annotations</artifactId>
+						</jarModule>
+						<jarModule>
+							<groupId>com.fasterxml.jackson.core</groupId>
+							<artifactId>jackson-databind</artifactId>
+						</jarModule>
+						<jarModule>
+							<groupId>commons-codec</groupId>
+							<artifactId>commons-codec</artifactId>
+						</jarModule>
+						<jarModule>
+			                <groupId>ch.qos.logback</groupId>
+			                <artifactId>logback-core</artifactId>
+                        </jarModule>
+		                <jarModule>
+			                <groupId>ch.qos.logback</groupId>
+                            <artifactId>logback-classic</artifactId>
+		                </jarModule>
+		                <jarModule>
+			                <groupId>ch.qos.logback</groupId>
+			                <artifactId>logback-access</artifactId>
+		                </jarModule>
+					</modules>
 				</configuration>
 			</plugin>
 		</plugins>
