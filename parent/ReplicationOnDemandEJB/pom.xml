@@ -14,7 +14,7 @@
 	<name>Replication on Demand - EJB JAR</name>
 	<packaging>ejb</packaging>
 	<version>${application.version}</version>
-
+    
 	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
@@ -28,7 +28,7 @@
 			<groupId>ch.qos.logback</groupId>
 	        <artifactId>logback-classic</artifactId>
         </dependency>
-		    		<dependency>
+		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-access</artifactId>
 		</dependency>

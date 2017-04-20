@@ -9,6 +9,7 @@
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
 
+
 	<modules>
 		<module>ReplicationOnDemandEJB</module>
 		<module>ReplicationOnDemandWeb</module>
@@ -31,6 +32,7 @@
 		<maven-ear-plugin.version>2.10</maven-ear-plugin.version>
 		<maven-ejb-plugin.version>2.3</maven-ejb-plugin.version>
 		<maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
+		<maven-wildfly-plugin.version>1.2.0.Alpha4</maven-wildfly-plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -53,9 +55,9 @@
 			    <version>${logback.version}</version>
 			    <scope>provided</scope>
 		    </dependency>
-		    		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-access</artifactId>
+		    <dependency>
+			    <groupId>ch.qos.logback</groupId>
+			    <artifactId>logback-access</artifactId>
 			<version>${logback.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -106,6 +108,14 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-ejb-plugin</artifactId>
 					<version>${maven-ejb-plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>${maven-wildfly-plugin.version}</version>
+					<configuration>
+                        <skip>true</skip>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

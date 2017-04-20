@@ -61,7 +61,7 @@ public class MetricsService implements Serializable {
     /**
      * Container-injected datasource object.
      */
-    @Resource(name="jdbc/RODMetrics")
+    @Resource(lookup="java:jboss/datasources/RODMetrics")
     DataSource datasource;
     
     /**

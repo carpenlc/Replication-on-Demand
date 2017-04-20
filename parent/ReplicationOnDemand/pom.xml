@@ -14,6 +14,18 @@
 	<packaging>ear</packaging>
 
 	<dependencies>
+	    <dependency>
+	        <groupId>mil.nga.rod.ejb</groupId>
+	        <artifactId>ReplicationOnDemandEJB</artifactId>
+	        <version>${application.version}</version>
+	        <type>ejb</type>
+	    </dependency>
+	    <dependency>
+	        <groupId>mil.nga.rod.web</groupId>
+	        <artifactId>ReplicationOnDemandWeb</artifactId>
+	        <version>${application.version}</version>
+	        <type>war</type>
+	    </dependency>
 		<dependency>
 		    <groupId>org.slf4j</groupId>
 		    <artifactId>slf4j-api</artifactId>
@@ -46,7 +58,6 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-access</artifactId>
 		</dependency>
-		
 	</dependencies>
 
 	<build>
@@ -60,8 +71,19 @@
 					<fileNameMapping>no-version</fileNameMapping>
 					<version>7</version>
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
+					<finalName>${project.artifactId}</finalName>
 					<libraryDirectoryMode>NONE</libraryDirectoryMode>
+					<generateApplicationXml>TRUE</generateApplicationXml>
 					<modules>
+					    <ejbModule>
+	                        <groupId>mil.nga.rod.ejb</groupId>
+	                        <artifactId>ReplicationOnDemandEJB</artifactId>
+	                    </ejbModule>
+	                    <webModule>
+	                        <groupId>mil.nga.rod.web</groupId>
+	                        <artifactId>ReplicationOnDemandWeb</artifactId>
+	                        <contextRoot>/rod</contextRoot>
+	                    </webModule>
 					    <jarModule>
 					        <groupId>org.slf4j</groupId>
 					        <artifactId>slf4j-api</artifactId>
@@ -97,6 +119,20 @@
 					</modules>
 				</configuration>
 			</plugin>
+			<plugin>
+			    <groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>${maven-wildfly-plugin.version}</version>
+				<configuration>
+					    <skip>false</skip>
+					    <hostname>214.37.42.185</hostname>
+					    <port>9990</port>
+					    <server-groups>
+					        <server-group>dev-server-group</server-group>
+					    </server-groups>
+				    <filename>${project.artifactId}.ear</filename>
+				</configuration>
+		    </plugin>
 		</plugins>
 	</build>
 </project>

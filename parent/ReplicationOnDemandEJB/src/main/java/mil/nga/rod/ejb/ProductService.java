@@ -51,7 +51,7 @@ public class ProductService implements Serializable {
     /**
      * Container-injected datasource object.
      */
-    @Resource(name="jdbc/ROD")
+    @Resource(lookup="java:jboss/datasources/ROD")
     DataSource datasource;
     
     /**

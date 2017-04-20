@@ -1,15 +1,6 @@
 package mil.nga.rod.ejb;
 
-public interface RoDVersionInfoI {
-
-    /**
-     * The following String represents the application version.  This must 
-     * match the version number that is included in the project pom.xml or 
-     * Maven command-line in order for the application to look up target 
-     * EJBs.
-     */
-    public static final String APPLICATION_VERSION = "1.0-SNAPSHOT";
-    
+public interface ApplicationInfoI {
     
     /**
      * The specific JNDI interface to look up.

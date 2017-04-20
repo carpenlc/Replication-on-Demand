@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author L. Craig Carpenter
  */
-public class EJBClientUtilities implements RoDVersionInfoI {
+public class EJBClientUtilities implements ApplicationInfoI {
 
     /**
      * Set up the LogBack system for use throughout the class
@@ -45,11 +45,7 @@ public class EJBClientUtilities implements RoDVersionInfoI {
      * information.
      */
     private String getApplicationName() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(EAR_APPLICATION_NAME.trim());
-        sb.append("-");
-        sb.append(APPLICATION_VERSION.trim());
-        return sb.toString();
+        return EAR_APPLICATION_NAME.trim();
     }
     
     /**
