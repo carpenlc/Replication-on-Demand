@@ -8,6 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
@@ -15,6 +18,75 @@ import java.util.regex.Pattern;
 
 
 public class FileUtils {
+    
+    /**
+     * Access the target file to get the actual size of the on-disk file. 
+     * 
+     * @param file String path to the target file.
+     * @return The size of the files in bytes.
+     * @throws IOException Thrown if there are problems accessing the target
+     * file.
+     */
+    public static long getActualFileSize(Path path) throws IOException {
+        
+        long size = 0L;
+        
+        if ((path != null) && (Files.exists(path))) {
+            size = Files.size(path);
+        }
+        return size;
+    }
+    
+    /**
+     * Access the target file to get the actual date of the on-disk file.  
+     * This method was added because the date information stored in the 
+     * database is always the same as the load date.
+     * 
+     * @param file String path to the target file.
+     * @return The date of the file.
+     * @throws IOException Thrown if there are problems accessing the target
+     * file.
+     */
+    public static java.sql.Date getActualFileDate(Path path) throws IOException {
+        
+        java.sql.Date fileDate = new java.sql.Date(0);
+        
+        if ((path != null) && (Files.exists(path))) {
+            BasicFileAttributes attrs = Files.getFileAttributeView(
+                    path, 
+                    BasicFileAttributeView.class).readAttributes();
+            FileTime t = attrs.lastModifiedTime();
+            // LOGGER.info("File time : " + t);
+            fileDate = new java.sql.Date(t.toMillis());
+        }
+        return fileDate;
+    }
+    
+    /**
+     * Access the target file to get the actual date of the on-disk file.  
+     * This method was added because the date information stored in the 
+     * database is always the same as the load date.
+     * 
+     * @param file String path to the target file.
+     * @return The date of the file.
+     * @throws IOException Thrown if there are problems accessing the target
+     * file.
+     */
+    public static java.sql.Date getActualFileDate(String file) throws IOException {
+        
+        java.sql.Date fileDate = new java.sql.Date(0);
+        
+        if ((file != null) && (!file.isEmpty())) {
+            Path p = Paths.get(file);
+            BasicFileAttributes attrs = Files.getFileAttributeView(
+                    p, 
+                    BasicFileAttributeView.class).readAttributes();
+            FileTime t = attrs.lastModifiedTime();
+            // LOGGER.info("File time : " + t);
+            fileDate = new java.sql.Date(t.toMillis());
+        }
+        return fileDate;
+    }
     
     /**
      * Get the host name.

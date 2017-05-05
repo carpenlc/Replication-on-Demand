@@ -12,6 +12,13 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.rod.model.Product;
 
+/**
+ * Backing bean associated with the PrimeFaces <code>index.xhtml</code> file 
+ * that provides the front-end web page for allowing users to access/download 
+ * the ISO files available under the Replication on Demand project.
+ * 
+ * @author L. Craig Carpenter
+ */
 @ManagedBean
 @ViewScoped
 public class FilteredProductTypeView 

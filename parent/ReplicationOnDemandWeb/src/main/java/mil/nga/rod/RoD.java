@@ -60,10 +60,12 @@ public class RoD
         java.sql.Date sqlDate = null;
         
         try {
+            
             java.util.Date utilDate = (new SimpleDateFormat(
                     ProductQueryRequest.INPUT_DATE_FORMAT_STRING))
                     .parse(date);
             sqlDate = new java.sql.Date(utilDate.getTime());
+        
         }
         catch (ParseException pe) {
             LOGGER.error("Unexpected ParseException raised while attempting "
@@ -83,7 +85,9 @@ public class RoD
      * @return The filter, if supplied, or the string "unavailable".
      */
     private String getFilter(ProductQueryRequest request) { 
+        
         String filter = "unavailable";
+        
         if (request != null) {
             if ((request.getAORCode() != null) && 
                     (!request.getAORCode().isEmpty())) {
@@ -165,6 +169,7 @@ public class RoD
         sb.append(EJBClientUtilities.getInstance().getServerName());
         sb.append(" ].");
         return Response.status(Status.OK).entity(sb.toString()).build();
+        
     }
     
     /**
@@ -173,7 +178,7 @@ public class RoD
      * output is a JSON array containing the list of products that match the
      * input query parameters.  This method is not meant to provide general 
      * query capabilities.  It is meant to aid clients in determining what 
-     * products may be new, or changed since a client-supplied date.  The only 
+     * products may be new, or changed since a certain date.  The only 
      * required parameter is the target load date, other parameters can be 
      * supplied to narrow down the list of products returned.  
      * 
