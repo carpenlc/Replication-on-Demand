@@ -1,7 +1,7 @@
 package mil.nga.rod.messages;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -91,10 +91,19 @@ public class ISOFile implements Serializable {
      * Getter method for the size of the ISO file requested.
      * @return The size of the file requested.
      */
-    @XmlElement(name="size")
-    @JsonProperty(value="size")
+    @JsonIgnore
     public long getSize() {
         return size;
+    }
+    
+    /**
+     * When serializing to JSON make sure everything is output as a String.
+     * @return The size of the file requested (as a String).
+     */
+    @XmlElement(name="size")
+    @JsonProperty(value="size")
+    public String getSizeString() { 
+        return Long.toString(size);
     }
     
     /**
