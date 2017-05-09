@@ -258,14 +258,16 @@ public class ProductQueryService implements Serializable {
 
                 try {
 
-                    String hash     = "unavaliable";
-                    Date   fileDate = getActualFileDate(prod.getPath());
-                    long   size     = prod.getSize();
+                    String hash             = "unavaliable";
+                    java.util.Date fileDate = getActualFileDate(prod.getPath());
+                    long   size             = prod.getSize();
                     
                     if (getProductQueryRequestAcceleratorService() != null) {
+                        
+                        
                         QueryRequestAccelerator accelerator = 
                                 getProductQueryRequestAcceleratorService()
-                                .getAcceleratorRecord(prod.getPath());
+                                .getRecordFromCache(prod);
                         
                         // If the hash was pre-computed, use it here otherwise
                         // compute the hash on the fly.
@@ -277,7 +279,7 @@ public class ProductQueryService implements Serializable {
                         else {
                             fileDate = getActualFileDate(prod.getPath());
                             if (getHashGeneratorService() != null) {
-                                hash     = getHashGeneratorService().getHash(
+                                hash = getHashGeneratorService().getHash(
                                             prod.getPath(), 
                                             HashType.MD5);
                             }

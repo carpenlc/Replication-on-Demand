@@ -11,6 +11,10 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
 
+import mil.nga.rod.JSONSerializer;
+import mil.nga.rod.accelerator.AcceleratorRecordFactory;
+import mil.nga.rod.accelerator.RedisCacheManager;
+import mil.nga.rod.model.Product;
 import mil.nga.rod.model.QueryRequestAccelerator;
 
 import org.slf4j.Logger;
@@ -55,6 +59,40 @@ public class ProductQueryRequestAcceleratorService
      */
     public ProductQueryRequestAcceleratorService() { }
 
+    /**
+     * Attempt to retrieve the data from the local cache.
+     * 
+     * @param product The target product.
+     * @return The product query accelerator record, or null if the record 
+     * could not be found.
+     */
+    public QueryRequestAccelerator getRecordFromCache(Product product) {
+        
+        QueryRequestAccelerator record = null;
+        String key = AcceleratorRecordFactory.getInstance().getKey(product);
+         
+        String value = RedisCacheManager.getInstance().get(key);
+        if ((value == null) || (value.isEmpty())) {
+            LOGGER.warn("Input key [ "
+                    + key 
+                    + " ] does not exist in the cache.");
+        }
+        else {
+            
+            record = JSONSerializer.getInstance()
+                    .deserializeToQueryRequestAccelerator(value);
+            if (LOGGER.isDebugEnabled()){ 
+                LOGGER.debug("Key => [ "
+                    + key 
+                    + " ], value => [ "
+                    + value
+                    + " ].");
+            }
+        }
+        
+        return record;
+    }
+    
     /**
      * Retrieve the accelerator record associated with the input file path.
      * 
@@ -175,7 +213,7 @@ public class ProductQueryRequestAcceleratorService
                     conn = datasource.getConnection();
                     stmt = conn.prepareStatement(sql);
                     
-                    stmt.setDate(   1, accelerator.getFileDate());
+                    stmt.setDate(   1, new java.sql.Date(accelerator.getFileDate().getTime()));
                     stmt.setLong(   2, accelerator.getSize());
                     stmt.setString( 3, accelerator.getPath());
                     stmt.setString( 4, accelerator.getHash());
@@ -243,7 +281,8 @@ public class ProductQueryRequestAcceleratorService
                     conn = datasource.getConnection();
                     stmt = conn.prepareStatement(sql);
                     
-                    stmt.setDate(   1, accelerator.getFileDate());
+                    stmt.setDate(   1, new java.sql.Date(
+                            accelerator.getFileDate().getTime()));
                     stmt.setLong(   2, accelerator.getSize());
                     stmt.setString( 3, accelerator.getHash());
                     stmt.setString( 4, accelerator.getPath());
