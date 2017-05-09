@@ -1,8 +1,11 @@
 package mil.nga.rod.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
  * Object used to pre-compute information associated with on-disk files in 
@@ -13,6 +16,7 @@ import java.text.SimpleDateFormat;
  *  
  * @author L. Craig Carpenter
  */
+@JsonDeserialize(builder = QueryRequestAccelerator.QueryRequestAcceleratorBuilder.class)
 public class QueryRequestAccelerator implements Serializable {
 
     /* Sample command for creating the backing data table (Oracle):
@@ -117,6 +121,7 @@ public class QueryRequestAccelerator implements Serializable {
      * 
      * @author L. Craig Carpenter
      */
+    @JsonPOJOBuilder(withPrefix = "")
     public static class QueryRequestAcceleratorBuilder {
         
         // Private internal members.
