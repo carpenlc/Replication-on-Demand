@@ -15,10 +15,19 @@
 	<packaging>ejb</packaging>
 	<version>${application.version}</version>
     
+    <properties>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
         </dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
