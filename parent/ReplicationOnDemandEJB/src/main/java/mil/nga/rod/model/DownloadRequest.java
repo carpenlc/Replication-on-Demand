@@ -16,7 +16,7 @@ public class DownloadRequest implements Serializable {
     /* Sample command for creating the backing data table (Oracle):
      
         create table ROD_DOWNLOAD_REQUESTS (
-            REQUEST_ID     VARCHAR2(20) not null, 
+            ID             NUMBER NOT NULL PRIMARY KEY,
             PROD_TYPE      VARCHAR2(10),
             AOR_CODE       VARCHAR2(10),
             COUNTRY_NAME   NVARCHAR2(50),
@@ -27,10 +27,10 @@ public class DownloadRequest implements Serializable {
             FILE_SIZE      NUMBER,
             USERNAME       VARCHAR2(240),
             SOURCE         VARCHAR2(240),
-            HOST_NAME      VARCHAR2(240)
-            CONSTRAINT REQUEST_ID_PK PRIMARY KEY (REQUEST_ID)
-        );
+            HOST_NAME      VARCHAR2(240));
     
+        create sequence rod_download_sequence start with 1 increment by 1 nomaxvalue;
+
     */
     
     /**
@@ -60,7 +60,6 @@ public class DownloadRequest implements Serializable {
     private final String nsn;
     private final String path;
     private final String productType;
-    private final String requestId;
     private final String source;
     private final String username;
 
@@ -78,7 +77,6 @@ public class DownloadRequest implements Serializable {
         this.nsn           = builder.nsn;
         this.path          = builder.path;
         this.productType   = builder.productType;
-        this.requestId     = builder.requestId;
         this.fileSize      = builder.fileSize;
         this.source        = builder.source;
         this.username      = builder.username;
@@ -165,14 +163,6 @@ public class DownloadRequest implements Serializable {
     }
     
     /**
-     * Getter method for the request ID.
-     * @return The request ID.
-     */
-    public String getRequestId() {
-        return requestId;
-    }
-    
-    /**
      * Getter method for the IP or host name of the source requesting the
      * target ISO file.
      * @return The IP or host name of the source requesting the target ISO
@@ -196,9 +186,7 @@ public class DownloadRequest implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("ISO Download Requested: ");
-        sb.append("Request ID => [ ");
-        sb.append(getRequestId());
-        sb.append(" ], Date requested => [ ");
+        sb.append("Date requested => [ ");
         sb.append(formatter.format(getDateRequested()));
         sb.append(" ], AOR code => [ ");
         sb.append(getAorCode());
@@ -231,7 +219,6 @@ public class DownloadRequest implements Serializable {
         private String nrn;
         private String nsn;
         private String productType;
-        private String requestId;
         private String username;
         private String path;
         private long   fileSize;
@@ -348,17 +335,6 @@ public class DownloadRequest implements Serializable {
         }
         
         /**
-         * Setter method for the request date attribute.
-         * @param value The request date.
-         */
-        public DownloadRequestBuilder requestId(String value) {
-            if (value != null) {
-                requestId = value.trim();
-            }
-            return this;
-        }
-        
-        /**
          * Setter method for the IP or host name of the source requester.
          * @param value The IP or host name of the source requester.
          */
@@ -390,13 +366,6 @@ public class DownloadRequest implements Serializable {
         private void validateDownloadRequestObject(DownloadRequest object) 
                 throws IllegalStateException {
             if (object != null) {
-                if ((object.getRequestId() == null) || 
-                        (object.getRequestId().isEmpty())) {
-                    throw new IllegalStateException("Attempted to build "
-                            + "DownloadRequest object but the value for "
-                            + "the request ID was null.  Note: Request ID "
-                            + "is the primary key.");
-                }
                 
                 if ((object.getAorCode()== null) || 
                         (object.getAorCode().isEmpty())) {

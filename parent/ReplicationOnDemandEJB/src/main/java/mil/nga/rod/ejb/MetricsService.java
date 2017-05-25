@@ -84,9 +84,9 @@ public class MetricsService implements Serializable {
         long              start  = System.currentTimeMillis();
         String            sql    = "insert into "
                 + DOWNLOAD_REQUEST_TABLE 
-                + "(REQUEST_ID, PROD_TYPE, AOR_CODE, COUNTRY_NAME, NRN, NSN, "
+                + "(ID, PROD_TYPE, AOR_CODE, COUNTRY_NAME, NRN, NSN, "
                 + "DATE_REQUESTED, UNIX_PATH, FILE_SIZE, USERNAME, SOURCE, "
-                + "HOST_NAME) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "HOST_NAME) values (rod_download_sequence.nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if (datasource != null) {
             if (request != null) {
@@ -101,18 +101,17 @@ public class MetricsService implements Serializable {
                     conn = datasource.getConnection();
                     stmt = conn.prepareStatement(sql);
                     
-                    stmt.setString( 1, request.getRequestId());
-                    stmt.setString( 2, request.getProductType());
-                    stmt.setString( 3, request.getAorCode());
-                    stmt.setString( 4, request.getCountryName());
-                    stmt.setString( 5, request.getNRN());
-                    stmt.setString( 6, request.getNSN());
-                    stmt.setDate(   7, request.getDateRequested());
-                    stmt.setString( 8, request.getPath());
-                    stmt.setLong(   9, request.getFileSize());
-                    stmt.setString(10, request.getUserName());
-                    stmt.setString(11, request.getSource());
-                    stmt.setString(12, request.getHostName());
+                    stmt.setString( 1, request.getProductType());
+                    stmt.setString( 2, request.getAorCode());
+                    stmt.setString( 3, request.getCountryName());
+                    stmt.setString( 4, request.getNRN());
+                    stmt.setString( 5, request.getNSN());
+                    stmt.setDate(   6, request.getDateRequested());
+                    stmt.setString( 7, request.getPath());
+                    stmt.setLong(   8, request.getFileSize());
+                    stmt.setString( 9, request.getUserName());
+                    stmt.setString(10, request.getSource());
+                    stmt.setString(11, request.getHostName());
                     stmt.executeUpdate();
                     
                 }
@@ -164,9 +163,9 @@ public class MetricsService implements Serializable {
         long              start  = System.currentTimeMillis();
         String            sql    = "insert into "
                 + QUERY_REQUEST_TABLE 
-                + "(LOAD_DATE_REQUESTED, FILTER, DATE_REQUESTED, "
+                + "(ID, LOAD_DATE_REQUESTED, FILTER, DATE_REQUESTED, "
                 + "NUM_RESULTS, USERNAME, SOURCE, HOST_NAME) "
-                + "values (?, ?, ?, ?, ?, ?, ?)";
+                + "values (rod_query_sequence.nextval, ?, ?, ?, ?, ?, ?, ?)";
         
         if (datasource != null) {
             if (request != null) {
@@ -307,7 +306,7 @@ public class MetricsService implements Serializable {
         ResultSet             rs     = null;
         List<DownloadRequest> requests = new ArrayList<DownloadRequest>();
         long                  start  = System.currentTimeMillis();
-        String                sql    =     "select REQUEST_ID, PROD_TYPE, "
+        String                sql    =     "select ID, PROD_TYPE, "
                 + "AOR_CODE, COUNTRY_NAME, NRN, NSN, DATE_REQUESTED, "
                 + "UNIX_PATH, FILE_SIZE, USERNAME, SOURCE, HOST_NAME "
                 + "from ROD_DOWNLOAD_REQUESTS order by DATE_REQUESTED desc";
@@ -327,7 +326,6 @@ public class MetricsService implements Serializable {
                 while (rs.next()) {
                     DownloadRequest request = new DownloadRequest
                             .DownloadRequestBuilder()
-                            .requestId(rs.getString("REQUEST_ID"))
                             .aorCode(rs.getString("AOR_CODE"))
                             .countryName(rs.getString("COUNTRY_NAME"))
                             .requestDate(rs.getDate("DATE_REQUESTED"))
@@ -399,7 +397,7 @@ public class MetricsService implements Serializable {
         ResultSet             rs     = null;
         List<DownloadRequest> requests = new ArrayList<DownloadRequest>();
         long                  start  = System.currentTimeMillis();
-        String                sql = "select REQUEST_ID, PROD_TYPE, AOR_CODE, "
+        String                sql = "select ID, PROD_TYPE, AOR_CODE, "
                 + "COUNTRY_NAME, NRN, NSN, DATE_REQUESTED, UNIX_PATH, "
                 + "FILE_SIZE, USERNAME, SOURCE, HOST_NAME "
                 + "from ROD_DOWNLOAD_REQUESTS where DATE_REQUESTED > ? "
@@ -443,7 +441,6 @@ public class MetricsService implements Serializable {
                 while (rs.next()) {
                     DownloadRequest request = new DownloadRequest
                             .DownloadRequestBuilder()
-                            .requestId(rs.getString("REQUEST_ID"))
                             .aorCode(rs.getString("AOR_CODE"))
                             .countryName(rs.getString("COUNTRY_NAME"))
                             .requestDate(rs.getDate("DATE_REQUESTED"))

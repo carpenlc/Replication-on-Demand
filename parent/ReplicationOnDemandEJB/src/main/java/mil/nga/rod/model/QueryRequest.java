@@ -15,16 +15,18 @@ public class QueryRequest implements Serializable {
     /* Sample command for creating the backing data table (Oracle):
      
         create table ROD_QUERY_REQUESTS (
+            ID                  NUMBER NOT NULL PRIMARY KEY,
             LOAD_DATE_REQUESTED DATE,
             FILTER         NVARCHAR2(50),
             DATE_REQUESTED TIMESTAMP,
             NUM_RESULTS    NUMBER,      
             USERNAME       VARCHAR2(240),
             SOURCE         VARCHAR2(240),
-            HOST_NAME      VARCHAR2(240)
-            CONSTRAINT REQUEST_ID_PK PRIMARY KEY (REQUEST_ID)
+            HOST_NAME      VARCHAR2(240));
         );
     
+        create sequence rod_query_sequence start with 1 increment by 1 nomaxvalue;
+        
     */
     
     /**
