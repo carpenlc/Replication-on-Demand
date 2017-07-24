@@ -125,10 +125,10 @@
 				<version>${maven-wildfly-plugin.version}</version>
 				<configuration>
 					    <skip>false</skip>
-					    <hostname>214.37.42.185</hostname>
+					    <hostname>ndwdsngwlvdtl03.geo.nga.mil</hostname>
 					    <port>9990</port>
 					    <server-groups>
-					        <server-group>dev-server-group</server-group>
+					        <server-group>rod-server-group</server-group>
 					    </server-groups>
 				    <filename>${project.artifactId}.ear</filename>
 				</configuration>

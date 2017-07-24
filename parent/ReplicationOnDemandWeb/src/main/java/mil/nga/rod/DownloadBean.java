@@ -120,7 +120,6 @@ public class DownloadBean
         
         // Build the POJO containing the request data.
         DownloadRequest request = new DownloadRequest.DownloadRequestBuilder()
-                .requestId(FileUtils.generateUniqueToken(TOKEN_LENGTH))
                 .aorCode(product.getAorCode())
                 .countryName(product.getCountryName())
                 .requestDate(new Date(System.currentTimeMillis()))

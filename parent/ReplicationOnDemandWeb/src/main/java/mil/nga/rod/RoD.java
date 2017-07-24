@@ -48,6 +48,11 @@ public class RoD
     public static final String APPLICATION_NAME = "ReplicationOnDemand";
     
     /**
+     * Length of the hexadecimal token used as the download request ID
+     */
+    private static int TOKEN_LENGTH = 8;
+    
+    /**
      * Simple internal method used to convert the date in String format
      * to a java.sql.Date object for use in querying the target data 
      * store.
