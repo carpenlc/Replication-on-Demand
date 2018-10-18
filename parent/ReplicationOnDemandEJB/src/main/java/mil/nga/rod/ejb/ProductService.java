@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 @Stateless
 @LocalBean
 public class ProductService implements Serializable {
+	
     // Note to self: if you want to access this from the web tier you must
     // implement the serializable interface.
 
@@ -221,7 +222,7 @@ public class ProductService implements Serializable {
                                             rs.getString("CLASS_DESC"))
                                     .countryName(rs.getString("COUNTRY_NAME"))
                                     .edition(rs.getLong("EDITION"))
-                                    .iso3char(rs.getString("ISO3CHR"))
+                                    .iso3Char(rs.getString("ISO3CHR"))
                                     .loadDate(rs.getDate("LOAD_DATE"))
                                     .fileDate(rs.getDate("FILE_DATE"))
                                     .mediaName(rs.getString("MEDIA_NAME"))
@@ -336,7 +337,7 @@ public class ProductService implements Serializable {
                                     .classificationDescription(rs.getString("CLASS_DESC"))
                                     .countryName(rs.getString("COUNTRY_NAME"))
                                     .edition(rs.getLong("EDITION"))
-                                    .iso3char(rs.getString("ISO3CHR"))
+                                    .iso3Char(rs.getString("ISO3CHR"))
                                     .loadDate(rs.getDate("LOAD_DATE"))
                                     .fileDate(rs.getDate("FILE_DATE"))
                                     .mediaName(rs.getString("MEDIA_NAME"))
@@ -449,7 +450,7 @@ public class ProductService implements Serializable {
                                         rs.getString("CLASS_DESC"))
                                 .countryName(rs.getString("COUNTRY_NAME"))
                                 .edition(rs.getLong("EDITION"))
-                                .iso3char(rs.getString("ISO3CHR"))
+                                .iso3Char(rs.getString("ISO3CHR"))
                                 .loadDate(rs.getDate("LOAD_DATE"))
                                 .fileDate(rs.getDate("FILE_DATE"))
                                 .mediaName(rs.getString("MEDIA_NAME"))
@@ -563,7 +564,7 @@ public class ProductService implements Serializable {
                                             rs.getString("CLASS_DESC"))
                                     .countryName(rs.getString("COUNTRY_NAME"))
                                     .edition(rs.getLong("EDITION"))
-                                    .iso3char(rs.getString("ISO3CHR"))
+                                    .iso3Char(rs.getString("ISO3CHR"))
                                     .loadDate(rs.getDate("LOAD_DATE"))
                                     .fileDate(rs.getDate("FILE_DATE"))
                                     .mediaName(rs.getString("MEDIA_NAME"))
@@ -683,7 +684,7 @@ public class ProductService implements Serializable {
                                             rs.getString("CLASS_DESC"))
                                     .countryName(rs.getString("COUNTRY_NAME"))
                                     .edition(rs.getLong("EDITION"))
-                                    .iso3char(rs.getString("ISO3CHR"))
+                                    .iso3Char(rs.getString("ISO3CHR"))
                                     .loadDate(rs.getDate("LOAD_DATE"))
                                     .fileDate(rs.getDate("FILE_DATE"))
                                     .mediaName(rs.getString("MEDIA_NAME"))
@@ -800,7 +801,7 @@ public class ProductService implements Serializable {
                                             rs.getString("CLASS_DESC"))
                                     .countryName(rs.getString("COUNTRY_NAME"))
                                     .edition(rs.getLong("EDITION"))
-                                    .iso3char(rs.getString("ISO3CHR"))
+                                    .iso3Char(rs.getString("ISO3CHR"))
                                     .loadDate(rs.getDate("LOAD_DATE"))
                                     .fileDate(rs.getDate("FILE_DATE"))
                                     .mediaName(rs.getString("MEDIA_NAME"))
@@ -917,7 +918,7 @@ public class ProductService implements Serializable {
                                             rs.getString("CLASS_DESC"))
                                     .countryName(rs.getString("COUNTRY_NAME"))
                                     .edition(rs.getLong("EDITION"))
-                                    .iso3char(rs.getString("ISO3CHR"))
+                                    .iso3Char(rs.getString("ISO3CHR"))
                                     .loadDate(rs.getDate("LOAD_DATE"))
                                     .fileDate(rs.getDate("FILE_DATE"))
                                     .mediaName(rs.getString("MEDIA_NAME"))
@@ -1088,7 +1089,7 @@ public class ProductService implements Serializable {
                                 .countryName(rs.getString("COUNTRY_NAME"))
                                 .edition(rs.getLong("EDITION"))
                                 .fileDate(rs.getDate("FILE_DATE"))
-                                .iso3char(rs.getString("ISO3CHR"))
+                                .iso3Char(rs.getString("ISO3CHR"))
                                 .loadDate(rs.getDate("LOAD_DATE"))
                                 .mediaName(rs.getString("MEDIA_NAME"))
                                 .notes(rs.getString("ALL_NOTES"))

@@ -1,4 +1,4 @@
-package mil.nga.util;
+package mil.nga.rod.util;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.exceptions.PropertiesNotLoadedException;
 import mil.nga.exceptions.PropertyNotFoundException;
+import mil.nga.util.FileUtils;
 import mil.nga.rod.accelerator.AcceleratorRecordFactory;
 import mil.nga.rod.jdbc.AcceleratorJDBCRecordFactory;
 import mil.nga.rod.jdbc.ProductFactory;

@@ -1,15 +1,16 @@
-package mil.nga.util;
+package mil.nga.rod.util;
 
 import java.util.Set;
 
 import mil.nga.rod.accelerator.RedisCacheManager;
 
 /**
- * Simple application used to output a list of all keys in the cache.
+ * Simple application used to remove all of the key/value pairs from the 
+ * Cache.
  * 
  * @author L. Craig Carpenter
  */
-public class DumpKeys {
+public class ClearCache {
 
     /**
      * Main method.
@@ -17,23 +18,21 @@ public class DumpKeys {
      * @param args Command line arguments.
      */
     public static void main(String[] args) {
-    	long start = System.currentTimeMillis();
+        int keysRemoved = 0;
         try (RedisCacheManager manager = RedisCacheManager.getInstance()) { 
             Set<String> keySet = manager.getKeys();
             if (keySet.size() > 0) {
                 for (String key : keySet) {
-                    System.out.println(key);
+                    manager.remove(key);
+                    keysRemoved++;
                 }
-                System.out.println("The cache contains [ "
-                        + keySet.size()
-                        + " ] elements.");
             }
             else {
                 System.out.println("The cache is empty.");
             }
         }
-        System.out.println("Keys retreived in [ "
-        		+ (System.currentTimeMillis() - start)
-        		+ " ] ms.");
+        System.out.println("Removed [ "
+                + keysRemoved
+                + " ] keys.");
     }
 }

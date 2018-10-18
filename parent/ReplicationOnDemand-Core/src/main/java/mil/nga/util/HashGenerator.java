@@ -142,7 +142,7 @@ public class HashGenerator {
                  + HashType.MD5.getText() 
                  + " ] hash for file [ "
                  + file.toString()
-                 + " ].  Exception message [ "
+                 + " ].  Exception message => [ "
                  + ioe.getMessage()
                  + " ].  Method will return a null hash.");
         }
@@ -178,7 +178,7 @@ public class HashGenerator {
                      + HashType.SHA1.getText() 
                      + " ] hash for file [ "
                      + file.toString()
-                     + " ].  Exception message [ "
+                     + " ].  Exception message => [ "
                      + ioe.getMessage()
                      + " ].  Method will return a null hash.");
         }
@@ -212,7 +212,7 @@ public class HashGenerator {
                 + HashType.SHA256.getText() 
                 + " ] hash for file [ "
                 + file.toString()
-                + " ].  Exception message [ "
+                + " ].  Exception message => [ "
                 + ioe.getMessage()
                 + " ].  Method will return a null hash.");
         }
@@ -246,7 +246,7 @@ public class HashGenerator {
                 + HashType.SHA384.getText() 
                 + " ] hash for file [ "
                 + file.toString()
-                + " ].  Exception message [ "
+                + " ].  Exception message => [ "
                 + ioe.getMessage()
                 + " ].  Method will return a null hash.");
         }
@@ -280,7 +280,7 @@ public class HashGenerator {
                 + HashType.SHA512.getText() 
                 + " ] hash for file [ "
                 + file.toString()
-                + " ].  Exception message [ "
+                + " ].  Exception message => [ "
                 + ioe.getMessage()
                 + " ].  Method will return a null hash.");
         }

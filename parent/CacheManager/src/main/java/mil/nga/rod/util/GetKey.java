@@ -1,4 +1,4 @@
-package mil.nga.util;
+package mil.nga.rod.util;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import mil.nga.rod.accelerator.RedisCacheManager;
 import mil.nga.rod.jdbc.ProductFactory;
 import mil.nga.rod.model.Product;
 import mil.nga.rod.model.QueryRequestAccelerator;
+import mil.nga.util.Options;
 import mil.nga.util.Options.Multiplicity;
 import mil.nga.util.Options.Separator;
 
