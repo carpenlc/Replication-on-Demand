@@ -1,4 +1,4 @@
-package mil.nga.rod.accelerator;
+package mil.nga.rod.cache;
 
 /**
  * Constants utilized within Replication-on-Demand caching implementation.

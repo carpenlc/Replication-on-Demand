@@ -1,7 +1,6 @@
-package mil.nga.rod.accelerator;
+package mil.nga.rod.cache;
 
-import java.io.IOException;
-import java.nio.file.Paths;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,17 +9,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.exceptions.PropertiesNotLoadedException;
-import mil.nga.exceptions.PropertyNotFoundException;
+import mil.nga.cache.RedisCacheManager;
 import mil.nga.rod.JSONSerializer;
-import mil.nga.rod.jdbc.AcceleratorJDBCRecordFactory;
-import mil.nga.rod.jdbc.ProductFactory;
-import mil.nga.rod.model.Product;
-import mil.nga.rod.model.QueryRequestAccelerator;
+import mil.nga.rod.jdbc.RoDProductRecordFactory;
+import mil.nga.rod.model.RoDProduct;
 import mil.nga.rod.util.ProductUtils;
-import mil.nga.util.FileUtils;
 import redis.clients.jedis.exceptions.JedisConnectionException;
-
 
 /**
  * Class containing the logic required to load a local Redis cache with data
@@ -53,274 +47,86 @@ public class CacheManager {
      */
     public CacheManager() { }
     
-    /**
-     * See if the on-disk file changed in size since the last time the cache 
-     * was updated.  
-     * 
-     * @param value The cached data.
-     * @return True if the on-disk data has changed since the last update.
-     * @throws IOException Thrown if there are issues accessing the on-disk 
-     * file.
-     */
-    public boolean isUpdateRequired(String value) throws IOException {
-        
-        boolean needsUpdate = false;
-        
-        if ((value != null) && (!value.isEmpty())) {
-            
-            QueryRequestAccelerator record = JSONSerializer
-                    .getInstance()
-                    .deserializeToQueryRequestAccelerator(value);
-            long size = FileUtils.getActualFileSize(Paths.get(record.getPath()));
-            
-            if (size != record.getSize()) {
-                
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("File [ "
-                            + record.getPath()
-                            + " ] has changed.  Cache record will be updated.");
-                }
-                
-                needsUpdate = true;
-            }
-        }
-        return needsUpdate;
-    }
-    
-    /**
-     * See if the on-disk file changed in size since the last time the cache 
-     * was updated.  
-     * 
-     * @param value The existing data.
-     * @return True if the on-disk data has changed since the last update.
-     * @throws IOException Thrown if there are issues accessing the on-disk 
-     * file.
-     */
-    public boolean isUpdateRequired(QueryRequestAccelerator product) 
-    		throws IOException {
-    	
-        boolean needsUpdate = false;
-        
-        if (product != null) {
-            
-            long size = FileUtils.getActualFileSize(
-            		Paths.get(product.getPath()));
-            
-            if (size != product.getSize()) {
-                
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("File [ "
-                            + product.getPath()
-                            + " ] has changed.  Cache record will be updated.");
-                }
-                
-                needsUpdate = true;
-            }
-        }
-        return needsUpdate;
-    }
-    
-    /**
-     * Get a list of all products in the backing data store.
-     * 
-     * @return The list of all products in the backing data store.
-     */
-    public List<Product> getAllProducts() {
 
-        List<Product> products = null;
-        
-        try (ProductFactory factory = ProductFactory.getInstance()) {
-            products = factory.getUniqueProducts();
-        }
-        catch (PropertyNotFoundException pnfe) {
-            LOGGER.error("PropertyNotFoundException raised "
-                    + "while attempting to establish a connection to the "
-                    + "back end data store.  Please ensure the required "
-                    + "properties are available.  Property-specific error "
-                    + "message => [ "
-                    + pnfe.getMessage()
-                    + " ].");
-        }
-        catch (PropertiesNotLoadedException pnle) {
-            LOGGER.error("Unexpected PropertiesNotLoadedException raised "
-                    + "while attempting to establish a connection to the "
-                    + "back end data store.  Error message [ "
-                    + pnle.getMessage()
-                    + " ].  Please ensure the system properties file "
-                    + "is available.");
-        }
-        catch (ClassNotFoundException cnfe) {
-            LOGGER.error("Unexpected ClassNotFoundException raised while "
-                    + "attempting to establish a connection to the back "
-                    + "end data store.  Error message [ "
-                    + cnfe.getMessage()
-                    + " ].  Please ensure the data store JDBC driver "
-                    + "library is on the class path.");
-        }
-        catch (JedisConnectionException jce) {
-            LOGGER.error("Unexpected JedisConnectionException raised while "
-                    + "attempting to establish a connection to the Redis "
-                    + "cache.  Error message [ "
-                    + jce.getMessage()
-                    + " ].  Please ensure that the cache is available "
-                    + "or disable the caching feature.");
-        }
-        
-        return products;
-    }
-    
     /**
-     * Main method containing the logic required to update the accelerator cache.
+     * Remove the records from the cache that no longer exist in the target 
+     * datasource.
+     * 
+     * @param cache List of keys that currently exist in the cache.
+     * @param datasource List of keys that currently exist in the datasource.
      */
-    public void updateAcceleratorCache() {
-    
-        long start          = System.currentTimeMillis();
-        int  successCounter = 0;
-        int  failedCounter  = 0;
-        int  totalCounter   = 0;
-        
-        LOGGER.info("Cache update started at [ "
-                + dateFormatter.format(new Date(System.currentTimeMillis()))
-                + " ].");
-            
-        List<Product> records = getAllProducts();
-        
-        if ((records != null) && (records.size() > 0)) {
-            
-            try (RedisCacheManager cacheManager = RedisCacheManager.getInstance()) {
-                for (Product record : records) {
-                    
-                    totalCounter++;
-                    try {
-                        
-                        String key = ProductUtils.getInstance().getKey(record);
-                        QueryRequestAccelerator value = 
-                        		JSONSerializer
-                        			.getInstance()
-                        			.deserializeToQueryRequestAccelerator(
-                        					RedisCacheManager.getInstance().get(key));
-                        
-                        //Not in cache? 
-                        if (value == null) {
-                        	// Check the database
-                        	value = AcceleratorJDBCRecordFactory.getInstance().getRecord(record);
-                        	// Not in database?
-                        	if (value == null) {
-                        		// Generate the record.
-                        		value = AcceleratorRecordFactory
-                        				.getInstance()
-                        				.buildRecord(record);
-                        		if (value != null) {
-	                        		RedisCacheManager.getInstance().put(
-	                        				key, 
-	                        				AcceleratorRecordFactory.getInstance().getValue(value));
-	                        		AcceleratorJDBCRecordFactory.getInstance().insert(value);
-	                        		successCounter++;
-                        		}
-                        		else {
-                                    failedCounter++;
-                                }
-                        	}
-                        	// It's in the database.  Is an update necessary?
-                        	else if (isUpdateRequired(value)) {
-                        		value = AcceleratorRecordFactory
-                        				.getInstance()
-                        				.buildRecord(record);
-                        		if (value != null) {
-	                        		RedisCacheManager.getInstance().put(
-	                        				key, 
-	                        				AcceleratorRecordFactory.getInstance().getValue(value));
-	                        		AcceleratorJDBCRecordFactory.getInstance().update(value);
-	                        		successCounter++;
-                        		}
-                        		else {
-                                    failedCounter++;
-                                }
-                        	}
-                        	else {
-                        		// Ensure it's put back in the cache.
-                        		RedisCacheManager.getInstance().put(
-                        				key, 
-                        				AcceleratorRecordFactory.getInstance().getValue(value));
-                        	}
-                        }
-                        // It's in the cache.  Is an update necessary?
-                        else if (isUpdateRequired(value)) {
-                    		value = AcceleratorRecordFactory
-                    				.getInstance()
-                    				.buildRecord(record);
-                    		if (value != null) {
-                        		RedisCacheManager.getInstance().put(
-                        				key, 
-                        				AcceleratorRecordFactory.getInstance().getValue(value));
-                        		AcceleratorJDBCRecordFactory.getInstance().update(value);
-                        		successCounter++;
-                    		}
-                    		else {
-                                failedCounter++;
-                            }
-                    	}
-                    }
-                    catch (ClassNotFoundException cnfe) {
-                    	failedCounter++;
-                    	LOGGER.error("Configuration error encountered.  "
-                    			+ "Database unavailable.  Unexpected "
-                    			+ "ClassNotFoundException raised.  "
-                    			+ "Error message => [ "
-                    			+ cnfe.getMessage()
-                    			+ " ].");
-                    }
-                    catch (PropertiesNotLoadedException pnle) {
-                    	failedCounter++;
-                    	LOGGER.error("Configuration error encountered.  "
-                    			+ "Database unavailable.  Unexpected "
-                    			+ "PropertiesNotLoadedException raised.  "
-                    			+ "Error message => [ "
-                    			+ pnle.getMessage()
-                    			+ " ].");
-                    }
-                    catch (PropertyNotFoundException pnfe) {
-                    	failedCounter++;
-                    	LOGGER.error("Configuration error encountered.  "
-                    			+ "Database unavailable.  Unexpected "
-                    			+ "PropertyNotFoundException raised.  "
-                    			+ "Error message => [ "
-                    			+ pnfe.getMessage()
-                    			+ " ].");
-                    }
-                    catch (IOException ioe) {
-                        failedCounter++;
-                        LOGGER.error("Unexpected IOException raised while "
-                                + "attempting to access on-disk file [ "
-                                + record.getPath()
-                                + " ].  Error message [ "
-                                + ioe.getMessage()
-                                + " ].  Cache record not updated.");
-                    }
-                } // end for
-            } // end try-with-resources
-            try {
-            	AcceleratorJDBCRecordFactory.getInstance().removeDuplicates();
-            }
-            catch (Exception e) {}
-        } 
-        else {
-            LOGGER.error("Data store unavailable.  (Query did not return "
-                    + "any records).");
-        }       
-        
+    private void removeObsoleteRecords(
+    		List<String> cache, 
+    		List<String> datasource) {
+    	
+		long start = System.currentTimeMillis();
+		int  count = 0;
+
+		List<String> cacheRecordsToRemove = ProductUtils.getInstance().defference(
+				cache,
+				datasource);
+		
+		if ((cacheRecordsToRemove != null) && (!cacheRecordsToRemove.isEmpty())) {
+			LOGGER.info("Removing [ "
+					+ cacheRecordsToRemove.size()
+					+ " ] obsolete cache records.");
+			for (String key : cacheRecordsToRemove) {
+				RedisCacheManager.getInstance().remove(key);
+				count++;
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("A total of [ "
+						+ count 
+						+ " ] records removed in [ "
+						+ (System.currentTimeMillis() - start)
+						+ " ] ms.");
+			}
+		}
+		else {
+			LOGGER.info("No obsolete cache records encountered.");
+		}
+    	
+    }
+
+    /**
+     * The cache is a slave to contents of the backing data store.  We need to
+     * remove any records in the cache that no longer exist in the backing data
+     * store, then simply over-write everything else.  This logic simplifies 
+     * the logic required keep the cache up-to-date.
+     */
+    public void updateCache() {
+    	
+    	long start = System.currentTimeMillis();
+    	
+    	try (RoDProductRecordFactory datasource = 
+    			RoDProductRecordFactory.getInstance();
+    		RedisCacheManager cache = 
+    				RedisCacheManager.getInstance()) {
+    		
+    		List<String> datasourceKeys = datasource.getKeys();
+    		List<String> cacheKeys      = cache.getKeysAsList();     
+    		removeObsoleteRecords(cacheKeys, datasourceKeys);
+    		
+    		List<RoDProduct> products = datasource.getProducts();
+    		if ((products != null) && (!products.isEmpty())) { 
+    			for (RoDProduct p : products) {
+    				cache.put(
+    						p.getKey(), 
+    						JSONSerializer.getInstance().serialize(p));
+    			}
+    		}
+    	}
+    	catch (JedisConnectionException jce) {
+    		LOGGER.error("Unable to connect to the local cache.  "
+    				+ "JedisConnectionException message => [ "
+    				+ jce.getMessage()
+    				+ " ].  Cache will not be updated.");
+    	}
         LOGGER.info("Cache update completed at [ "
                 + dateFormatter.format(new Date(System.currentTimeMillis()))
                 + " ] in [ "
                 + (System.currentTimeMillis() - start)
                 + " ] ms.");
-        LOGGER.info("Processed [ "
-                + totalCounter
-                + " ] records.  [ "
-                + successCounter 
-                + " ] were successfully updated, [ "
-                + failedCounter
-                + " ] records failed to update.");
     }
     
     /**
@@ -330,7 +136,7 @@ public class CacheManager {
      */
     public static void main(String[] args) {
         try {
-            (new CacheManager()).updateAcceleratorCache();
+            (new CacheManager()).updateCache();
         }
         catch (Exception e) {
             e.printStackTrace();
