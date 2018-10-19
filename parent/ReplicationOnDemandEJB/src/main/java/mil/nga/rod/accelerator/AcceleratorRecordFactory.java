@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.rod.JSONSerializer;
-import mil.nga.rod.accelerator.RedisCacheManager.RedisCacheManagerHolder;
 import mil.nga.rod.model.Product;
 import mil.nga.rod.model.QueryRequestAccelerator;
 import mil.nga.types.HashType;
@@ -163,7 +162,6 @@ public class AcceleratorRecordFactory {
                                     .QueryRequestAcceleratorBuilder()
                                         .fileDate(FileUtils.getActualFileDate(p))
                                         .hash(hash)
-                                        .path(path)
                                         .size(FileUtils.getActualFileSize(p))
                                         .build();
                         }
