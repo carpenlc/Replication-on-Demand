@@ -1,4 +1,4 @@
-package mil.nga.rod.accelerator;
+package mil.nga.cache;
 
 import java.util.Set;
 
@@ -11,12 +11,12 @@ import java.util.Set;
 public interface CacheManagerI {
 
     /**
-     * The defailt Redis host
+     * The default Redis host
      */
     public static final String DEFAULT_REDIS_HOST = "localhost";
     
     /**
-     * The defailt Redis port 
+     * The default Redis port 
      */
     public static final int DEFAULT_REDIS_PORT = 6379;
     

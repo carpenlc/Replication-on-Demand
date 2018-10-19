@@ -1,5 +1,7 @@
-package mil.nga.rod.accelerator;
+package mil.nga.cache;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -103,6 +105,30 @@ public class RedisCacheManager
             keySet = jedis.keys("*");
         }
         return keySet;
+    }
+    
+    /**
+     * Get a List containing all of the keys that are currently stored in the 
+     * target cache.  This was added because I got tired of converting the Set 
+     * to a list throughout the code.
+     *   
+     * @return A List containing all of the keys stored in the Redis cache.
+     * @throws JedisConnectionException Runtime exception thrown if a 
+     * connection cannot be made to the local Redis cache. 
+     */
+    public List<String> getKeysAsList() {
+    	List<String> keyList = null;
+        Set<String>  keySet  = null;
+        try (Jedis jedis = pool.getResource()) {
+            keySet = jedis.keys("*");
+        }
+        if ((keySet == null) || (keySet.size() == 0)) { 
+        	keyList = new ArrayList<String>();
+        }
+        else {
+        	keyList = new ArrayList<String>(keySet);
+        }
+        return keyList;
     }
     
     /**
