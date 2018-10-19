@@ -12,6 +12,11 @@ Repository used to exchange the "front-end" code associated with the replication
 # cd /var/local/src
 # git clone https://github.com/carpenlc/Replication-on-Demand.git
 ```
+* Install the Oracle JDBC drivers into the local maven repository.
+```
+# cd Replication-on-Demand
+# mvn install:install-file -Dfile=./parent/lib/ojdbc8.jar -DgroupId=com.oracle -DartifactId=ojdbc8 -Dversion=12.2.0.1 -Dpackaging=jar
+```
 * Execute the Maven targets to build the output EAR
 ```
 # cd /var/local/src/Replication-on-Demand/parent
