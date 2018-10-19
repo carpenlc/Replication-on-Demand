@@ -5,8 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.cache.RedisCacheManager;
 import mil.nga.rod.JSONSerializer;
-import mil.nga.rod.accelerator.RedisCacheManager;
 import mil.nga.rod.jdbc.ProductFactory;
 import mil.nga.rod.model.Product;
 import mil.nga.rod.model.QueryRequestAccelerator;

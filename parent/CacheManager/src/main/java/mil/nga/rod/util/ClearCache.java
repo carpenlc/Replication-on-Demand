@@ -2,7 +2,7 @@ package mil.nga.rod.util;
 
 import java.util.Set;
 
-import mil.nga.rod.accelerator.RedisCacheManager;
+import mil.nga.cache.RedisCacheManager;
 
 /**
  * Simple application used to remove all of the key/value pairs from the 

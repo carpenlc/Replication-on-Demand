@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.cache.RedisCacheManager;
 import mil.nga.exceptions.PropertiesNotLoadedException;
 import mil.nga.exceptions.PropertyNotFoundException;
 import mil.nga.rod.JSONSerializer;
-import mil.nga.rod.accelerator.AcceleratorRecordFactory;
-import mil.nga.rod.accelerator.RedisCacheManager;
+import mil.nga.rod.cache.AcceleratorRecordFactory;
 import mil.nga.rod.jdbc.AcceleratorJDBCRecordFactory;
 import mil.nga.rod.jdbc.ProductFactory;
 import mil.nga.rod.jdbc.RoDProductFactory;
