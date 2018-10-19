@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.exceptions.ServiceUnavailableException;
+import mil.nga.rod.interfaces.RoDProductServiceI;
 import mil.nga.rod.model.RoDProduct;
 
 /**
@@ -30,7 +31,7 @@ import mil.nga.rod.model.RoDProduct;
  */
 @Stateless
 @LocalBean
-public class RoDProductService implements Serializable {
+public class RoDProductServiceJPA implements RoDProductServiceI, Serializable {
 
 	/**
 	 * Persistence context for the datasource containing the replication-on-demand
@@ -42,7 +43,7 @@ public class RoDProductService implements Serializable {
      * Set up the logging system for use throughout the class
      */        
     private static final Logger LOG = LoggerFactory.getLogger(
-    		RoDProductService.class);
+    		RoDProductServiceJPA.class);
     
 	/**
 	 * Eclipse-generated serialVersionUID
@@ -58,14 +59,14 @@ public class RoDProductService implements Serializable {
 	/**
 	 * Required default no-arg constructor.
 	 */
-	public RoDProductService() {}
+	public RoDProductServiceJPA() {}
 	
 	/**
 	 * Getter method to attempt to obtain a handle to data source 
 	 * <code>EntityManager</code>
 	 * @return A handle to the constructed <code>EntityManager</code> object.
 	 */
-	public EntityManager getEntityManager() 
+	private EntityManager getEntityManager() 
 			throws ServiceUnavailableException {
 		if (em == null) {
 			
@@ -102,6 +103,7 @@ public class RoDProductService implements Serializable {
 	 * @throws ServiceUnavailableException Thrown if we cannot start the 
 	 * JPA subsystem.
 	 */
+	@Override
 	public List<String> getKeys() throws ServiceUnavailableException {
 		
 		long         start = System.currentTimeMillis();
@@ -135,6 +137,7 @@ public class RoDProductService implements Serializable {
 	 * @throws ServiceUnavailableException Thrown if we cannot start the 
 	 * JPA subsystem.
 	 */
+	@Override
 	public RoDProduct getProduct(String key) 
 			throws ServiceUnavailableException {
 		
@@ -177,6 +180,7 @@ public class RoDProductService implements Serializable {
 	 * @throws ServiceUnavailableException Thrown if we cannot start the 
 	 * JPA subsystem.
 	 */
+	@Override
 	public List<RoDProduct> getProducts() 
 			throws ServiceUnavailableException {
 		

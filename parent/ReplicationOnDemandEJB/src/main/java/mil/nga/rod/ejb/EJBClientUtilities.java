@@ -247,6 +247,39 @@ public class EJBClientUtilities implements ApplicationInfoI {
     }
     
     /**
+     * Utility method used to look up the <code>RoDProductService</code> 
+     * interface.  This method is only called by the web tier.
+     * 
+     * @return The <code>RoDProductService</code> interface, or null if we 
+     * couldn't look it up.
+     */
+    public RoDProductService getRoDProductService() {
+        
+        RoDProductService service = null;
+        Object         ejb     = getEJB(RoDProductService.class);
+        
+        if (ejb != null) {
+            if (ejb instanceof mil.nga.rod.ejb.RoDProductService) {
+                service = (RoDProductService)ejb;
+            }
+            else {
+                LOGGER.error("Unable to look up EJB [ "
+                        + getJNDIName(RoDProductService.class)
+                        + " ] returned reference was the wrong type.  "
+                        + "Type returned [ "
+                        + ejb.getClass().getCanonicalName()
+                        + " ].");
+            }
+        }
+        else {
+            LOGGER.error("Unable to look up EJB [ "
+                    + getJNDIName(RoDProductService.class)
+                    + " ] returned reference was null.");
+        }
+        return service;
+    }
+    
+    /**
      * Utility method used to look up the 
      * getProductQueryRequestAcceleratorService interface.  
      * This method is only called by the web tier.

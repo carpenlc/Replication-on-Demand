@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 
 import mil.nga.rod.JSONSerializer;
 import mil.nga.rod.accelerator.AcceleratorRecordFactory;
-import mil.nga.rod.accelerator.RedisCacheManager;
+import mil.nga.cache.RedisCacheManager;
 import mil.nga.rod.model.Product;
 import mil.nga.rod.model.QueryRequestAccelerator;
 
@@ -25,6 +25,10 @@ import org.slf4j.LoggerFactory;
  * 
  * Class implemented to manage the database interface to the tables containing
  * the query acceleration data.
+ * 
+ * @deprecated The QueryRequestAccelerator are no longer stored in a separate
+ * database table.  They are stored with the product and artwork in a RoDProduct
+ * record.
  */
 @Stateless
 @LocalBean
@@ -126,7 +130,6 @@ public class ProductQueryRequestAcceleratorService
                             accelerator = new QueryRequestAccelerator
                                     .QueryRequestAcceleratorBuilder()
                                     .fileDate(rs.getDate("FILE_DATE"))
-                                    .path(rs.getString("UNIX_PATH"))
                                     .size(rs.getLong("FILE_SIZE"))
                                     .hash(rs.getString("HASH"))
                                     .build();
