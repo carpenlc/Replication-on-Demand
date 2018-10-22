@@ -56,6 +56,9 @@ public class ArtworkUnzipper {
 				}
 				catch (URISyntaxException use) {}
 			}
+			else {
+				uri = temp;
+			}
 		}
 		else {
 			LOG.error("The input file path was null or empty.  Output URI "
