@@ -5,6 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mortennobel.imagescaling.ResampleOp;
+
+import mil.nga.util.URIUtils;
 
 /**
  * Superclass containing reduced resolution image creation algorithms common 
@@ -238,20 +241,28 @@ public abstract class ImageProcessor {
 			LOG.info("Writing thumbnail to [ " 
 					+ getOutputImagePath()
 					+ " ].");
-			
-			try {
-				Path p = Paths.get(URI.create(getOutputImagePath()));
-				ImageIO.write(
-						image, 
-						"jpg", 
-						Files.newOutputStream(p));
+			Path p = Paths.get(URIUtils.getInstance().getURI(getOutputImagePath()));
+			if (p != null) {
+				try (OutputStream os = Files.newOutputStream(p)){
+					
+					ImageIO.write(
+							image, 
+							"jpg", 
+							os);
+				}
+				catch (IOException ioe) {
+					LOG.error("Unexpected IOException encountered while trying to write " 
+							+ "thumbnail image to [ "
+							+ getOutputImagePath()
+							+ " ].  Error message => [ "
+							+ ioe.getMessage()
+							+ " ].");
+				}
 			}
-			catch (IOException ioe) {
-				LOG.error("Unexpected IOException encountered while trying to write " 
-						+ "thumbnail image to [ "
+			else {
+				LOG.error("Unable to construct a URI for target output "
+						+ "file => [ "
 						+ getOutputImagePath()
-						+ " ].  Error message => [ "
-						+ ioe.getMessage()
 						+ " ].");
 			}
 		}

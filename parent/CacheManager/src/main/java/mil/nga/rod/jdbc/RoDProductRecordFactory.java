@@ -193,6 +193,7 @@ public class RoDProductRecordFactory implements AutoCloseable {
 		if (product != null) {
 			EntityManager em = getEntityManager();
 			if (em != null) {
+				
 				em.getTransaction().begin();
 				em.merge(product);
 				em.getTransaction().commit();

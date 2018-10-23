@@ -2,6 +2,7 @@ package mil.nga.artwork.image;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -97,7 +98,8 @@ public class PDFImageProcessor extends ImageProcessor
 		
 		if ((pathToImage != null) && (!pathToImage.isEmpty())) {
 			Path p = Paths.get(URI.create(pathToImage));
-			try (final PDDocument doc = PDDocument.load(Files.newInputStream(p))) {
+			try (InputStream is = Files.newInputStream(p);
+					final PDDocument doc = PDDocument.load(is)) {
 				if ((doc != null) && (doc.getNumberOfPages() > 0)) {
 					PDFRenderer renderer = new PDFRenderer(doc);
 					image = renderer.renderImage(0);
