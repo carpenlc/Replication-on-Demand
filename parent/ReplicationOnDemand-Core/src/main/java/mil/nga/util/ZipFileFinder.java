@@ -27,9 +27,12 @@ public class ZipFileFinder {
 	 */
 	public static List<Path> find(URI uri, String pattern) 
 			throws IOException {		
-		Finder finder = new Finder(uri, pattern);
-		Files.walkFileTree(Paths.get(uri), finder);
-		return finder.getResults();
+		List<Path> matches = new ArrayList<Path>();
+		try (Finder finder = new Finder(uri, pattern)) {
+			Files.walkFileTree(Paths.get(uri), finder);
+			matches = finder.getResults();
+		}
+		return matches;
 	}
 	
 	/**
