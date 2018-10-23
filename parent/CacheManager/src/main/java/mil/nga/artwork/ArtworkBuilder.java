@@ -3,6 +3,7 @@ package mil.nga.artwork;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -182,7 +183,7 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 				if (sourceImage != null) {	
 					art = new Artwork.ArtworkBuilder()
 							.artworkRow(row)
-							.sourceImagePath(sourceImage.toString())
+							.sourceImagePath(getSourceImagePath(sourceImage.toString()))
 							.sourceImageUrl(getSourceImageUrl(sourceImage.toString()))
 							.smallImagePath(getSmallImagePath())
 							.smallImageUrl(getSmallImageUrl())
@@ -299,6 +300,42 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 		sb.append(".");
 		sb.append(OUTPUT_IMAGE_TYPE.getText());
 		return sb.toString();
+	}
+	
+	/**
+	 * Construct a URL for the artwork source image.
+	 * @param srcImagePath The on-disk path for the source image.
+	 * @return The URL for the source image.
+	 */
+	private String getSourceImagePath(String srcImagePath) {
+		URI uri = null;
+    	if ((srcImagePath != null) && (!srcImagePath.isEmpty())) {
+			URI temp = URI.create(srcImagePath);
+			if ((temp.getScheme() == null) || (temp.getScheme().isEmpty())) {
+				try {
+					uri = new URI(
+							"file",
+							temp.getAuthority(),
+							temp.getPath(),
+							temp.getFragment(),
+							temp.getQuery());
+				}
+				catch (URISyntaxException use) {}
+			}
+			else {
+				uri = temp;
+			}
+		}
+		else {
+			LOG.error("The input file path was null or empty.  Output URI "
+					+ "will also be null.");
+		}
+    	if (uri != null) {
+    		return uri.toString();
+    	}
+    	else {
+    		return null;
+    	}
 	}
 	
 	/**

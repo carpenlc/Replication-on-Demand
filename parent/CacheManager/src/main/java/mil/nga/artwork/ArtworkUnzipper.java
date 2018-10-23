@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.util.FileUtils;
+import mil.nga.util.URIUtils;
 import mil.nga.util.ZipFileFinder;
 
 /**
@@ -35,71 +36,6 @@ public class ArtworkUnzipper {
      * Default constructor.
      */
     public ArtworkUnzipper() { }
-
-	/**
-	 * Construct a URI for the output artwork file.
-	 * @param path The output location for the target file.
-	 * @return The URI associated with output location of the target file.
-	 */
-    private URI getFileURI(String path) {
-    	URI uri = null;
-    	if ((path != null) && (!path.isEmpty())) {
-			URI temp = URI.create(path);
-			if ((temp.getScheme() == null) || (temp.getScheme().isEmpty())) {
-				try {
-					uri = new URI(
-							"file",
-							temp.getAuthority(),
-							temp.getPath(),
-							temp.getFragment(),
-							temp.getQuery());
-				}
-				catch (URISyntaxException use) {}
-			}
-			else {
-				uri = temp;
-			}
-		}
-		else {
-			LOG.error("The input file path was null or empty.  Output URI "
-					+ "will also be null.");
-		}
-		return uri;
-    }
-    
-	/**
-	 * Construct a URI for the target zip file.
-	 * @param pathToZip The on-disk path to the target zip file.
-	 * @return The URI associated with the target zip file.
-	 */
-	private URI getURI(String pathToZip) {
-		URI zipURI = null;
-		if ((pathToZip != null) && (!pathToZip.isEmpty())) {
-			// Don't know if it's a bug in the JDK or what, but the 
-			// ZipFileSystemProvider requires the existence of "!/"
-			// in the URI or you get an IllegalArgmentException when
-			// attempting to get a Path from a URI.  The following 
-			// line of code works around that issue.
-			pathToZip = pathToZip + "!/";
-			URI temp = URI.create(pathToZip);
-			if ((temp.getScheme() == null) || (temp.getScheme().isEmpty())) {
-				try {
-					zipURI = new URI(
-							"jar:file",
-							temp.getAuthority(),
-							temp.getPath(),
-							temp.getFragment(),
-							temp.getQuery());
-				}
-				catch (URISyntaxException use) {}
-			}
-		}
-		else {
-			LOG.error("The input file path was null or empty.  Output URI "
-					+ "will also be null.");
-		}
-		return zipURI;
-	}
 	
 	/**
 	 * Construct the <code>Path</code> object for the target output file 
@@ -119,7 +55,7 @@ public class ArtworkUnzipper {
 					sb.append(File.separator);
 				}
 				sb.append(FileUtils.getFilenameFromPath(zipFile));
-				p = Paths.get(getFileURI(sb.toString()));
+				p = Paths.get(URIUtils.getInstance().getURI(sb.toString()));
 			}
 		}
 		return p;
@@ -133,8 +69,10 @@ public class ArtworkUnzipper {
 	 * @return The Path object representing the output artwork PDF.
 	 */
 	public Path unzipArtwork(String pathToZip, String outputPath) {
+		
 		Path target = null;
-		URI  uri    = getURI(pathToZip);
+		URI  uri    = URIUtils.getInstance().getZipURI(pathToZip);
+		
 		if (uri != null) {
 			try {
 				// LOG.info("Target ZIP file => [ " + uri.toString() + " ].");
