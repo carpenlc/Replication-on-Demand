@@ -98,6 +98,7 @@ public class ArtworkUnzipper {
 					
 					Path fileToExtract = zipFileSystem.getPath(
 							targetArtworkFile.get(0).toString());
+					
 					// Path fileToExtract = targetArtworkFile.get(0);
 					if (targetArtworkFile.size() > 1) {
 						LOG.warn("More than one PDF file exists in ZIP file [ "
@@ -122,7 +123,7 @@ public class ArtworkUnzipper {
 										+ target.toString()
 										+ " ].");
 							}
-							Files.copy(fileToExtract, target);
+							Files.copy(target, fileToExtract);
 						}
 						else {
 							LOG.info("Target output file [ "
