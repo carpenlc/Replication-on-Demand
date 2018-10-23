@@ -97,35 +97,41 @@ public class JPGImageProcessor extends ImageProcessor
 		long          start = System.currentTimeMillis();
 		BufferedImage image = null;
 		
-		Path p = Paths.get(URI.create(pathToImage));
-	
-		if (Files.exists(p)) {
-			try (InputStream is = Files.newInputStream(p)) {
-				image = ImageIO.read(is);
+		if ((pathToImage != null) && (!pathToImage.isEmpty())) {
+			Path p = Paths.get(URI.create(pathToImage));
+		
+			if (Files.exists(p)) {
+				try (InputStream is = Files.newInputStream(p)) {
+					image = ImageIO.read(is);
+				}
+				catch (FileNotFoundException fnfe) {
+					LOG.error("Unexpected FileNotFoundException encountered while "
+							+ "reading source image [ "
+							+ pathToImage
+							+ " ].  Error message => [ "
+							+ fnfe.getMessage()
+							+ " ].");
+				}
+				catch (IOException ioe) {
+					LOG.error("Unexpected IOException encountered while "
+							+ "reading source image [ "
+							+ pathToImage
+							+ " ].  Error message => [ "
+							+ ioe.getMessage()
+							+ " ].");
+					ioe.printStackTrace();
+				}
 			}
-			catch (FileNotFoundException fnfe) {
-				LOG.error("Unexpected FileNotFoundException encountered while "
-						+ "reading source image [ "
-						+ pathToImage
-						+ " ].  Error message => [ "
-						+ fnfe.getMessage()
+			else {
+				LOG.error("Target JPG image file does not exist.  "
+						+ "Target file => [ "
+						+ p.toString()
 						+ " ].");
-			}
-			catch (IOException ioe) {
-				LOG.error("Unexpected IOException encountered while "
-						+ "reading source image [ "
-						+ pathToImage
-						+ " ].  Error message => [ "
-						+ ioe.getMessage()
-						+ " ].");
-				ioe.printStackTrace();
 			}
 		}
 		else {
-			LOG.error("Target JPG image file does not exist.  "
-					+ "Target file => [ "
-					+ p.toString()
-					+ " ].");
+			LOG.error("The input image path is null or undefined.  Unable "
+					+ "to load the target image.");
 		}
 		
 		if (LOG.isDebugEnabled()) {

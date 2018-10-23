@@ -1,8 +1,11 @@
 package mil.nga.artwork.image;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
@@ -11,11 +14,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Concrete class that will attempt to convert a PDF into a thumbnail image for
- * display with the Rotator widget.  PDFs are common when associated with SUPIR
+ * web site display.  PDFs are common when associated with SUPIR
  * intel product types.  This class has dependencies on the following two Apache
  * projects:
  * 
- * Apache HttpComponents (for retrieving PDFs from target web sites)
  * Apache PDFBox (for loading and converting PDF files)
  * 
  * Note: Converting PDFs to a reduced-resolution thumbnail requires a huge 
@@ -24,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * The most common is conversion of PDF files that contain fonts that are unknown 
  * to, or not handled by the free open source PDFBox library. 
  * 
- * @author carpenlc
+ * @author L. Craig Carpenter
  */
 public class PDFImageProcessor extends ImageProcessor 
 		implements ImageProcessorI, Runnable {
@@ -89,27 +91,34 @@ public class PDFImageProcessor extends ImageProcessor
 	 * PDF.
 	 */
 	@Override
-	public BufferedImage getSourceImage(String path) {
+	public BufferedImage getSourceImage(String pathToImage) {
 		
 		BufferedImage image  = null;
 		
-		try (final PDDocument doc = PDDocument.load(new File(path))) {
-			if ((doc != null) && (doc.getNumberOfPages() > 0)) {
-				PDFRenderer renderer = new PDFRenderer(doc);
-				image = renderer.renderImage(0);
+		if ((pathToImage != null) && (!pathToImage.isEmpty())) {
+			Path p = Paths.get(URI.create(pathToImage));
+			try (final PDDocument doc = PDDocument.load(Files.newInputStream(p))) {
+				if ((doc != null) && (doc.getNumberOfPages() > 0)) {
+					PDFRenderer renderer = new PDFRenderer(doc);
+					image = renderer.renderImage(0);
+				}
+				else {
+					LOG.error("Unable to open the target PDF document.  The "
+							+ "document was null, or did not contain any pages.");
+				}
 			}
-			else {
-				LOG.error("Unable to open the target PDF document.  The "
-						+ "document was null, or did not contain any pages.");
+			catch (IOException ioe) {
+				LOG.error("Unexpected IOException encountered while attempting "
+						+ "to open PDF document [ "
+						+ pathToImage
+						+ " ].  Error message => [ "
+						+ ioe.getMessage()
+						+ " ].");
 			}
 		}
-		catch (IOException ioe) {
-			LOG.error("Unexpected IOException encountered while attempting "
-					+ "to open PDF document [ "
-					+ path
-					+ " ].  Error message => [ "
-					+ ioe.getMessage()
-					+ " ].");
+		else {
+			LOG.error("The input image path is null or undefined.  Unable "
+					+ "to load the target image.");
 		}
 		return image;
 	}
