@@ -4,10 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -70,8 +73,9 @@ public class ArtworkUnzipper {
 	 */
 	public Path unzipArtwork(String pathToZip, String outputPath) {
 		
-		Path target = null;
-		URI  uri    = URIUtils.getInstance().getZipURI(pathToZip);
+		Path       target        = null;
+		URI        uri           = URIUtils.getInstance().getZipURI(pathToZip);
+		FileSystem zipFileSystem = null;
 		
 		if (uri != null) {
 			try {
@@ -84,6 +88,17 @@ public class ArtworkUnzipper {
 					//for (FileSystemProvider provider : providers) {
 					//	System.out.println(provider.getScheme());
 					//}
+					// After correcting a bug with the ZipFileFinder leaving 
+					// Streams open to the target artwork zip file, we now have
+					// to re-open the filesystem before attempting to extract 
+					// the artwork.
+					HashMap<String, String> env = new HashMap<String, String>();
+					env.put("create", "false");
+					zipFileSystem = FileSystems.newFileSystem(
+			    			uri, 
+			    			env, 
+			    			Thread.currentThread().getContextClassLoader()); 
+					
 					Path fileToExtract = targetArtworkFile.get(0);
 					
 					if (targetArtworkFile.size() > 1) {
@@ -137,6 +152,11 @@ public class ArtworkUnzipper {
 						+ "Error message => [ "
 						+ fsnf.getMessage()
 						+ " ].");
+			}
+			finally {
+				if (zipFileSystem != null) {
+					try { zipFileSystem.close(); } catch (Exception e) {}
+				}
 			}
 		}
 		else {
