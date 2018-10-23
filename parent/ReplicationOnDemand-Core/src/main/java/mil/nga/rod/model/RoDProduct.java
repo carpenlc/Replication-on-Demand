@@ -61,7 +61,7 @@ public class RoDProduct implements Serializable {
     private Date   loadDate;
 	@Column(name="MEDIA_NAME")
     private String mediaName;
-	@Column(name="NOTES")
+	@Column(name="NOTES", length=4000)
     private String notes;
 	@Column(name="NRN")
     private String nrn;
