@@ -81,26 +81,24 @@ public class ArtworkUnzipper {
 			try {
 				// LOG.info("Target ZIP file => [ " + uri.toString() + " ].");
 				List<Path> targetArtworkFile = ZipFileFinder.find(uri, "*.pdf");
-				if ((targetArtworkFile != null) && (targetArtworkFile.size() > 0)) {
-					// Note to self.  The Zip filesystem was loaded when we 
-					// searched it for a PDF.  
-					//List<FileSystemProvider> providers = FileSystemProvider.installedProviders();	
-					//for (FileSystemProvider provider : providers) {
-					//	System.out.println(provider.getScheme());
-					//}
-					// After correcting a bug with the ZipFileFinder leaving 
-					// Streams open to the target artwork zip file, we now have
-					// to re-open the filesystem before attempting to extract 
-					// the artwork.
-					HashMap<String, String> env = new HashMap<String, String>();
-					env.put("create", "false");
-					zipFileSystem = FileSystems.newFileSystem(
-			    			uri, 
-			    			env, 
-			    			Thread.currentThread().getContextClassLoader()); 
+				
+				// After correcting a bug with the ZipFileFinder leaving 
+				// Streams open to the target artwork zip file, we now have
+				// to re-open the filesystem before attempting to extract 
+				// the artwork.
+				HashMap<String, String> env = new HashMap<String, String>();
+				env.put("create", "false");
+				zipFileSystem = FileSystems.newFileSystem(
+		    			uri, 
+		    			env, 
+		    			Thread.currentThread().getContextClassLoader()); 
+				
+				if ((targetArtworkFile != null) && 
+						(targetArtworkFile.size() > 0)) {
 					
-					Path fileToExtract = targetArtworkFile.get(0);
-					
+					Path fileToExtract = zipFileSystem.getPath(
+							targetArtworkFile.get(0).toString());
+					// Path fileToExtract = targetArtworkFile.get(0);
 					if (targetArtworkFile.size() > 1) {
 						LOG.warn("More than one PDF file exists in ZIP file [ "
 								+ uri.toString()
