@@ -1,10 +1,8 @@
 package mil.nga.rod.util;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
+import javax.persistence.NoResultException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +11,7 @@ import mil.nga.cache.RedisCacheManager;
 import mil.nga.exceptions.PropertiesNotLoadedException;
 import mil.nga.exceptions.PropertyNotFoundException;
 import mil.nga.rod.JSONSerializer;
-import mil.nga.rod.cache.AcceleratorRecordFactory;
-import mil.nga.rod.jdbc.AcceleratorJDBCRecordFactory;
-import mil.nga.rod.jdbc.ProductFactory;
-import mil.nga.rod.jdbc.RoDProductFactory;
-import mil.nga.rod.model.Product;
-import mil.nga.rod.model.QueryRequestAccelerator;
+import mil.nga.rod.jdbc.RoDProductRecordFactory;
 import mil.nga.rod.model.RoDProduct;
 import mil.nga.rod.util.ProductUtils;
 
@@ -50,9 +43,10 @@ public class CacheManager {
 		long start = System.currentTimeMillis();
 		int  count = 0;
 
-		List<String> cacheRecordsToRemove = ProductUtils.getInstance().defference(
-				cache,
-				datastore);
+		List<String> cacheRecordsToRemove = 
+				ProductUtils.getInstance().defference(
+						cache,
+						datastore);
 		
 		if ((cacheRecordsToRemove != null) && (cacheRecordsToRemove.size() > 0)) {
 			LOGGER.info("Removing [ "
@@ -60,6 +54,9 @@ public class CacheManager {
 					+ " ] obsolete cache records.");
 			for (String key : cacheRecordsToRemove) {
 				RedisCacheManager.getInstance().remove(key);
+				LOGGER.info("Removed cached RoDProduct with key => [ "
+						+ key
+						+ " ].");
 				count++;
 			}
 			if (LOGGER.isDebugEnabled()) {
@@ -71,8 +68,7 @@ public class CacheManager {
 			}
 		}
 		else {
-			LOGGER.info("No obsolete QueryRequestAccelerator records "
-					+ "encountered.");
+			LOGGER.info("No obsolete RoDProduct records in the cache.");
 		}
 	}
     
@@ -101,39 +97,13 @@ public class CacheManager {
 			
 			for (String key : cacheRecordsToAdd) {
 				try {
-					List<Product> prods = ProductFactory.getInstance().getProducts(key);
-					if ((prods != null) && (prods.size() > 0)) {
-						
-						QueryRequestAccelerator accel = 
-								AcceleratorRecordFactory
-									.getInstance()
-									.buildRecord(
-										prods.get(0));
-						
-						if (accel != null) {
-							
-							Optional<RoDProduct> rodProduct = 
-									RoDProductFactory.getInstance()
-										.getRoDProductOneStep(
-											Optional.of(accel));
-							
-							if (rodProduct.isPresent()) {
-								RedisCacheManager.getInstance().put(
-										key,
-										JSONSerializer.getInstance().serialize(
-												rodProduct.get()));
-							}
-							
-						}
-						else {
-							LOGGER.warn("Unable to build the "
-									+ "QueryRequestAccelerator record for "
-									+ "key [ "
-									+ key 
-									+ " ].");
-						}
-						
-
+					
+					RoDProduct prod = RoDProductRecordFactory.getInstance().getProduct(key);
+					if (key != null) {
+						RedisCacheManager.getInstance().put(
+								key,
+								JSONSerializer.getInstance().serialize(
+										prod));
 					}
 					else {
 						LOGGER.warn("No product found with NRN => [ "
@@ -144,38 +114,11 @@ public class CacheManager {
 						errorCount++;
 					}
 				}
-				catch (IOException ioe) {
-					LOGGER.error("Unexpected IOException "
+				catch (NoResultException nre) {
+					LOGGER.error("Unexpected NoResultsException "
 							+ "encountered.  Unable "
 							+ "to add new records.  Error message => [ "
-							+ ioe.getMessage()
-							+ " ].");
-					errorCount++;
-				}
-				catch (PropertiesNotLoadedException pnle) {
-					LOGGER.error("Unexpected PropertiesNotLoadedException "
-							+ "encountered.  Please ensure that the "
-							+ "application is properly configured.  Unable "
-							+ "to add new records.  Error message => [ "
-							+ pnle.getMessage()
-							+ " ].");
-					errorCount++;
-				}
-				catch (PropertyNotFoundException pnfe) {
-					LOGGER.error("Unexpected PropertyNotFoundException encountered.  "
-							+ "Please ensure that the application is properly "
-							+ "configured.  Unable to add new records.  "
-							+ "Error message => [ "
-							+ pnfe.getMessage()
-							+ " ].");
-					errorCount++;
-				}
-				catch (ClassNotFoundException cnfe) {
-					LOGGER.error("Unexpected ClassNotFoundException "
-							+ "encountered.  Please ensure that the JDBC "
-							+ "drivers are available.  Unable to  "
-							+ "add new records.  Error message => [ "
-							+ cnfe.getMessage()
+							+ nre.getMessage()
 							+ " ].");
 					errorCount++;
 				}
@@ -191,7 +134,7 @@ public class CacheManager {
 			}
 		}
 		else {
-			LOGGER.info("No QueryRequestAccelerator records to add.");
+			LOGGER.info("No new RoDProduct records to add to the cache.");
 		}
 	}
 	
@@ -227,13 +170,14 @@ public class CacheManager {
 						(!serializedProduct.isEmpty())) {
 					RoDProduct product = JSONSerializer.getInstance()
 							.deserializeToRoDProduct(serializedProduct);
+					
 					if (product != null) {
-						Optional<RoDProduct> productDS  = 
-								RoDProductFactory.getInstance()
-									.getRoDProduct(key);
-						if (productDS.isPresent()) {
-							if (!productDS.get()
-									.getHash()
+						RoDProduct productDS = 
+								RoDProductRecordFactory
+									.getInstance()
+									.getProduct(key);
+						if (productDS != null) {
+							if (!productDS.getHash()
 									.equalsIgnoreCase(product.getHash())) {
 								// Simply replace the existing cache record
 								// with a serialized version of the current 
@@ -241,7 +185,7 @@ public class CacheManager {
 								RedisCacheManager.getInstance().put(
 										key,
 										JSONSerializer.getInstance().serialize(
-												productDS.get()));
+												productDS));
 								updatedRecs++;
 							}
 						}
@@ -266,63 +210,41 @@ public class CacheManager {
 							+ key
 							+ " ].");
 				}
-			}
-				
-			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("A total of [ "
-						+ updatedRecs 
-						+ " ] records updated out of [ "
-						+ count 
-						+ " ] candidates records with [ "
-						+ errorCount 
-						+ " ] errors encountered in [ "
-						+ (System.currentTimeMillis() - start)
-						+ " ] ms.");
-			}
+			} //end for	
+		}
+		else {
+			LOGGER.info("There are no overlapping records to update.");
+		}
+		
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("A total of [ "
+					+ updatedRecs 
+					+ " ] records updated out of [ "
+					+ count 
+					+ " ] candidates records with [ "
+					+ errorCount 
+					+ " ] errors encountered in [ "
+					+ (System.currentTimeMillis() - start)
+					+ " ] ms.");
+		}
 	}
 	
     /**
      * 
      */
     public void update() {
-    	try {
 
-			List<String> datastoreRecords = 
-					AcceleratorJDBCRecordFactory.getInstance()
-						.getUniqueKeys();
-			Set<String> cacheRecordSet = 
-					RedisCacheManager.getInstance()
-					.getKeys();
-			List<String> cacheRecords = 
-					cacheRecordSet.stream().collect(Collectors.toList());
-			removeObsoleteCacheRecords(datastoreRecords, cacheRecords);
-			addNewCacheRecords(datastoreRecords, cacheRecords);
-    	}
-		catch (PropertiesNotLoadedException pnle) {
-			LOGGER.error("Unexpected PropertiesNotLoadedException "
-					+ "encountered.  Please ensure that the "
-					+ "application is properly configured.  Unable "
-					+ "to add new records.  Error message => [ "
-					+ pnle.getMessage()
-					+ " ].");
-		}
-		catch (PropertyNotFoundException pnfe) {
-			LOGGER.error("Unexpected PropertyNotFoundException encountered.  "
-					+ "Please ensure that the application is properly "
-					+ "configured.  Unable to add new records.  "
-					+ "Error message => [ "
-					+ pnfe.getMessage()
-					+ " ].");
-		}
-		catch (ClassNotFoundException cnfe) {
-			LOGGER.error("Unexpected ClassNotFoundException "
-					+ "encountered.  Please ensure that the JDBC "
-					+ "drivers are available.  Unable to  "
-					+ "add new records.  Error message => [ "
-					+ cnfe.getMessage()
-					+ " ].");
-		}
+    		try (RoDProductRecordFactory prodFactory = 
+    				RoDProductRecordFactory.getInstance()) {
+				List<String> datastoreKeys = prodFactory.getKeys();
+				List<String> cacheKeys     = RedisCacheManager.getInstance().getKeysAsList();
+				
+				removeObsoleteCacheRecords(datastoreKeys, cacheKeys);
+				addNewCacheRecords(datastoreKeys, cacheKeys);
+				updateCacheRecords(datastoreKeys, cacheKeys);
+    		}
+			
+    	
     }
     
     
