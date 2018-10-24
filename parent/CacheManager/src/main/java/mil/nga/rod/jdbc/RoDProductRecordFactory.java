@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -182,6 +183,36 @@ public class RoDProductRecordFactory implements AutoCloseable {
 		return products;
 	}
 
+	/**
+	 * Simple method to remove a single <code>RoDProduct</code> from the 
+	 * backing data store.  all products in the target persistence unit.
+	 * @param key The primary key to delete.
+	 */
+	public void remove(String key) {
+		EntityManager em = getEntityManager();
+		try {
+			RoDProduct prod = getProduct(key);
+			if (prod != null) {
+				
+				em.getTransaction().begin();
+				em.remove(prod);
+				em.getTransaction().commit();
+				
+			}
+			else {
+				LOG.error("Unable to find product with key [ "
+						+ key
+						+ " ].  Nothing to remove.");
+			}
+		}
+		catch (NoResultException nre) {
+			LOG.error("Unable to find product with key [ "
+					+ key
+					+ " ].  NoResultException encountered.  "
+					+ "Nothing to remove.");
+		}
+	}
+	
 	/**
 	 * Method used to store an input <code>RoDProduct</code> object in the 
 	 * backing data store.  It uses the merge function of 
