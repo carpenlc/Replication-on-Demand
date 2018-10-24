@@ -139,8 +139,8 @@ public class ArtworkUnzipper {
 				}
 			}
 			catch (IOException ioe) {
-				LOG.error("An unexpected IOException was raised while attempting "
-						+ "to open the target ZIP file [ "
+				LOG.error("An unexpected IOException was raised while "
+						+ "attempting to open the target ZIP file [ "
 						+ uri.toString()
 						+ " ].  Error message => [ "
 						+ ioe.getMessage()
