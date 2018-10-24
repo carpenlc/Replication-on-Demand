@@ -7,23 +7,26 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.cache.RedisCacheManager;
 import mil.nga.exceptions.PropertiesNotLoadedException;
 import mil.nga.exceptions.PropertyNotFoundException;
 import mil.nga.util.FileUtils;
 import mil.nga.rod.cache.AcceleratorRecordFactory;
 import mil.nga.rod.jdbc.AcceleratorJDBCRecordFactory;
 import mil.nga.rod.jdbc.ProductFactory;
+import mil.nga.rod.jdbc.RoDProductFactory;
+import mil.nga.rod.jdbc.RoDProductRecordFactory;
 import mil.nga.rod.model.Product;
 import mil.nga.rod.model.QueryRequestAccelerator;
 import mil.nga.rod.util.ProductUtils;
 
 /**
- * Class introduced to manage the "Accelerator" records resident in the 
- * back-end data store.  There is one accelerator record for each unique 
- * NRN/NSN combination.  The accelerator record contains a calculated 
- * hash code and the actual on-disk file size.  These records are used 
- * by clients to determine whether or not their local holdings are the 
- * same as the source holdings.  
+ * Class introduced to manage the <code>RoDProduct</code> records 
+ * resident in the back-end data store.  There is one accelerator 
+ * record for each unique NRN/NSN combination.  The accelerator record 
+ * contains a calculated hash code and the actual on-disk file size.  
+ * These records are used by clients to determine whether or not their 
+ * local holdings are the same as the source holdings.  
  * 
  * In order to simplify processing the management of the backing data 
  * store was segregated from the management of the local cache.  
@@ -68,62 +71,37 @@ public class RoDProductManager {
         return needsUpdate;
     }
 	/**
-	 * Remove orphaned accelerator records.  These are accelerator records 
-	 * that do not have an associated Product record.
+	 * Remove orphaned <code>RoDProduct</code> records.  These are 
+	 * <code>RoDProduct</code> records that do not have an associated 
+	 * Product record.
 	 * 
 	 * @param products List of unique products.
 	 * @param accelerators List of unique query accelerator records.
 	 */
-	public void removeObsoleteAcceleratorRecords(
-			List<String> products, 
-			List<String> accelerators) {
+	public void removeObsoleteRoDProductRecords(
+			List<String> prodKeys, 
+			List<String> rodProdKeys) {
 	
 		long start      = System.currentTimeMillis();
 		int  count      = 0;
 		int  errorCount = 0;
-		List<String> acceleratorsToRemove = ProductUtils.getInstance().defference(
-				accelerators,
-				products);
 		
-		if ((acceleratorsToRemove != null) && (acceleratorsToRemove.size() > 0)) {
+		List<String> prodsToRemove = 
+				ProductUtils.getInstance().defference(
+						rodProdKeys,
+						prodKeys);
+		
+		if ((prodsToRemove != null) && (prodsToRemove.size() > 0)) {
+			
 			LOGGER.info("Removing [ "
-					+ acceleratorsToRemove.size()
-					+ " ] obsolete QueryRequestAccelerator records.");
-			for (String key : acceleratorsToRemove) {
-				try {
-					AcceleratorJDBCRecordFactory.getInstance().remove(
-							ProductUtils.getInstance().getNRNFromKey(key), 
-							ProductUtils.getInstance().getNSNFromKey(key));
-					count += 1;
-				}
-				catch (PropertiesNotLoadedException pnle) {
-					LOGGER.error("Unexpected PropertiesNotLoadedException "
-							+ "encountered.  Please ensure that the "
-							+ "application is properly configured.  Unable "
-							+ "to remove orphaned records.  Error message => [ "
-							+ pnle.getMessage()
-							+ " ].");
-					errorCount += 1;
-				}
-				catch (PropertyNotFoundException pnfe) {
-					LOGGER.error("Unexpected PropertyNotFoundException encountered.  "
-							+ "Please ensure that the application is properly "
-							+ "configured.  Unable to remove orphaned records.  "
-							+ "Error message => [ "
-							+ pnfe.getMessage()
-							+ " ].");
-					errorCount += 1;
-				}
-				catch (ClassNotFoundException cnfe) {
-					LOGGER.error("Unexpected ClassNotFoundException "
-							+ "encountered.  Please ensure that the JDBC "
-							+ "drivers are available.  Unable to remove "
-							+ "orphaned records.  Error message => [ "
-							+ cnfe.getMessage()
-							+ " ].");
-					errorCount += 1;
-				}
+					+ prodsToRemove.size()
+					+ " ] obsolete RoDProduct records.");
+			
+			for (String key : prodsToRemove) {
+				RoDProductRecordFactory.getInstance().remove(key);
+				count += 1;
 			}
+			
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("A total of [ "
 						+ count 
@@ -135,7 +113,7 @@ public class RoDProductManager {
 			}
 		}
 		else {
-			LOGGER.info("No obsolete QueryRequestAccelerator records "
+			LOGGER.info("No obsolete RoDProduct records "
 					+ "encountered.");
 		}
 	}
@@ -147,21 +125,25 @@ public class RoDProductManager {
 	 * @param accelerators List of unique query accelerator records.
 	 */
 	public void addNewAcceleratorRecords(
-			List<String> products, 
-			List<String> accelerators) {
+			List<String> prodKeys, 
+			List<String> rodProdKeys) {
 		
 		long start      = System.currentTimeMillis();
 		int  count      = 0;
 		int  errorCount = 0;
-		List<String> acceleratorsToAdd = ProductUtils.getInstance().defference(
-				products,
-				accelerators);
+		List<String> prodsToAdd = 
+				ProductUtils.getInstance().defference(
+						prodKeys,
+						rodProdKeys);
 		
-		if ((acceleratorsToAdd != null) && (acceleratorsToAdd.size() > 0)) {
+		if ((prodsToAdd != null) && (prodsToAdd.size() > 0)) {
+			
 			LOGGER.info("Adding [ "
-					+ acceleratorsToAdd.size()
-					+ " ] new QueryRequestAccelerator records.");
-			for (String key : acceleratorsToAdd) {
+					+ prodsToAdd.size()
+					+ " ] new RoDRecords records.");
+			
+			
+			for (String key : prodsToAdd) {
 				try {
 					List<Product> prods = ProductFactory.getInstance().getProducts(key);
 					if ((prods != null) && (prods.size() > 0)) {
@@ -327,16 +309,20 @@ public class RoDProductManager {
 		
 		long start = System.currentTimeMillis();
 		
-		try {
+		// Wrap the instance references in a try-with-resources block
+		try (ProductFactory          prodFactory    = 
+					ProductFactory.getInstance();
+			 RoDProductRecordFactory rodProdFactory = 
+					RoDProductRecordFactory.getInstance()) {
 			
-			List<String> uniqueProducts = ProductFactory.getInstance()
-						.getUniqueKeys();
+			List<String> productKeys = prodFactory.getUniqueKeys();
+			List<String> rodProductKeys = rodProdFactory.getKeys();
 			
 			// Get the map containing a unique list of accelerator records
 			//List<String> uniqueRecords = RoDProductRecordFactory.getInstance()
 			//			.getUniqueKeys();
 			
-			//removeObsoleteAcceleratorRecords(uniqueProducts, uniqueRecords);
+			removeObsoleteRoDProductRecords(productKeys, rodProductKeys);
 			//addNewAcceleratorRecords(uniqueProducts, uniqueRecords);
 			//updateAcceleratorRecords(uniqueProducts, uniqueRecords);
 			
@@ -350,7 +336,7 @@ public class RoDProductManager {
 		catch (ClassNotFoundException cnfe) {
 			
 		}
-		LOGGER.info("Update completed in [ "
+		LOGGER.info("DataStore update completed in [ "
 				+ (System.currentTimeMillis() - start)
 				+ " ] ms.");
 	}

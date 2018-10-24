@@ -152,9 +152,10 @@ public class CacheManager {
 		int  errorCount  = 0;
 		int  updatedRecs = 0;
 		
-		List<String> cacheRecordsToUpdate = ProductUtils.getInstance().intersection(
-				datastore,
-				cache);
+		List<String> cacheRecordsToUpdate = 
+				ProductUtils.getInstance().intersection(
+						datastore,
+						cache);
 		
 		if ((cacheRecordsToUpdate != null) && (cacheRecordsToUpdate.size() > 0)) {
 			LOGGER.info("Updating [ "
@@ -168,6 +169,7 @@ public class CacheManager {
 													.get(key);
 				if ((serializedProduct != null) && 
 						(!serializedProduct.isEmpty())) {
+					
 					RoDProduct product = JSONSerializer.getInstance()
 							.deserializeToRoDProduct(serializedProduct);
 					
