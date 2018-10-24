@@ -7,7 +7,7 @@ if [ -z `which java` ]; then
   fi
 fi
 SCRIPT_DIR=$(dirname `which $0`)
-LIB_DIR="${SCRIPT_DIR}/../target/lib/"
+LIB_DIR="${SCRIPT_DIR}/../CacheManager/target/lib/"
 
 for i in ${LIB_DIR}*.jar; do
     CLASSPATH=$CLASSPATH:$i
