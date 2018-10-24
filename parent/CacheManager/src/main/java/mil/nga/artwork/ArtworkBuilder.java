@@ -22,6 +22,7 @@ import mil.nga.rod.model.ArtworkRow;
 import mil.nga.rod.model.Product;
 import mil.nga.rod.util.ProductUtils;
 import mil.nga.util.FileUtils;
+import mil.nga.util.URIUtils;
 
 
 /**
@@ -61,7 +62,7 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
      * Set up the Log4j system for use throughout the class
      */     
     static final Logger LOG = LoggerFactory.getLogger(
-    		ArtworkProcessor.class);
+    		ArtworkBuilder.class);
     
 	/**
 	 * The base name to use for the output files.
@@ -442,9 +443,11 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 		
 		long size = 0L;
 		
-		if ((getDefaultImagePath() != null) && (!getDefaultImagePath().isEmpty())) {
+		if ((getDefaultImagePath() != null) && 
+				(!getDefaultImagePath().isEmpty())) {
 			try {
-				Path p = Paths.get(getDefaultImagePath());
+				Path p = Paths.get(
+						URIUtils.getInstance().getURI(getDefaultImagePath()));
 				if (Files.exists(p)) {
 					size = Files.size(p);
 				}
@@ -685,13 +688,13 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 			sb.append(File.separator);
 		}
 		sb.append(productType.toLowerCase());
-		Path p = Paths.get(URI.create(sb.toString()));
+		Path p = Paths.get(URIUtils.getInstance().getURI(sb.toString()));
 		if (!Files.exists(p)) {
 			Files.createDirectory(p);
 		};
 		sb.append(File.separator);
 		sb.append(ProductUtils.getInstance().getKey(getNRN(), getNSN()));
-		p = Paths.get(URI.create(sb.toString()));
+		p = Paths.get(URIUtils.getInstance().getURI(sb.toString()));
 		if (!Files.exists(p)) {
 			Files.createDirectory(p);
 		};
