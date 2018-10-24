@@ -243,6 +243,9 @@ public class CacheManager {
 				addNewCacheRecords(datastoreKeys, cacheKeys);
 				updateCacheRecords(datastoreKeys, cacheKeys);
     		}
+    		catch (Exception e) {
+    			e.printStackTrace();
+    		}
 			
     	
     }
