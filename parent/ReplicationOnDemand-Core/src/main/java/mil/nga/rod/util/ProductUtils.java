@@ -90,17 +90,22 @@ public class ProductUtils {
 	 * is stored in the cache.  The key is a concatentation of the NRN and NSN
 	 * of the unique product. 
 	 * 
-	 * @param nrn
-	 * @param nsn
+	 * Note: In the datastore, there are several products that are missing the
+	 * NRN, NSN, or both.  The team maintaining the data store replace these 
+	 * missing Strings with "XXX not avail".  The spaces cause problems later 
+	 * when we attempt to construct URIs to locations on the file system.  
+	 * 
+	 * @param nrn Product NRN
+	 * @param nsn Product NSN
 	 * @return
 	 */
 	public String getKey(String nrn, String nsn) {
 		StringBuilder sb = new StringBuilder();
         if ((nsn != null) && (!nsn.isEmpty())) {
             if ((nrn != null) && (!nrn.isEmpty())) {
-                sb.append(nsn.trim());
+                sb.append(nsn.trim().replaceAll("\\ ", "-"));
                 sb.append("+");
-                sb.append(nrn.trim());
+                sb.append(nrn.trim().replaceAll("\\ ", "-"));
             }
             else {
                 LOGGER.error("The input product object contains a null "
