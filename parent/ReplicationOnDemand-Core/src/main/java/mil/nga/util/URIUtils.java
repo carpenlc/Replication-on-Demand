@@ -1,10 +1,10 @@
 package mil.nga.util;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+//import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
+//import java.net.URLEncoder;
 import java.nio.file.FileSystemNotFoundException;
 
 import org.slf4j.Logger;
@@ -117,7 +117,7 @@ public class URIUtils implements Serializable {
     	
     	if ((filePath != null) && (!filePath.isEmpty())) { 
     		
-	    	try {
+	    	//try {
 	    		
 	    		// If the input URI contains spaces, encode it.  This was 
 	    		// added to support Windows-based paths associated with the 
@@ -127,14 +127,19 @@ public class URIUtils implements Serializable {
 	    			// Do not encode if the incoming URL is s3.  The 
 	    			// URI.create() method is unable to pick out the scheme
 	    			// if the URI is encoded.
-	    			if (filePath.startsWith("s3")) {
+	    			//if (filePath.startsWith("s3")) {
 	    				filePath = filePath.replaceAll("\\ ", "+");
-	    			}
-	    			else {
-	    				filePath = URLEncoder
-	    						.encode(filePath, "UTF-8")
-	    						.replaceAll("\\+", "%20");
-	    			}
+	    			//}
+	    			//else {
+	    				// Encoding the entire path doesn't work based on the 
+	    				// same comment as above.  The URI.create() method 
+	    				// cannot parse out the scheme if the full path is 
+	    				// encoded.  This needs to have a permanent fix 
+	    				// implemented. 
+	    				//filePath = URLEncoder
+	    				//		.encode(filePath, "UTF-8")
+	    				//		.replaceAll("\\+", "%20");
+	    			//}
 	    		}
 		    				
 	    		// For large jobs, this message creates too much disk IO
@@ -158,16 +163,16 @@ public class URIUtils implements Serializable {
 		            LOGGER.warn("Input filePath is null or not defined.  Returned "
 		                    + "URI will be null.");
 		        }
-	    	}
-	        catch (UnsupportedEncodingException use) {
-	        	LOGGER.error("Unexpected UnsupportedEncodingException "
-	        			+ "encountered while encoding URI [ "
-	        			+ filePath
-	        			+ " ].  This should never happen because the "
-	        			+ "encoding type is hardcoded.  Error => [ "
-	        			+ use.getMessage()
-	        			+ " ].");
-	        }
+	    	//}
+	        //catch (UnsupportedEncodingException use) {
+	        //	LOGGER.error("Unexpected UnsupportedEncodingException "
+	        //			+ "encountered while encoding URI [ "
+	        //			+ filePath
+	        //			+ " ].  This should never happen because the "
+	        //			+ "encoding type is hardcoded.  Error => [ "
+	        //			+ use.getMessage()
+	        //			+ " ].");
+	        //}
     	}
     	else {
     		LOGGER.warn("The input file path is null or not populated.  The "
