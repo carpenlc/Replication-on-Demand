@@ -13,4 +13,4 @@ for i in ${LIB_DIR}*.jar; do
     CLASSPATH=$CLASSPATH:$i
 done
 
-java -cp ${CLASSPATH} mil.nga.rod.cache.CacheManager
+java -cp ${CLASSPATH} mil.nga.rod.util.CacheManager
