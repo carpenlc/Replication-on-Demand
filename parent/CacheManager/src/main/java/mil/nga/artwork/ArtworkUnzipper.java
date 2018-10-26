@@ -123,7 +123,7 @@ public class ArtworkUnzipper {
 										+ target.toString()
 										+ " ].");
 							}
-							Files.copy(target, fileToExtract);
+							Files.copy(fileToExtract, target);
 						}
 						else {
 							LOG.info("Target output file [ "

@@ -45,7 +45,7 @@ public class InitializeRoDProductTable {
 		long start = System.currentTimeMillis();
 		
 		// Initialize the database connections in a try-with-resources so 
-		// they are closed properly.
+		// they are all closed properly.
 		try (RoDProductRecordFactory rodProdFactory = 
 				RoDProductRecordFactory.getInstance();
 			 ArtworkRowFactory       artFactory     = 

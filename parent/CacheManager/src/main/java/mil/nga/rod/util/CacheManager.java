@@ -35,8 +35,9 @@ public class CacheManager {
 	 * 
 	 * @param products List of unique products.
 	 * @param cache List of unique cache records.
+	 * @return The number of records removed.
 	 */
-	public void removeObsoleteCacheRecords(
+	public int removeObsoleteCacheRecords(
 			List<String> datastore, 
 			List<String> cache) {
 	
@@ -70,14 +71,16 @@ public class CacheManager {
 		else {
 			LOGGER.info("No obsolete RoDProduct records in the cache.");
 		}
+		return count;
 	}
     
 	/**
 	 * Add new records to the cache. 
 	 * @param products List of unique products.
 	 * @param accelerators List of unique query accelerator records.
+	 * @return The number of records added.
 	 */
-	public void addNewCacheRecords(
+	public int addNewCacheRecords(
 			List<String> datastore, 
 			List<String> cache) {
 	
@@ -104,6 +107,7 @@ public class CacheManager {
 								key,
 								JSONSerializer.getInstance().serialize(
 										prod));
+						count++;
 					}
 					else {
 						LOGGER.warn("No product found with NRN => [ "
@@ -136,14 +140,16 @@ public class CacheManager {
 		else {
 			LOGGER.info("No new RoDProduct records to add to the cache.");
 		}
+		return count;
 	}
 	
 	/**
 	 * Update existing cache records. 
 	 * @param datastore List of unique products in the data store.
 	 * @param cache List of cache records.
+	 * @return The number of records that were updated.
 	 */
-	public void updateCacheRecords(
+	public int updateCacheRecords(
 			List<String> datastore, 
 			List<String> cache) {
 	
@@ -229,26 +235,37 @@ public class CacheManager {
 					+ (System.currentTimeMillis() - start)
 					+ " ] ms.");
 		}
+		return updatedRecs;
 	}
 	
     /**
      * 
      */
     public void update() {
-
-    		try (RoDProductRecordFactory prodFactory = 
-    				RoDProductRecordFactory.getInstance()) {
-				List<String> datastoreKeys = prodFactory.getKeys();
-				List<String> cacheKeys     = RedisCacheManager.getInstance().getKeysAsList();
-				
-				removeObsoleteCacheRecords(datastoreKeys, cacheKeys);
-				addNewCacheRecords(datastoreKeys, cacheKeys);
-				updateCacheRecords(datastoreKeys, cacheKeys);
-    		}
-    		catch (Exception e) {
-    			e.printStackTrace();
-    		}
+    	long start = System.currentTimeMillis();
+		
+    	try (RoDProductRecordFactory prodFactory = 
+				RoDProductRecordFactory.getInstance()) {
 			
+			List<String> datastoreKeys = prodFactory.getKeys();
+			List<String> cacheKeys     = RedisCacheManager.getInstance().getKeysAsList();
+			
+			int removed = removeObsoleteCacheRecords(datastoreKeys, cacheKeys);
+			int added   = addNewCacheRecords(datastoreKeys, cacheKeys);
+			int updated = updateCacheRecords(datastoreKeys, cacheKeys);
+			
+			LOGGER.info("Cache update complete.  Products added => [ "
+					+ added
+					+ " ], products updated => [ "
+					+ updated
+					+ " ], product removed => [ "
+					+ removed 
+					+ " ].");
+		}
+		
+		LOGGER.info("Cache update completed in [ "
+				+ (System.currentTimeMillis() - start)
+				+ " ] ms.");
     	
     }
     

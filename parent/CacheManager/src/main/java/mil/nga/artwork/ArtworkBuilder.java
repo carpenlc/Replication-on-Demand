@@ -127,7 +127,60 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 		setDefaultImagePath(props.getProperty(ARTWORK_DEFAULT_IMAGE_PATH_PROPERTY));
 		setDefaultImageUrl(props.getProperty(ARTWORK_DEFAULT_IMAGE_URL_PROPERTY));
 	}
-		
+	
+	/**
+	 * This method was introduced adding logic to determine whether the source 
+	 * image needs to be extracted from a zip file (expected behavior) or
+	 * retrieved from an on-disk location (when the artwork doesn't exist).
+	 * The logic is essentially, if the <code>pathToSourceImage</code> 
+	 * refers to a file that exists and is a zip file, the source image will 
+	 * be extracted from the target location.  Oherwise, a default image will 
+	 * be utilized. 
+	 * 
+	 * @param pathToSourceImage Path to the target source image
+	 * @return Path to the source image.
+	 */
+	private Path getSourceImage(String pathToSourceImage) {
+		Path sourceImage = null;
+		if ((pathToSourceImage != null) && (!pathToSourceImage.isEmpty())) { 
+			String extension = FileUtils.getExtension(pathToSourceImage);
+			if (extension.trim().equalsIgnoreCase("zip")) {
+				// At this point in processing, just create a regular URI as 
+				// opposed to a zip URI.  If we create a zip URI we get a 
+				// FileSystemNotFoundException.
+				Path p = Paths.get(URIUtils.getInstance().getURI(pathToSourceImage));
+				if (Files.exists(p)) {
+					sourceImage = (new ArtworkUnzipper())
+							.unzipArtwork(
+									pathToSourceImage, 
+									getOutputPath());
+					if (sourceImage == null) {
+						LOG.warn("Unable to retrieve the source image from "
+								+ "target zip file => [ "
+								+ pathToSourceImage
+								+ " ].  Using default image.");
+						sourceImage = Paths.get(
+								URIUtils.getInstance().getURI(
+										getDefaultImagePath()));
+					}
+				}
+				else {
+					LOG.warn("Target artwork zip file => [ "
+							+ p.toString()
+							+ " ] does not exist.  Using the default image.");
+					sourceImage = Paths.get(
+							URIUtils.getInstance().getURI(
+									getDefaultImagePath()));
+				}
+			}
+			else {
+				sourceImage = Paths.get(
+						URIUtils.getInstance().getURI(pathToSourceImage));
+			}
+		}
+		return sourceImage;
+	}
+	
 	/**
 	 * 
 	 * @throws IllegalStateException Thrown if any issues are encountered 
@@ -135,8 +188,8 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 	 */
 	public Artwork build() throws IllegalStateException {
 		
-		Artwork    art = null;  // return object
-		ArtworkRow row = null;
+		Artwork           art = null;  // return object
+		ArtworkRow        row = null;
 		ArtworkRowFactory artFactory = ArtworkRowFactory.getInstance();
 		
 		if ((productType == null) || (productType.isEmpty())) {
@@ -155,13 +208,6 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 					+ " ] and NSN => [ "
 					+ getNSN()
 					+ " ].  Using default images.");
-			row = new ArtworkRow.ArtworkBuilder()
-						.cdName("00000000")
-						.nrn(getNRN())
-						.nsn(getNSN())
-						.path(getDefaultImagePath())
-						.size(getDefaultImageSize())
-						.build();
 		}
 		
 		
@@ -176,10 +222,7 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 				
 				// Extract the source image to a pre-defined location for 
 				// further processing.
-				Path sourceImage = (new ArtworkUnzipper())
-						.unzipArtwork(
-								row.getPath(), 
-								getOutputPath());
+				Path sourceImage = getSourceImage(row.getPath());
 				
 				if (sourceImage != null) {	
 					art = new Artwork.ArtworkBuilder()
@@ -215,6 +258,19 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 						+ " ] and NSN => [ "
 						+ getNSN()
 						+ " ].  Using default image information.");
+				row = new ArtworkRow.ArtworkBuilder()
+						.cdName("00000000")
+						.nrn(getNRN())
+						.nsn(getNSN())
+						.path(getDefaultImagePath())
+						.size(getDefaultImageSize())
+						.build();
+				
+				// Calculate the path strings.
+				setOutputPath(row, productType);
+				updateBaseUrl(row, productType);
+				setBaseFilename(row.getPath());
+				
 				art = new Artwork.ArtworkBuilder()
 						.artworkRow(row)
 						.sourceImagePath(getDefaultImagePath())
