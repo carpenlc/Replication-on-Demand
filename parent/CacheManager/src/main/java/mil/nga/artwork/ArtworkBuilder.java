@@ -401,13 +401,24 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 	 * @return The URL for the source image.
 	 */
 	private String getSourceImageUrl(String srcImagePath) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(getBaseUrl());
-		if (!(baseUrl.endsWith("/"))) {
-			sb.append("/");
+		
+		String url = null;
+		String srcFilename = FileUtils.getFilenameFromPath(srcImagePath);
+		String defaultFilename = FileUtils.getFilenameFromPath(getDefaultImagePath());
+		
+		if (srcFilename.equalsIgnoreCase(defaultFilename)) {
+			url = getDefaultImageUrl();
 		}
-		sb.append(FileUtils.getFilenameFromPath(srcImagePath));
-		return sb.toString();
+		else {
+			StringBuilder sb = new StringBuilder();
+			sb.append(getBaseUrl());
+			if (!(baseUrl.endsWith("/"))) {
+				sb.append("/");
+			}
+			sb.append(FileUtils.getFilenameFromPath(srcImagePath));
+			url = sb.toString();
+		}
+		return url;
 	}
 	
 	/**

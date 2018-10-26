@@ -227,6 +227,7 @@ public class RoDProductRecordFactory implements AutoCloseable {
 				
 				em.getTransaction().begin();
 				em.merge(product);
+                                em.flush();
 				em.getTransaction().commit();
 				
                 if (LOG.isDebugEnabled()) {
