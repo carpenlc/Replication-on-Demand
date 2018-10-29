@@ -64,6 +64,11 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-access</artifactId>
         </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -122,6 +127,11 @@
                             <groupId>ch.qos.logback</groupId>
                             <artifactId>logback-access</artifactId>
                         </jarModule>
+                        <jarModule>
+                            <groupId>redis.clients</groupId>
+                            <artifactId>jedis</artifactId>
+                        </jarModule>
+
                     </modules>
                 </configuration>
             </plugin>
