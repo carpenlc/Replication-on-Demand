@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 
 import org.slf4j.Logger;
@@ -26,6 +28,8 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  * 
  * @author L. Craig Carpenter
  */
+@Stateless
+@LocalBean
 public class RoDProductService implements RoDProductServiceI, Serializable {
 
 	/**
