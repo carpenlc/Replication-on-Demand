@@ -269,7 +269,7 @@ public class RoDProductManager {
 	 * @param accelerators List of unique query accelerator records.
 	 * @return The number of products updated in the backing data store.
 	 */
-	public int updateAcceleratorRecords(
+	public int updateRodProductRecords(
 			List<String> prodKeys, 
 			List<String> rodProdKeys) {
 	
@@ -294,6 +294,7 @@ public class RoDProductManager {
 				count++;
 				try {
 					
+					// Go get the raw Product record.
 					List<Product> records = ProductFactory.getInstance()
 											.getProducts(key);
 					
@@ -417,7 +418,7 @@ public class RoDProductManager {
 		     ArtworkRowFactory       artFactory     = 
 						 ArtworkRowFactory.getInstance();) {
 			
-			List<String> productKeys = prodFactory.getUniqueKeys();
+			List<String> productKeys    = prodFactory.getUniqueKeys();
 			List<String> rodProductKeys = rodProdFactory.getKeys();
 			
 			int obsolete    = removeObsoleteRoDProductRecords(
@@ -426,7 +427,7 @@ public class RoDProductManager {
 			int newProducts = addNewRoDProductRecords(
 					  			productKeys, 
 					  			rodProductKeys);
-			int updated     = updateAcceleratorRecords(
+			int updated     = updateRodProductRecords(
 								productKeys, 
 								rodProductKeys);
 			
