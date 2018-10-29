@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.artwork.ArtworkBuilder;
 import mil.nga.cache.RedisCacheManager;
 import mil.nga.exceptions.PropertiesNotLoadedException;
 import mil.nga.exceptions.PropertyNotFoundException;
@@ -16,8 +19,10 @@ import mil.nga.rod.jdbc.AcceleratorJDBCRecordFactory;
 import mil.nga.rod.jdbc.ProductFactory;
 import mil.nga.rod.jdbc.RoDProductFactory;
 import mil.nga.rod.jdbc.RoDProductRecordFactory;
+import mil.nga.rod.model.Artwork;
 import mil.nga.rod.model.Product;
 import mil.nga.rod.model.QueryRequestAccelerator;
+import mil.nga.rod.model.RoDProduct;
 import mil.nga.rod.util.ProductUtils;
 
 /**
@@ -50,7 +55,7 @@ public class RoDProductManager {
      * @throws IOException Thrown if there are issues accessing the on-disk 
      * file.
      */
-    public boolean isUpdateRequired(QueryRequestAccelerator record) throws IOException {
+    public boolean isUpdateRequired(Product record) throws IOException {
         
         boolean needsUpdate = false;
         
@@ -62,7 +67,7 @@ public class RoDProductManager {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("File [ "
                             + record.getPath()
-                            + " ] has changed.  QueryRequestAccelerator "
+                            + " ] has changed.  RoDProduct "
                             + "record will be updated.");
                 }
                 needsUpdate = true;
@@ -70,6 +75,7 @@ public class RoDProductManager {
         }
         return needsUpdate;
     }
+    
 	/**
 	 * Remove orphaned <code>RoDProduct</code> records.  These are 
 	 * <code>RoDProduct</code> records that do not have an associated 
@@ -77,8 +83,10 @@ public class RoDProductManager {
 	 * 
 	 * @param products List of unique products.
 	 * @param accelerators List of unique query accelerator records.
+	 * @return The number of records that were removed from the backing 
+	 * data store.
 	 */
-	public void removeObsoleteRoDProductRecords(
+	public int removeObsoleteRoDProductRecords(
 			List<String> prodKeys, 
 			List<String> rodProdKeys) {
 	
@@ -99,7 +107,7 @@ public class RoDProductManager {
 			
 			for (String key : prodsToRemove) {
 				RoDProductRecordFactory.getInstance().remove(key);
-				count += 1;
+				count++;
 			}
 			
 			if (LOGGER.isDebugEnabled()) {
@@ -116,6 +124,7 @@ public class RoDProductManager {
 			LOGGER.info("No obsolete RoDProduct records "
 					+ "encountered.");
 		}
+		return count;
 	}
 	
 	
@@ -124,7 +133,7 @@ public class RoDProductManager {
 	 * @param products List of unique products.
 	 * @param accelerators List of unique query accelerator records.
 	 */
-	public void addNewAcceleratorRecords(
+	public void addNewRoDProductRecords(
 			List<String> prodKeys, 
 			List<String> rodProdKeys) {
 		
@@ -147,8 +156,29 @@ public class RoDProductManager {
 				try {
 					List<Product> prods = ProductFactory.getInstance().getProducts(key);
 					if ((prods != null) && (prods.size() > 0)) {
-						AcceleratorJDBCRecordFactory.getInstance().insert(
-								AcceleratorRecordFactory.getInstance().buildRecord(prods.get(0)));
+						
+						// Get the on-disk information (size, hash, etc.)
+						QueryRequestAccelerator accelerator = 
+								AcceleratorRecordFactory
+									.getInstance()	
+									.buildRecord(prods.get(0));
+						
+						// Get/process the artwork information
+						Artwork art = (new ArtworkBuilder())
+								.product(prods.get(0))
+								.build();
+						
+						// Construct the record that will be inserted in the 
+						// target data store.
+						RoDProduct rodProduct = new RoDProduct.RoDProductBuilder()
+								.product(prods.get(0))
+								.queryRequestAccelerator(accelerator)
+								.artwork(art)
+								.build();
+						
+						// Store the record.
+						RoDProductRecordFactory.getInstance().persist(rodProduct);
+						count++;
 					}
 					else {
 						LOGGER.warn("No product found with NRN => [ "
@@ -216,40 +246,86 @@ public class RoDProductManager {
 	 * @param accelerators List of unique query accelerator records.
 	 */
 	public void updateAcceleratorRecords(
-			List<String> products, 
-			List<String> accelerators) {
+			List<String> prodKeys, 
+			List<String> rodProdKeys) {
 	
 		long start       = System.currentTimeMillis();
 		int  count       = 0;
 		int  errorCount  = 0;
 		int  updatedRecs = 0;
-		List<String> acceleratorsToUpdate = ProductUtils.getInstance().intersection(
-				products,
-				accelerators);
 		
-		if ((acceleratorsToUpdate != null) && (acceleratorsToUpdate.size() > 0)) {
+		// Get the intersection of existing RoDProduct records and product 
+		// records.
+		List<String> rodProdsToUpdate = ProductUtils.getInstance().intersection(
+				prodKeys,
+				rodProdKeys);
+		
+		if ((rodProdsToUpdate != null) && (rodProdsToUpdate.size() > 0)) {
+			
 			LOGGER.info("Updating [ "
-					+ acceleratorsToUpdate.size()
-					+ " ] new QueryRequestAccelerator records.");
-			for (String key : acceleratorsToUpdate) {
+					+ rodProdsToUpdate.size()
+					+ " ] new RoDProduct records.");
+			
+			for (String key : rodProdsToUpdate) {
 				count++;
 				try {
-					QueryRequestAccelerator record = 
-							AcceleratorJDBCRecordFactory.getInstance().getRecord(key);
-					if (record != null) {
-						if (isUpdateRequired(record)) {
-							QueryRequestAccelerator newRecord = AcceleratorRecordFactory
-                    				.getInstance()
-                    				.buildRecord(record.getProduct());
-							if (newRecord != null) {
-								AcceleratorJDBCRecordFactory.getInstance().update(newRecord);
-								updatedRecs++;
-							}
-							else {
-								errorCount++;
-							}
+					
+					List<Product> records = ProductFactory.getInstance()
+											.getProducts(key);
+					
+					if ((records != null) && (records.size() > 0)) {
+						Product product = records.get(0);
+						if (isUpdateRequired(product)) {
+							
+							// Get the on-disk information (size, hash, etc.)
+							QueryRequestAccelerator accelerator = 
+									AcceleratorRecordFactory
+										.getInstance()	
+										.buildRecord(product);
+							
+							// Get/process the artwork information
+							Artwork art = (new ArtworkBuilder())
+									.product(product)
+									.build();
+							
+							// Construct the record that will be inserted in the 
+							// target data store.
+							RoDProduct rodProduct = new RoDProduct.RoDProductBuilder()
+									.product(product)
+									.queryRequestAccelerator(accelerator)
+									.artwork(art)
+									.build();
+							
+							// Store the record.
+							RoDProductRecordFactory.getInstance().persist(rodProduct);
+							updatedRecs++;
 						}
 					}
+					else {
+						LOGGER.error("Unable to retrieve Product record for "
+								+ "key => [ "
+								+ key
+								+ " ].");
+						errorCount++;
+					}
+				}
+				catch (IllegalStateException ise) {
+					LOGGER.error("IllegalStateException encountered while "
+							+ "building the RoDProduct record for key [ "
+							+ key
+							+ " ].  Error message => [ "
+							+ ise.getMessage()
+							+ " ].");
+					errorCount++;
+				}
+				catch (NoResultException nre) {
+					LOGGER.error("IllegalStateException encountered while "
+							+ "building the RoDProduct record for key [ "
+							+ key
+							+ " ].  Error message => [ "
+							+ nre.getMessage()
+							+ " ].");
+					errorCount++;
 				}
 				catch (IOException ioe) {
 					LOGGER.error("Unexpected IOException "
@@ -323,7 +399,7 @@ public class RoDProductManager {
 			//			.getUniqueKeys();
 			
 			removeObsoleteRoDProductRecords(productKeys, rodProductKeys);
-			//addNewAcceleratorRecords(uniqueProducts, uniqueRecords);
+			addNewRoDProductRecords(productKeys, rodProductKeys);
 			//updateAcceleratorRecords(uniqueProducts, uniqueRecords);
 			
 		}
