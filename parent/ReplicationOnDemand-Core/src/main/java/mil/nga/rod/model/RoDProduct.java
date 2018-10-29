@@ -375,6 +375,35 @@ public class RoDProduct implements Serializable {
     }
     
     /**
+     * Overriden method used to calculate equivalency based on both the 
+     * NSN and NRN values.
+     */
+    @Override
+    public boolean equals(Object product) {
+        boolean equals = false;
+        if (product instanceof Product) {
+            if ((getNSN().equalsIgnoreCase(((Product)product).getNSN())) &&
+                    (getNRN().equalsIgnoreCase(((Product)product).getNRN()))) {
+                equals = true;
+            }
+        }
+        return equals;
+    }
+    
+    /**
+     * Construct the hash code based on a combination of the NRN and NSN.
+     * @return The computed hash code of the Product object.
+     */
+    @Override
+    public int hashCode() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getNRN());
+        sb.append("+");
+        sb.append(getNSN());
+        return sb.toString().hashCode();
+    }
+    
+    /**
      * Convert to a human readable String.
      */
     public String toString() {
