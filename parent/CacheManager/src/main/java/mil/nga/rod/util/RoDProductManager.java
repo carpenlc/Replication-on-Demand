@@ -16,6 +16,7 @@ import mil.nga.exceptions.PropertyNotFoundException;
 import mil.nga.util.FileUtils;
 import mil.nga.rod.cache.AcceleratorRecordFactory;
 import mil.nga.rod.jdbc.AcceleratorJDBCRecordFactory;
+import mil.nga.rod.jdbc.ArtworkRowFactory;
 import mil.nga.rod.jdbc.ProductFactory;
 import mil.nga.rod.jdbc.RoDProductFactory;
 import mil.nga.rod.jdbc.RoDProductRecordFactory;
@@ -129,11 +130,13 @@ public class RoDProductManager {
 	
 	
 	/**
+	 * Add new <code>RoDProduct</code> records to the backing data store.
 	 * 
 	 * @param products List of unique products.
 	 * @param accelerators List of unique query accelerator records.
+	 * @return The number of products added to the backing data store.
 	 */
-	public void addNewRoDProductRecords(
+	public int addNewRoDProductRecords(
 			List<String> prodKeys, 
 			List<String> rodProdKeys) {
 		
@@ -189,6 +192,24 @@ public class RoDProductManager {
 								
 					}
 				}
+				catch (IllegalStateException ise) {
+					LOGGER.error("IllegalStateException encountered while "
+							+ "building the RoDProduct record for key [ "
+							+ key
+							+ " ].  Error message => [ "
+							+ ise.getMessage()
+							+ " ].");
+					errorCount++;
+				}
+				catch (NoResultException nre) {
+					LOGGER.error("IllegalStateException encountered while "
+							+ "building the RoDProduct record for key [ "
+							+ key
+							+ " ].  Error message => [ "
+							+ nre.getMessage()
+							+ " ].");
+					errorCount++;
+				}
 				catch (IOException ioe) {
 					LOGGER.error("Unexpected IOException "
 							+ "encountered.  Unable "
@@ -238,14 +259,17 @@ public class RoDProductManager {
 		else {
 			LOGGER.info("No QueryRequestAccelerator records to add.");
 		}
+		return count;
 	}
 	
 	/**
+	 * Update <code>RoDProduct</code> records that have changed.
 	 * 
 	 * @param products List of unique products.
 	 * @param accelerators List of unique query accelerator records.
+	 * @return The number of products updated in the backing data store.
 	 */
-	public void updateAcceleratorRecords(
+	public int updateAcceleratorRecords(
 			List<String> prodKeys, 
 			List<String> rodProdKeys) {
 	
@@ -375,11 +399,11 @@ public class RoDProductManager {
 						+ " ] ms.");
 			}
 		}
+		return updatedRecs;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Overall driver method for the update process.
 	 */
 	public void update() {
 		
@@ -389,30 +413,54 @@ public class RoDProductManager {
 		try (ProductFactory          prodFactory    = 
 					ProductFactory.getInstance();
 			 RoDProductRecordFactory rodProdFactory = 
-					RoDProductRecordFactory.getInstance()) {
+					RoDProductRecordFactory.getInstance();
+		     ArtworkRowFactory       artFactory     = 
+						 ArtworkRowFactory.getInstance();) {
 			
 			List<String> productKeys = prodFactory.getUniqueKeys();
 			List<String> rodProductKeys = rodProdFactory.getKeys();
 			
-			// Get the map containing a unique list of accelerator records
-			//List<String> uniqueRecords = RoDProductRecordFactory.getInstance()
-			//			.getUniqueKeys();
+			int obsolete    = removeObsoleteRoDProductRecords(
+								productKeys, 
+								rodProductKeys);
+			int newProducts = addNewRoDProductRecords(
+					  			productKeys, 
+					  			rodProductKeys);
+			int updated     = updateAcceleratorRecords(
+								productKeys, 
+								rodProductKeys);
 			
-			removeObsoleteRoDProductRecords(productKeys, rodProductKeys);
-			addNewRoDProductRecords(productKeys, rodProductKeys);
-			//updateAcceleratorRecords(uniqueProducts, uniqueRecords);
+			LOGGER.info("RoDProduct table updated.  [ "
+					+ obsolete 
+					+ " ] records removed, [ "
+					+ newProducts 
+					+ " ] added, [ "
+					+ updated
+					+ " ] products updated.");
 			
 		}
 		catch (PropertiesNotLoadedException pnle) {
-			
+			LOGGER.error("Unable to construct the ProductFactory object.  "
+					+ "Unexpected PropertiesNotLoadedException exception "
+					+ "raised.  Error message => [ "
+					+ pnle.getMessage()
+					+ " ].");
 		}
 		catch (PropertyNotFoundException pnfe) {
-			
+			LOGGER.error("Unable to construct the ProductFactory object.  "
+					+ "Unexpected PropertyNotFoundException exception "
+					+ "raised.  Error message => [ "
+					+ pnfe.getMessage()
+					+ " ].");
 		}
 		catch (ClassNotFoundException cnfe) {
-			
+			LOGGER.error("Unable to construct the ProductFactory object.  "
+					+ "Unexpected ClassNotFoundException exception "
+					+ "raised.  Error message => [ "
+					+ cnfe.getMessage()
+					+ " ].");
 		}
-		LOGGER.info("DataStore update completed in [ "
+		LOGGER.info("RoDProduct table update completed in [ "
 				+ (System.currentTimeMillis() - start)
 				+ " ] ms.");
 	}
