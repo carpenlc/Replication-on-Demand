@@ -302,15 +302,15 @@ public class ProductFactory extends ConnectionProperties
             } catch (Exception e) {}
         }
         
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("[ " 
-                    + products.size()
-                    + " ] records selected in [ "
-                    + (System.currentTimeMillis() - start) 
-                    + " ] ms.  Of the records selected [ "
-                    + counter
-                    + " ] contained data errors.");
-        }
+        //if (LOGGER.isDebugEnabled()) {
+        //   LOGGER.debug("[ " 
+        //            + products.size()
+        //            + " ] records selected in [ "
+        //            + (System.currentTimeMillis() - start) 
+        //            + " ] ms.  Of the records selected [ "
+        //            + counter
+        //            + " ] contained data errors.");
+        //}
         return products;
     }
     
