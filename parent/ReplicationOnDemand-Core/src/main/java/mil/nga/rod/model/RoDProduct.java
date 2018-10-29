@@ -766,6 +766,7 @@ public class RoDProduct implements Serializable {
     	public RoDProductBuilder queryRequestAccelerator(QueryRequestAccelerator value) {
     		if (value != null) {
 	            hash(value.getHash());
+	            size(value.getSize());
     		}
     		return this;
     	}
