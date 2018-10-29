@@ -233,7 +233,7 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 							.smallImageUrl(getSmallImageUrl())
 							.thumbnailImagePath(getThumbnailImagePath())
 							.thumbnailImageUrl(getThumbnailImageUrl())
-							.size(FileUtils.getActualFileSize(getDefaultImagePath()))
+							.size(FileUtils.getActualFileSize(sourceImage))
 							.build();
 					
 				}
