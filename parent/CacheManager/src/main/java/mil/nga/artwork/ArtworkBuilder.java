@@ -233,6 +233,7 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 							.smallImageUrl(getSmallImageUrl())
 							.thumbnailImagePath(getThumbnailImagePath())
 							.thumbnailImageUrl(getThumbnailImageUrl())
+							.size(FileUtils.getActualFileSize(getDefaultImagePath()))
 							.build();
 					
 				}
@@ -249,6 +250,7 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 							.smallImageUrl(getSmallImageUrl())
 							.thumbnailImagePath(getThumbnailImagePath())
 							.thumbnailImageUrl(getThumbnailImageUrl())
+							.size(FileUtils.getActualFileSize(getDefaultImagePath()))
 							.build();
 				}
 			}
@@ -279,6 +281,7 @@ public class ArtworkBuilder implements ArtworkProcessorConstants {
 						.smallImageUrl(getSmallImageUrl())
 						.thumbnailImagePath(getThumbnailImagePath())
 						.thumbnailImageUrl(getThumbnailImageUrl())
+						.size(FileUtils.getActualFileSize(getDefaultImagePath()))
 						.build();
 			}
 			
