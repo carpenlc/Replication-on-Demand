@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +23,8 @@ import mil.nga.rod.model.RoDProduct;
  * 
  * @author L. Craig Carpenter
  */
+@Stateless
+@LocalBean
 public class RoDProductServiceCache implements RoDProductServiceI, Serializable {
 	
 	/**
