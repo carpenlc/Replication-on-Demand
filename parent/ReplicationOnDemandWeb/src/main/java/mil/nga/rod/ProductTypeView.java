@@ -11,7 +11,9 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import mil.nga.exceptions.ServiceUnavailableException;
 import mil.nga.rod.model.Product;
+import mil.nga.rod.model.RoDProduct;
 
 import org.primefaces.model.DualListModel;
 
@@ -45,14 +47,14 @@ public class ProductTypeView
      * List containing all of currently available products.  This list will 
      * not change throughout the life of the current bean.
      */
-    private List<Product> allProducts;
+    private List<RoDProduct> allProducts;
     
     /**
      * List containing the list of products after filtering is applied.  This
      * is the list that is displayed in the data table.  On construction the 
      * filtered list and allProducts list are the same.
      */
-    private List<Product> filteredProducts;
+    private List<RoDProduct> filteredProducts;
     
     /**
      * Indicated whether the filters selected by the user should be combined 
@@ -82,10 +84,10 @@ public class ProductTypeView
      * the internal lists that are displayed in the target web page.
      */
     @PostConstruct
-    public void initialize() {
-        productTypes = initProductTypes();
-        aorCodes = initAorCodes();
-        countries = initCountries();
+    public void initialize() throws ServiceUnavailableException {
+        //productTypes = initProductTypes();
+        //aorCodes = initAorCodes();
+        //countries = initCountries();
         allProducts = initProducts();
         filteredProducts = allProducts;
         logicalOperator = "AND";
@@ -95,12 +97,14 @@ public class ProductTypeView
      * Getter method for the list of available AOR codes.
      * @return The list of product types available.
      */
+    /*
     public DualListModel<String> getAorCodes() {
         if ((aorCodes == null) || (aorCodes.getSource().size() == 0)) {
             aorCodes = initAorCodes();
         }
         return aorCodes;
     }
+    */
     
     /**
      * Getter method for the list of available AOR codes.  Rather than 
@@ -108,30 +112,33 @@ public class ProductTypeView
      * pickList component), this method only returns the source list.
      * @return The list of AOR codes available.
      */
+    /*
     public List<String> getAorCodeList() {
         if ((aorCodes == null) || (aorCodes.getSource().size() == 0)) {
             aorCodes = initAorCodes();
         }
         return aorCodes.getSource();
     }
+    */
     
     /**
      * Getter method for the list of available countries
      * @return The list of countries available.
      */
+    /*
     public DualListModel<String> getCountries() {
         if ((countries == null) || (countries.getSource().size() == 0)) {
             countries = initCountries();
         }
         return countries;
     }
-    
+    */
     /**
      * Getter method for the list of filtered products.
      * 
      * @return The list of filtered products.
      */
-    public List<Product> getFilteredProducts() {
+    public List<RoDProduct> getFilteredProducts() {
         return filteredProducts;
     }
     
@@ -185,7 +192,7 @@ public class ProductTypeView
      * Getter method for the list of all available products.
      * @return The list of all available products.
      */
-    public List<Product> getProducts() {
+    public List<RoDProduct> getProducts() {
         return filteredProducts;
     }
     
@@ -220,7 +227,7 @@ public class ProductTypeView
      * 
      * @return The list of filtered products.
      */
-    public void setFilteredProducts(List<Product> value) {
+    public void setFilteredProducts(List<RoDProduct> value) {
         filteredProducts = value;
     }
     
@@ -281,10 +288,11 @@ public class ProductTypeView
     }
     
     
-    private List<Product> initProducts() {
+    private List<RoDProduct> initProducts() throws ServiceUnavailableException {
         return super.loadAllProducts();
     }
     
+    /*
     private DualListModel<String> initAorCodes() {
         List<String> aorCodesSource = super.loadAORCodes();
         List<String> aorCodesTarget = new ArrayList<String>();
@@ -296,12 +304,13 @@ public class ProductTypeView
         List<String> target = new ArrayList<String>();
         return new DualListModel<String>(source, target);
     }
-    
+    */
     private DualListModel<String> initProductTypes() {
         List<String> prodTypeSource = super.loadProductTypes();
         List<String> prodTypeTarget = new ArrayList<String>();
         return new DualListModel<String>(prodTypeSource, prodTypeTarget);
     }
+    
     
     /**
      * See if there are any selected filters that need to be applied.
@@ -394,6 +403,7 @@ public class ProductTypeView
      * 
      * @return
      */
+    /*
     private List<Product> filterByCountry() {
 
         List<Product> filtered = new ArrayList<Product>();
@@ -426,7 +436,9 @@ public class ProductTypeView
         
         return filtered;
     }
+    */
     
+    /*
     private List<Product> filterByAor() {
 
         List<Product> filtered = new ArrayList<Product>();
@@ -460,9 +472,12 @@ public class ProductTypeView
         return filtered;
     }
     
-    private List<Product> filterByNrn() {
+    */
+    
+    
+    private List<RoDProduct> filterByNrn() throws ServiceUnavailableException {
 
-        List<Product> filtered = new ArrayList<Product>();
+        List<RoDProduct> filtered = new ArrayList<RoDProduct>();
         
         if ((allProducts == null) || (allProducts.size() == 0)) {
             initProducts();
@@ -475,7 +490,7 @@ public class ProductTypeView
                         + " ].");
             }
             
-            for (Product product : allProducts) {
+            for (RoDProduct product : allProducts) {
                 
                 if (product
                         .getNRN()
@@ -497,9 +512,10 @@ public class ProductTypeView
         return filtered;
     }
     
-    private List<Product> filterByNsn() {
+    private List<RoDProduct> filterByNsn() throws ServiceUnavailableException {
 
-        List<Product> filtered = new ArrayList<Product>();
+        List<RoDProduct> filtered = new ArrayList<RoDProduct>();
+        
         
         if ((allProducts == null) || (allProducts.size() == 0)) {
             initProducts();
@@ -512,7 +528,7 @@ public class ProductTypeView
                         + " ].");
             }
             
-            for (Product product : allProducts) {
+            for (RoDProduct product : allProducts) {
                 
                 if (product
                         .getNSN()
@@ -534,9 +550,9 @@ public class ProductTypeView
         return filtered;
     }
     
-    private List<Product> filterByProductType() {
+    private List<RoDProduct> filterByProductType() throws ServiceUnavailableException {
 
-        List<Product> filtered = new ArrayList<Product>();
+        List<RoDProduct> filtered = new ArrayList<RoDProduct>();
         
         if ((allProducts == null) || (allProducts.size() == 0)) {
             initProducts();
@@ -550,7 +566,7 @@ public class ProductTypeView
                             + " ].");
                 }
                 
-                for (Product product : allProducts) {
+                for (RoDProduct product : allProducts) {
                     if (product
                             .getProductType()
                             .equalsIgnoreCase(productType)) {
@@ -692,25 +708,25 @@ public class ProductTypeView
     }
     
     
-    public void applyFilters() {
+    public void applyFilters() throws ServiceUnavailableException {
         
-        List<Product> filteredByCountry     = null;
-        List<Product> filteredByAor         = null;
-        List<Product> filteredByProductType = null;
-        List<Product> filteredByNRN         = null;
-        List<Product> filteredByNSN         = null;
+        List<RoDProduct> filteredByCountry     = null;
+        List<RoDProduct> filteredByAor         = null;
+        List<RoDProduct> filteredByProductType = null;
+        List<RoDProduct> filteredByNRN         = null;
+        List<RoDProduct> filteredByNSN         = null;
         
         if (applyAnyFilter()) {
             
             // Reset the filtered products list.
-            filteredProducts = new ArrayList<Product>();
+            filteredProducts = new ArrayList<RoDProduct>();
             
-            if (applyCountryFilter()) {
-                filteredByCountry = filterByCountry();
-            }
-            if (applyAorFilter()) {
-                filteredByAor = filterByAor();
-            }
+            //if (applyCountryFilter()) {
+            //    filteredByCountry = filterByCountry();
+            //}
+            //if (applyAorFilter()) {
+            //    filteredByAor = filterByAor();
+            //}
             if(applyProductTypeFilter()) {
                 filteredByProductType = filterByProductType();
             }
@@ -721,6 +737,7 @@ public class ProductTypeView
                 filteredByNSN = filterByNsn();
             }
             
+            /*
             if (this.getLogicalOperator().equalsIgnoreCase("AND")) {
                 filteredProducts = intersection (
                         filteredByCountry, 
@@ -737,6 +754,7 @@ public class ProductTypeView
                         filteredByNRN,
                         filteredByNSN);
             }
+            */
         }
         else {
             filteredProducts = allProducts;

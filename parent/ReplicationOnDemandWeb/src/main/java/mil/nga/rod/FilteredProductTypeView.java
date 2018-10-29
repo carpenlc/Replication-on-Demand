@@ -10,7 +10,9 @@ import javax.faces.bean.ViewScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.exceptions.ServiceUnavailableException;
 import mil.nga.rod.model.Product;
+import mil.nga.rod.model.RoDProduct;
 
 /**
  * Backing bean associated with the PrimeFaces <code>index.xhtml</code> file 
@@ -40,7 +42,7 @@ public class FilteredProductTypeView
      * List containing all of currently available products.  This list will 
      * not change throughout the life of the current bean.
      */
-    private List<Product> products;
+    private List<RoDProduct> products;
     
     /**
      * List containing the products "filtered" by the user using the tools 
@@ -75,14 +77,14 @@ public class FilteredProductTypeView
      * the internal lists that are displayed in the target web page.
      */
     @PostConstruct
-    public void initialize() {
+    public void initialize() throws ServiceUnavailableException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Constructor called.");
         }
         products = super.loadAllProducts();
         availableProductTypes = super.loadProductTypes();
-        availableCountryNames = super.loadCountries();
-        availableAORs = super.loadAORCodes();
+        //availableCountryNames = super.loadCountries();
+        //availableAORs = super.loadAORCodes();
     }
     
     /**
@@ -122,7 +124,7 @@ public class FilteredProductTypeView
      * Getter method for the list of all available products.
      * @return The list of all available products.
      */
-    public List<Product> getProducts() {
+    public List<RoDProduct> getProducts() {
         return products;
     }
     

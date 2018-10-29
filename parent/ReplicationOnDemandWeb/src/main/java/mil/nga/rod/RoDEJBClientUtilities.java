@@ -10,11 +10,14 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.exceptions.ServiceUnavailableException;
 import mil.nga.rod.ejb.EJBClientUtilities;
 import mil.nga.rod.ejb.MetricsService;
 import mil.nga.rod.ejb.ProductQueryService;
 import mil.nga.rod.ejb.ProductService;
+import mil.nga.rod.ejb.RoDProductService;
 import mil.nga.rod.model.Product;
+import mil.nga.rod.model.RoDProduct;
 
 public class RoDEJBClientUtilities {
 
@@ -44,6 +47,16 @@ public class RoDEJBClientUtilities {
         "X-FORWARDED-FOR",
         "HTTP_X_FORWARDED_FOR",
     };
+    
+    /**
+     * Inject the EJB used to look up the store/retrieve product information.
+     * 
+     * Note:  JBoss EAP 6.x does not support injection into the application
+     * web tier.  When deployed to JBoss EAP 6.x this internal member 
+     * variable will always be null.
+     */
+    @EJB
+    protected RoDProductService rodProductService;
     
     /**
      * Inject the EJB used to look up the store/retrieve product information.
@@ -171,6 +184,22 @@ public class RoDEJBClientUtilities {
                     .getMetricsService();
         }
         return metricsService;
+    }
+    
+    /**
+     * Private method used to obtain a reference to the target EJB.  
+     * @return Reference to the ProductService EJB.
+     */
+    protected RoDProductService getRoDProductService() {
+        if (rodProductService == null) {
+            LOGGER.warn("Application container failed to inject the "
+                    + "reference to ProductService.  Attempting to "
+                    + "look it up via JNDI.");
+            rodProductService = EJBClientUtilities
+                    .getInstance()
+                    .getRoDProductService();
+        }
+        return rodProductService;
     }
     
     /**
@@ -338,10 +367,10 @@ public class RoDEJBClientUtilities {
      * 
      * @return The list of available product types.
      */
-    protected List<Product> loadAllProducts() {
-        List<Product> products = new ArrayList<Product>();
-        if (getProductService() != null) {
-            products = getProductService().getAllProducts();
+    protected List<RoDProduct> loadAllProducts() throws ServiceUnavailableException {
+        List<RoDProduct> products = new ArrayList<RoDProduct>();
+        if (getRoDProductService() != null) {
+            products = getRoDProductService().getProducts();
         }
         else {
             LOGGER.error("Unable to obtain a reference to the target EJB.  "
@@ -356,17 +385,17 @@ public class RoDEJBClientUtilities {
      * 
      * @return The list of available product types.
      */
-    protected List<String> loadCountries() {
-        List<String> countries = new ArrayList<String>();
-        if (getProductService() != null) {
-            countries = getProductService().getCountries();
-        }
-        else {
-            LOGGER.error("Unable to obtain a reference to the target EJB.  "
-                    + "The returned list of countries will be empty.");
-        }
-        return countries;
-    }
+    //protected List<String> loadCountries() {
+    //    List<String> countries = new ArrayList<String>();
+    //    if (getProductService() != null) {
+    //        countries = getProductService().getCountries();
+    //    }
+    //    else {
+    //        LOGGER.error("Unable to obtain a reference to the target EJB.  "
+    //                + "The returned list of countries will be empty.");
+   //    }
+    //    return countries;
+    //}
     
     /**
      * Utilize the EJB session beans to look up a list of available
@@ -386,12 +415,14 @@ public class RoDEJBClientUtilities {
         return types;
     }
     
+    
     /**
      * Utilize the EJB session beans to look up a list of available
      * product types.
      * 
      * @return The list of available product types.
      */
+    /*
     protected List<String> loadAORCodes() {
         List<String> codes = new ArrayList<String>();
         if (getProductService() != null) {
@@ -403,5 +434,5 @@ public class RoDEJBClientUtilities {
         }
         return codes;
     }
-    
+    */
 }
