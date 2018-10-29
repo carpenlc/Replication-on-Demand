@@ -1,5 +1,5 @@
 #!/bin/bash
-
+PATH=${PATH}:/usr/bin
 if [ -z `which java` ]; then
   if [ -z ${JAVA_HOME+x} ]; then 
   	export JAVA_HOME=/usr/java/jdk1.8.0
