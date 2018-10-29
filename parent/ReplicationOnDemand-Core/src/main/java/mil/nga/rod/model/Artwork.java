@@ -26,6 +26,7 @@ public class Artwork extends ArtworkDecorator implements ArtworkRowI, Serializab
 	private final String smallImagePath;
 	private final String sourceImagePath;
 	private final String sourceImageUrl;
+	private final long   size;
 	
     /**
      * Constructor used to set all of the required internal members.
@@ -39,6 +40,7 @@ public class Artwork extends ArtworkDecorator implements ArtworkRowI, Serializab
 		smallImagePath     = builder.smallImagePath;
 		sourceImagePath    = builder.sourceImagePath;
 		sourceImageUrl     = builder.sourceImageUrl;
+		size               = builder.size;
 	}
 	
 	/**
@@ -160,6 +162,7 @@ public class Artwork extends ArtworkDecorator implements ArtworkRowI, Serializab
     	private String     smallImagePath     = null;
     	private String     sourceImagePath    = null;
     	private String     sourceImageUrl     = null;
+    	private long       size               = 0;
     	
         /**
          * Method used to actually construct the Artwork object
@@ -245,6 +248,15 @@ public class Artwork extends ArtworkDecorator implements ArtworkRowI, Serializab
     		if (value != null) {
     			thumbnailImageUrl = value.trim();
     		}
+    		return this;
+    	}
+    	
+    	/**
+    	 * Getter method for the URL associated with the thumbnail image.
+    	 * @return The URL of the thumbnail image for web-site display.
+    	 */
+    	public ArtworkBuilder size(long value) {
+    		size = value;
     		return this;
     	}
     	

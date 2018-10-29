@@ -46,6 +46,32 @@ public class FileUtils {
     }
     
     /**
+     * Access the target file to get the actual size of the on-disk file. 
+     * 
+     * @param file String path to the target file.
+     * @return The size of the files in bytes.
+     * @throws IOException Thrown if there are problems accessing the target
+     * file.
+     */
+    public static long getActualFileSize(String path) throws IOException {
+        
+        long size = 0L;
+        
+        if ((path != null) && (!path.isEmpty())) {
+        	Path p = Paths.get(URIUtils.getInstance().getURI(path));
+        	if (Files.exists(p)) {
+        		size = Files.size(p);
+        	}
+        	else {
+        		throw new FileNotFoundException("File [ "
+        				+ path
+        				+ " ] does not exist.");
+        	}
+        }
+        return size;
+    }
+    
+    /**
      * Access the target file to get the actual date of the on-disk file.  
      * This method was added because the date information stored in the 
      * database is always the same as the load date.
