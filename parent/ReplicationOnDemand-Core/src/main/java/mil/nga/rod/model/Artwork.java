@@ -67,7 +67,7 @@ public class Artwork extends ArtworkDecorator implements ArtworkRowI, Serializab
 	 */
 	@Override
 	public long getArtworkSize() { 
-		return getArtworkRow().getSize();
+		return size;
 	}
 	
 	/**
