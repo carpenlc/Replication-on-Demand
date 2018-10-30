@@ -1,6 +1,7 @@
 package mil.nga.rod.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
@@ -40,6 +42,19 @@ public class RoDProduct implements Serializable {
 	 */
 	private static final long serialVersionUID = -2049705868120254134L;
 	
+    /** 
+     * Format associated with dates incoming from the target UPG data source.
+     * NOTE: It doesn't appear that the DATE stored in the database contains 
+     * the time component.  Remove it in the formatter String.
+     */
+    private static final String DATE_FORMAT_STRING = "yyyy-MM-dd";
+    
+    /**
+     * As of this writing, not all of the date fields are actually populated.
+     * Use a 
+     */
+    private static final String DEFAULT_DATE_STRING = "unavailable";
+    
 	/**
 	 * The primary key field is the concatenation of the NRN/NSN fields. 
 	 * @see mil.nga.rod.util.ProductUtils
@@ -249,6 +264,19 @@ public class RoDProduct implements Serializable {
     }
 
     /**
+     * Getter method for the file date.
+     * @return The file date.
+     */
+    @JsonIgnore
+    public String getFileDateString() {
+        String date = DEFAULT_DATE_STRING;
+        if (fileDate != null) {
+            date = (new SimpleDateFormat(DATE_FORMAT_STRING)).format(fileDate);
+        }
+        return date;
+    }
+    
+    /**
      * Getter method for the MD5 hash of the target file.  
      * @return The MD5 hash of the target file.
      */
@@ -301,14 +329,14 @@ public class RoDProduct implements Serializable {
      * Getter method for the load date.
      * @return The load date.
      */
-    //@JsonIgnore
-    //public String getLoadDateString() {
-    //    String date = DEFAULT_DATE_STRING;
-    //    if (fileDate != null) {
-    //        date = (new SimpleDateFormat(DATE_FORMAT_STRING)).format(fileDate);
-    //    }
-    //    return date;
-    //}
+    @JsonIgnore
+    public String getLoadDateString() {
+        String date = DEFAULT_DATE_STRING;
+        if (fileDate != null) {
+            date = (new SimpleDateFormat(DATE_FORMAT_STRING)).format(fileDate);
+        }
+        return date;
+    }
     
     /**
      * Getter method for the name of the media.
