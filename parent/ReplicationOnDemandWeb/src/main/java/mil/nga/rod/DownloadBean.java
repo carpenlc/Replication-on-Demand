@@ -119,29 +119,37 @@ public class DownloadBean
         String host     = FileUtils.getHostName();
         long   size     = getSize(product.getPath());
         
-        // Build the POJO containing the request data.
-        DownloadRequest request = new DownloadRequest.DownloadRequestBuilder()
-                //.aorCode(product.getAorCode())
-                //.countryName(product.getCountryName())
-                .requestDate(new Date(System.currentTimeMillis()))
-                .fileSize(size)
-                .hostName(host)
-                .nrn(product.getNRN())
-                .nsn(product.getNSN())
-                .productType(product.getProductType())
-                .username(username)
-                .path(product.getPath())
-                .source(clientIP)
-                .build();
-            
-        // Persist the data.
-        if (getMetricsService() != null) {
-            getMetricsService().logDownloadRequest(request);
-        }
-        else {
-            LOGGER.warn("Unable to obtain a reference to the MetricsService "
-                    + "EJB.  Download request will not be logged. ");
-        }
+        try { 	
+	        // Build the POJO containing the request data.
+	        DownloadRequest request = new DownloadRequest.DownloadRequestBuilder()
+	                //.aorCode(product.getAorCode())
+	                //.countryName(product.getCountryName())
+	                .requestDate(new Date(System.currentTimeMillis()))
+	                .fileSize(size)
+	                .hostName(host)
+	                .nrn(product.getNRN())
+	                .nsn(product.getNSN())
+	                .productType(product.getProductType())
+	                .username(username)
+	                .path(product.getPath())
+	                .source(clientIP)
+	                .build();
+	            
+	        // Persist the data.
+	        if (getMetricsService() != null) {
+	            getMetricsService().logDownloadRequest(request);
+	        }
+	        else {
+	            LOGGER.warn("Unable to obtain a reference to the MetricsService "
+	                    + "EJB.  Download request will not be logged. ");
+	        }
+	    }
+	    catch (IllegalStateException ise) {
+	    	LOGGER.error("IllegalStateException encountered while attempting "
+	    			+ "to log a file download request.  Error message => [ "
+	    			+ ise.getMessage()
+	    			+ " ].");
+	    }
     }
     
     /**

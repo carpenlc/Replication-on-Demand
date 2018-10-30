@@ -200,6 +200,11 @@ body {
 				-->
 				<p:column headerText="Artwork">
 				    <h:graphicImage value="#{product.thumbnailImageUrl}" />
+				    <p:commandButton value="Download" ajax="false"
+						icon="ui-icon-arrowthick-1-s"
+						onClick="PrimeFaces.monitorDownload(start, stop);" >
+						<p:fileDownload value="#{artworkDownloadBean.getFile(product)}" />
+						</p:commandButton>
 				</p:column>
 				<p:column headerText="Download">
 					<p:commandButton value="Download" ajax="false"
