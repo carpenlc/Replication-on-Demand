@@ -199,14 +199,22 @@ body {
 				</p:column>
 				-->
 				<p:column headerText="Artwork">
-				    <h:graphicImage value="#{product.thumbnailImageUrl}" />
-				    <p:commandButton value="Download" ajax="false"
+				    <p:lightBox styleClass="imageBox">
+				        <h:outputLink value="#{product.smallImageUrl}">
+				            <h:graphicImage value="#{product.thumbnailImageUrl}" />
+				        </h:outputLink>
+				    </p:lightBox>
+				    <p:commandButton 
+				        id="artworkDownloadButton" value="Download" ajax="false"
 						icon="ui-icon-arrowthick-1-s"
 						onClick="PrimeFaces.monitorDownload(start, stop);" >
 						<p:fileDownload value="#{artworkDownloadBean.getFile(product)}" />
-						</p:commandButton>
+				    </p:commandButton>
+				    <p:tooltip for="artworkDownloadButton" 
+				               value="Download artwork and supporting files in a zip file."
+				               position="top" />
 				</p:column>
-				<p:column headerText="Download">
+				<p:column headerText="Product Download">
 					<p:commandButton value="Download" ajax="false"
 						icon="ui-icon-arrowthick-1-s"
 						onClick="PrimeFaces.monitorDownload(start, stop);">
