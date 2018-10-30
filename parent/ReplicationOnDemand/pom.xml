@@ -68,6 +68,10 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -130,6 +134,10 @@
                         <jarModule>
                             <groupId>redis.clients</groupId>
                             <artifactId>jedis</artifactId>
+                        </jarModule>
+                        <jarModule>
+                            <groupId>org.apache.commons</groupId>
+                            <artifactId>commons-pool2</artifactId>
                         </jarModule>
 
                     </modules>
