@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 
 import mil.nga.rod.model.DownloadRequest;
 import mil.nga.rod.model.Product;
+import mil.nga.rod.model.RoDProduct;
 import mil.nga.util.FileUtils;
 
 import org.primefaces.model.DefaultStreamedContent;
@@ -109,7 +110,7 @@ public class DownloadBean
      * @param requestHeaders The incoming request headers.
      */
     private void logDownloadRequest(
-            Product               product,
+            RoDProduct            product,
             Map<String, String[]> requestHeaders) {
         
         // Collect the required data not in the input product object.
@@ -120,8 +121,8 @@ public class DownloadBean
         
         // Build the POJO containing the request data.
         DownloadRequest request = new DownloadRequest.DownloadRequestBuilder()
-                .aorCode(product.getAorCode())
-                .countryName(product.getCountryName())
+                //.aorCode(product.getAorCode())
+                //.countryName(product.getCountryName())
                 .requestDate(new Date(System.currentTimeMillis()))
                 .fileSize(size)
                 .hostName(host)
@@ -153,7 +154,7 @@ public class DownloadBean
      * @return A stream attached to the requested file.
      */
     public StreamedContent getFile(
-            Product product) {
+            RoDProduct product) {
         
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("User requested download of file [ "

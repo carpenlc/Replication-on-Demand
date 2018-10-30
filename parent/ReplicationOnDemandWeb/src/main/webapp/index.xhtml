@@ -189,10 +189,17 @@ body {
 					sortBy="#{product.loadDateString}" filterMatchMode="contains">
 					<h:outputText value="#{product.loadDateString}"></h:outputText>
 				</p:column>
+				<!--
+				The file date and load date are always the same.  Get rid of the 
+				duplicate column.  
 				<p:column headerText="File Date"
 					filterBy="#{product.fileDateString}"
 					sortBy="#{product.fileDateString}" filterMatchMode="contains">
 					<h:outputText value="#{product.fileDateString}"></h:outputText>
+				</p:column>
+				-->
+				<p:column headerText="Artwork">
+				    <h:graphicImage value="#{product.thumbnailImageUrl}" />
 				</p:column>
 				<p:column headerText="Download">
 					<p:commandButton value="Download" ajax="false"
