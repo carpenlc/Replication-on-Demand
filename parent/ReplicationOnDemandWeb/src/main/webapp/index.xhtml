@@ -215,11 +215,14 @@ body {
 				               position="top" />
 				</p:column>
 				<p:column headerText="Product Download">
-					<p:commandButton value="Download" ajax="false"
+					<p:commandButton id="productDownloadButton" value="Download" ajax="false"
 						icon="ui-icon-arrowthick-1-s"
 						onClick="PrimeFaces.monitorDownload(start, stop);">
 						<p:fileDownload value="#{downloadBean.getFile(product)}" />
 					</p:commandButton>
+					<p:tooltip for="productDownloadButton" 
+				               value="Download product ISO as a zip file."
+				               position="top" />
 				</p:column>
 			</p:dataTable>
 
