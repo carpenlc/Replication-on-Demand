@@ -172,22 +172,27 @@ body {
 				-->
 				<p:column headerText="NSN" sortBy="#{product.NSN}"
 					filterBy="#{product.NSN}" filterMatchMode="contains">
-					<h:outputText value="#{product.NSN}"></h:outputText>
+					<h:outputText value="#{product.NSN}"
+					              style="center"></h:outputText>
 				</p:column>
 				<p:column headerText="NRN" sortBy="#{product.NRN}"
 					filterBy="#{product.NRN}" filterMatchMode="contains">
-					<h:outputText value="#{product.NRN}"></h:outputText>
+					<h:outputText value="#{product.NRN}"
+					              style="center"></h:outputText>
 				</p:column>
 				<p:column headerText="Edition" sortBy="#{product.edition}">
-					<h:outputText value="#{product.edition}"></h:outputText>
+					<h:outputText value="#{product.edition}"
+					              style="center"></h:outputText>
 				</p:column>
 				<p:column headerText="Media Name" sortBy="#{product.mediaName}">
-					<h:outputText value="#{product.mediaName}"></h:outputText>
+					<h:outputText value="#{product.mediaName}"
+					              style="center"></h:outputText>
 				</p:column>
 				<p:column headerText="Load Date"
 					filterBy="#{product.loadDateString}"
 					sortBy="#{product.loadDateString}" filterMatchMode="contains">
-					<h:outputText value="#{product.loadDateString}"></h:outputText>
+					<h:outputText value="#{product.loadDateString}"
+					              style="center"></h:outputText>
 				</p:column>
 				<!--
 				The file date and load date are always the same.  Get rid of the 
@@ -213,7 +218,7 @@ body {
 						    <p:fileDownload value="#{artworkDownloadBean.getFile(product)}" />
 				        </p:commandButton>
 				        <p:tooltip for="artworkDownloadButton" 
-				                   value="Download artwork and supporting files in a zip file."
+				                   value="Download artwork and supporting files as a zip file."
 				                   position="top" />
 				    </p:panelGrid>
 				</p:column>
