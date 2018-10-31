@@ -61,8 +61,8 @@ public interface ArtworkProcessorConstants {
 	/**
 	 * Default width/height for the small images.
 	 */
-	public static final int DEFAULT_SMALL_IMAGE_WIDTH = 500;
-	public static final int DEFAULT_SMALL_IMAGE_HEIGHT = 500;
+	public static final int DEFAULT_SMALL_IMAGE_WIDTH = 700;
+	public static final int DEFAULT_SMALL_IMAGE_HEIGHT = 700;
 	
 	
 }
