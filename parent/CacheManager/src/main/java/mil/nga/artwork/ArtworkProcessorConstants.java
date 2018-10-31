@@ -55,8 +55,8 @@ public interface ArtworkProcessorConstants {
 	/**
 	 * Default width/height for the thumbnail images.
 	 */
-	public static final int DEFAULT_THUMBNAIL_IMAGE_WIDTH = 100;
-	public static final int DEFAULT_THUMBNAIL_IMAGE_HEIGHT = 100;
+	public static final int DEFAULT_THUMBNAIL_IMAGE_WIDTH = 50;
+	public static final int DEFAULT_THUMBNAIL_IMAGE_HEIGHT = 50;
 	
 	/**
 	 * Default width/height for the small images.

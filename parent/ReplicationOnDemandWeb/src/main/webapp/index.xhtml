@@ -199,7 +199,7 @@ body {
 				</p:column>
 				-->
 				<p:column headerText="Artwork">
-				    <h:panelGrid columns="2">
+				    <p:panelGrid columns="2" styleClass="ui-noborder">
 				        <p:lightBox styleClass="imageBox">
 				            <h:outputLink value="#{product.smallImageUrl}">
 				                <h:graphicImage value="#{product.thumbnailImageUrl}" />
@@ -215,7 +215,7 @@ body {
 				        <p:tooltip for="artworkDownloadButton" 
 				                   value="Download artwork and supporting files in a zip file."
 				                   position="top" />
-				    </h:panelGrid>
+				    </p:panelGrid>
 				</p:column>
 				<p:column headerText="Product Download">
 					<p:commandButton id="productDownloadButton" value="Download" ajax="false"

@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.cache.RedisCacheManager;
-import mil.nga.exceptions.PropertiesNotLoadedException;
-import mil.nga.exceptions.PropertyNotFoundException;
 import mil.nga.rod.JSONSerializer;
 import mil.nga.rod.jdbc.RoDProductRecordFactory;
 import mil.nga.rod.model.RoDProduct;
