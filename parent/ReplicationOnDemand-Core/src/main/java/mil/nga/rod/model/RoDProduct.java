@@ -63,15 +63,34 @@ public class RoDProduct implements Serializable {
 	@Column(name="KEY", nullable=false)
 	private String key;
 	
-	// Fields from product
+	/**
+	 * A flat string containing a list of AORs associated with this
+	 * NRN/NSN combination.
+	 */
+	@Column(name="AOR_CODES")
+    private String aorCodes;
 	@Column(name="CLASSIFICATION")
     private String classification;
 	@Column(name="CLASSIFICATION_DESCRIPTION")
     private String classificationDescription;
+	
+	/**
+	 * A flat string containing a list of countries associated with this
+	 * NRN/NSN combination.
+	 */
+	@Column(name="COUNTRY_NAMES")
+	private String countryNames;
 	@Column(name="EDITION")
     private long   edition;
 	@Column(name="FILE_DATE")
     private Date   fileDate;
+	
+	/**
+	 * A flat string containing a list of ISO 3 character codes associated 
+	 * with this NRN/NSN combination.
+	 */
+	@Column(name="ISO3CHAR_CODES")
+	private String iso3CharCodes;
 	@Column(name="LOAD_DATE")
     private Date   loadDate;
 	@Column(name="MEDIA_NAME")
@@ -131,14 +150,14 @@ public class RoDProduct implements Serializable {
      */
     private RoDProduct(RoDProductBuilder builder) {
     	// Set fields from product
-    	// Do not store the AOR code or the country name in the cache.
-    	// this.aorCode                   = builder.aorCode;
-        // this.countryName               = builder.countryName;
+    	this.aorCodes                  = builder.aorCodes;
+        this.countryNames              = builder.countryNames;
     	this.key                       = builder.key;
         this.classification            = builder.classification;
         this.classificationDescription = builder.classificationDescription;
         this.edition                   = builder.edition;
         this.fileDate                  = builder.fileDate;
+        this.iso3CharCodes             = builder.iso3CharCodes;
         this.loadDate                  = builder.loadDate;
         this.mediaName                 = builder.mediaName;
         this.notes                     = builder.notes;
@@ -165,6 +184,15 @@ public class RoDProduct implements Serializable {
 		this.hash                      = builder.hash;
     }
    
+    /**
+     * Getter method for the list of AOR codes associated with this 
+     * product.
+     * @return The AOR codes for the product.
+     */
+    public String getAorCodes() {
+    	return aorCodes;
+    }
+    
     /**
      * Getter method for the primary key.
      * @return The primary key for the product.
@@ -196,6 +224,24 @@ public class RoDProduct implements Serializable {
 	public String getCdName() {
 		return cdName;
 	}
+    
+	/**
+     * Getter method for the list of country names associated with 
+     * this product.
+     * @return The country names for the product.
+     */
+    public String getCountryNames() {
+    	return countryNames;
+    }
+    
+	/**
+     * Getter method for the list of ISO 3 char codes associated with 
+     * this product.
+     * @return The ISO 3 char codes for the product.
+     */
+    public String getIso3CharCodes() {
+    	return iso3CharCodes;
+    }
     
 	/**
 	 * Getter method for the on-disk path to the "small" image.
@@ -448,6 +494,8 @@ public class RoDProduct implements Serializable {
         sb.append(getNRN());
         sb.append(" ], NSN => [ ");
         sb.append(getNSN());
+        sb.append(" ], Country Names => [ ");
+        sb.append(getCountryNames());
         sb.append(" ].");
         sb.append(newLine);
         sb.append("  On-Disk data:  Hash => [ ");
@@ -475,11 +523,13 @@ public class RoDProduct implements Serializable {
     public static class RoDProductBuilder {
     	
         private String     key;
+        private String     aorCodes;
         private String     classification;
         private String     classificationDescription;
-        // private String     countryName;
+        private String     countryNames;
         private long       edition;
         private Date       fileDate;
+        private String     iso3CharCodes;
         private Date       loadDate;
         private String     mediaName;
         private String     notes;
@@ -502,6 +552,15 @@ public class RoDProduct implements Serializable {
     	private String     sourceImageUrl     = "";
     	private String     hash               = "";
     	
+        /**
+         * Setter method for the list of AORs associated with the product.
+         * @param value The AORs associated with the product.
+         */
+        public RoDProductBuilder aorCodes(String value) {
+        	aorCodes = value;
+            return this;
+        }
+        
         /**
          * Setter method for the size (in bytes) of the target artwork file.
          * @param value The size of the target artwork file.
@@ -543,6 +602,16 @@ public class RoDProduct implements Serializable {
         }
 
         /**
+         * Setter method for the list of country names associated with the 
+         * product.
+         * @param value The country names associated with the product.
+         */
+        public RoDProductBuilder countryNames(String value) {
+        	countryNames = value;
+            return this;
+        }
+        
+        /**
          * Setter method for the EDITION attribute.
          * @param value The EDITION attribute.
          */
@@ -573,6 +642,16 @@ public class RoDProduct implements Serializable {
             if (value != null) {
                 hash = value;
             }
+            return this;
+        }
+        
+        /**
+         * Setter method for the list of ISO 3 char codes associated with the 
+         * product.
+         * @param value The ISO 3-char codes associated with the product.
+         */
+        public RoDProductBuilder iso3CharCodes(String value) {
+        	iso3CharCodes = value;
             return this;
         }
         

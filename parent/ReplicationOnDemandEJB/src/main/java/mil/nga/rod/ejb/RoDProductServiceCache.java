@@ -81,7 +81,7 @@ public class RoDProductServiceCache implements RoDProductServiceI, Serializable 
 	@Override
 	public RoDProduct getProduct(String key) throws ServiceUnavailableException {
 		
-		long       start   = System.currentTimeMillis();
+		//long       start   = System.currentTimeMillis();
 		RoDProduct product = null;
 		
 		if ((key != null) && (!key.isEmpty())) {
@@ -99,13 +99,14 @@ public class RoDProductServiceCache implements RoDProductServiceI, Serializable 
 			LOG.warn("Input key was null.  Returned RoDProduct will be null.");
 		}
 		
-		if (LOG.isDebugEnabled()) {
-			LOG.debug("RoDProduct with key [ "
-					+ key 
-					+ " ] retrieved from cache in [ "
-					+ (System.currentTimeMillis() - start)
-					+ " ] ms.");
-		}
+		// Causes too much disk IO
+		//if (LOG.isDebugEnabled()) {
+		//	LOG.debug("RoDProduct with key [ "
+		//			+ key 
+		//			+ " ] retrieved from cache in [ "
+		//			+ (System.currentTimeMillis() - start)
+		//			+ " ] ms.");
+		//}
 		return product;
 	}
 	

@@ -173,6 +173,80 @@ public class ProductFactory extends ConnectionProperties
         return products;
     }
     
+    /**
+     * Simple wrapper method allowing clients to retrieve a single product 
+     * that is a combination of the list of products stored in the database
+     * for a given key.  The key is a concatenation of NRN and NSN.
+     * 
+     * @param nrn The NRN to select.
+     * @param nsn The NSN to select.
+     * @return A single product matching the input NRN/NSN.
+     */
+    public Product getProduct(String nrn, String nsn) {
+    	Product p = null;
+        if ((nrn != null) && (!nrn.isEmpty())) {
+            if ((nsn != null) && (!nsn.isEmpty())) {
+            	p = getProduct(ProductUtils.getInstance().getKey(nrn, nsn));
+            }
+		    else {
+		        LOGGER.warn("Input NSN is null.  Query wasn't executed.  "
+		                + "Return array is empty.");
+		    }
+		}
+		else {
+		    LOGGER.warn("Input NRN is null.  Query wasn't executed.  "
+		            + "Return array is empty.");     
+		}
+        return p;
+    }
+    
+    /**
+     * Simple wrapper method allowing clients to retrieve a single product 
+     * that is a combination of the list of products stored in the database
+     * for a given key.  The key is a concatenation of NRN and NSN.
+     *   
+     * @param key Unique product key.
+     * @return A single product matching the input key.
+     */
+    public Product getProduct(String key) {
+    	Product p = null;
+    	List<Product> products = getProducts(key);
+    	if ((products != null) && (products.size() > 0)) { 
+    		Product firstProd = products.get(0);
+    		p = new Product.ProductBuilder()
+    				 .aorCode(
+    						 ProductUtils.getInstance().getSimpleString(
+    					     ProductUtils.getInstance().getAorCodes(
+    					    		 products)))
+                     .classification(firstProd.getClassification())
+                     .classificationDescription(
+                    		 firstProd.getClassificationDescription())
+                     .countryName(
+                    		 ProductUtils.getInstance().getSimpleString(
+    					     ProductUtils.getInstance().getCountryNames(
+    					    		 products)))
+                     .edition(firstProd.getEdition())
+                     .fileDate(firstProd.getFileDate())
+                     .iso3Char(
+                    		 ProductUtils.getInstance().getSimpleString(
+    					     ProductUtils.getInstance().getISO3CharCodes(
+    					    		 products)))
+                     .loadDate(firstProd.getLoadDate())
+                     .mediaName(firstProd.getMediaName())
+                     .notes(firstProd.getNotes())
+                     .nsn(firstProd.getNSN())
+                     .nrn(firstProd.getNRN())
+                     .path(firstProd.getPath())
+                     .productType(firstProd.getProductType())
+                     .releasability(firstProd.getReleasability())
+                     .releasabilityDescription(
+                    		 firstProd.getReleasabilityDescription())
+                     .size(firstProd.getSize())
+                     .url(firstProd.getURL())
+                     .build();
+    	}
+    	return p;
+    }
     
     /**
      * Simple wrapper method allowing clients to retrieve a list of products 
@@ -509,11 +583,13 @@ public class ProductFactory extends ConnectionProperties
                 // Now load the return product list.
                 if (uniqueProducts.size() > 0) {
 	                for (String nrn : uniqueProducts.keySet()) {
-	                	List<Product> prods = getProducts(
+	                	
+	                	Product p = getProduct(
 	                			nrn, 
 	                			uniqueProducts.get(nrn));
-	                	if (prods.size() > 0) {
-	                		products.add(prods.get(0));
+
+	                	if (p != null) {
+	                		products.add(p);
 	                	}
 	                	else {
 	                		LOGGER.warn("Unable to retrieve unique product "

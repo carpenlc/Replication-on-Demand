@@ -1,7 +1,9 @@
 package mil.nga.rod.util;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,6 +199,77 @@ public class ProductUtils {
         }
         return NSN;
     }
+    
+    /**
+     * Concert a list of Strings into a comma-separated String.
+     * @param list A list of String values.
+     * @return A comma-separated list.
+     */
+    public String getSimpleString(Set<String> list) {
+    	String simpleString = "";
+    	if ((list != null) && (list.size() > 0)) { 
+    		simpleString = String.join(",", list);
+    	}
+    	return simpleString;
+    }
+    
+    /**
+     * Take a <code>List</code> of <code>Product</code> objects and 
+     * construct a <code>Set</code> containing the list of various 
+     * country names residing in the list of Products.
+     * 
+     * Using a Set instead of a List because we don't want duplicates.
+     * @param products
+     * @return
+     */
+    public Set<String> getCountryNames(List<Product> products) {
+    	Set<String> names = new HashSet<String>();
+    	if ((products != null) && (products.size() > 0)) {
+    		for (Product p : products) {
+    			names.add(p.getCountryName());
+    		}
+    	}
+    	return names;
+    }
+    
+    /**
+     * Take a <code>List</code> of <code>Product</code> objects and 
+     * construct a <code>Set</code> containing the list of various 
+     * ISO 3 character codes residing in the list of Products.
+     * 
+     * Using a Set instead of a List because we don't want duplicates.
+     * @param products
+     * @return
+     */
+    public Set<String> getISO3CharCodes(List<Product> products) {
+    	Set<String> codes = new HashSet<String>();
+    	if ((products != null) && (products.size() > 0)) {
+    		for (Product p : products) {
+    			codes.add(p.getIso3Char().toUpperCase());
+    		}
+    	}
+    	return codes;
+    }
+    
+    /**
+     * Take a <code>List</code> of <code>Product</code> objects and 
+     * construct a <code>Set</code> containing the list of various 
+     * AOR codes residing in the list of Products.
+     * 
+     * Using a Set instead of a List because we don't want duplicates.
+     * @param products
+     * @return
+     */
+    public Set<String> getAorCodes(List<Product> products) {
+    	Set<String> codes = new HashSet<String>();
+    	if ((products != null) && (products.size() > 0)) {
+    		for (Product p : products) {
+    			codes.add(p.getAorCode().toUpperCase());
+    		}
+    	}
+    	return codes;
+    }
+    
     
     /**
      * Static inner class used to construct the Singleton object.  This class
