@@ -907,10 +907,13 @@ public class RoDProduct implements Serializable {
     	 */
     	public RoDProductBuilder product(Product value) {
     		if (value != null) {
+    			aorCodes(value.getAorCode());
     			classification(value.getClassification());
     	        classificationDescription(value.getClassificationDescription());
+    	        countryNames(value.getCountryName());
     	        edition(value.getEdition());
     	        fileDate(value.getFileDate());
+    	        iso3CharCodes(value.getIso3Char());
     	        loadDate(value.getLoadDate()); 
     	        mediaName(value.getMediaName());
     	        notes(value.getNotes());
