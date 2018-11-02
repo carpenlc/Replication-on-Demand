@@ -134,6 +134,16 @@ body {
 				<f:facet name="header">
 					<h:outputText value="Available ISOs"></h:outputText>
 				</f:facet>
+				<p:column>
+					<p:lightBox styleClass="imageBox" id="artworkLightbox">
+				            <h:outputLink value="#{product.smallImageUrl}">
+				                <h:graphicImage value="#{product.thumbnailImageUrl}" />
+				            </h:outputLink>
+				    </p:lightBox>
+				    <p:tooltip for="artworkLightbox" 
+				                   value="Click to see larger image."
+				                   position="top" />
+				</p:column>
 				<p:column headerText="Product" 
 				          filterMatchMode="exact"
 					      sortBy="#{product.productType}" 
@@ -209,24 +219,17 @@ body {
 					<h:outputText value="#{product.fileDateString}"></h:outputText>
 				</p:column>
 				-->
-				<p:column headerText="Artwork">
-				    <p:panelGrid columns="2" styleClass="ui-noborder">
-				        <p:lightBox styleClass="imageBox">
-				            <h:outputLink value="#{product.smallImageUrl}">
-				                <h:graphicImage value="#{product.thumbnailImageUrl}" />
-				            </h:outputLink>
-				        </p:lightBox>
-				        <p:commandButton id="artworkDownloadButton" 
-				                         value="Download" 
-				                         ajax="false"
-						                 icon="ui-icon-arrowthick-1-s"
-						                 onClick="PrimeFaces.monitorDownload(start, stop);" >
-						    <p:fileDownload value="#{artworkDownloadBean.getFile(product)}" />
-				        </p:commandButton>
+				<p:column headerText="Artwork">    
+				    <p:commandButton id="artworkDownloadButton" 
+				                     value="Download" 
+				                     ajax="false"
+						             icon="ui-icon-arrowthick-1-s"
+						             onClick="PrimeFaces.monitorDownload(start, stop);" >
+			            <p:fileDownload value="#{artworkDownloadBean.getFile(product)}" />
+				    </p:commandButton>
 				        <p:tooltip for="artworkDownloadButton" 
 				                   value="Download artwork and supporting files as a zip file."
 				                   position="top" />
-				    </p:panelGrid>
 				</p:column>
 				<p:column headerText="Product Download">
 					<p:commandButton id="productDownloadButton" value="Download" ajax="false"
