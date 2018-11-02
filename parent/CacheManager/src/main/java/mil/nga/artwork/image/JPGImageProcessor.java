@@ -108,11 +108,14 @@ public class JPGImageProcessor extends ImageProcessor
 					// rectangular with lots of white space and looks 
 					// like crap when displayed on the web site.  
 					// We're going to crop it to a square before scaling.
-					image = image.getSubimage(
-							0,  // start X 
-							0,  // start Y
-							image.getWidth(), 
-							image.getWidth());
+					if (image.getHeight() > image.getWidth()) {
+						int height = image.getHeight()/2;
+						image = image.getSubimage(
+								0,  // start X 
+								0,  // start Y
+								image.getWidth(), 
+								height);
+					}
 					
 				}
 				catch (FileNotFoundException fnfe) {
