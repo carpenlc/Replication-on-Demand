@@ -117,6 +117,10 @@ body {
 		<p:growl id="messages" showDetail="true" sticky="true"
 			closeable="true" />
 
+        <p:panel styleClass="top-aligned">
+        
+        </p:panel>
+        
 		<p:panel styleClass="top-aligned">
 			<p:dataTable id="filteredProductListDT"
 				widgetVar="filteredProductsDataTable"
@@ -130,8 +134,10 @@ body {
 				<f:facet name="header">
 					<h:outputText value="Available ISOs"></h:outputText>
 				</f:facet>
-				<p:column headerText="Product" filterMatchMode="exact"
-					sortBy="#{product.productType}" filterBy="#{product.productType}">
+				<p:column headerText="Product" 
+				          filterMatchMode="exact"
+					      sortBy="#{product.productType}" 
+					      filterBy="#{product.productType}">
 					<f:facet name="filter">
 						<p:selectOneMenu
 							onchange="PF('filteredProductsDataTable').filter()">

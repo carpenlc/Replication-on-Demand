@@ -103,6 +103,17 @@ public class JPGImageProcessor extends ImageProcessor
 			if (Files.exists(p)) {
 				try (InputStream is = Files.newInputStream(p)) {
 					image = ImageIO.read(is);
+					
+					// The artwork used in the CD/DVD jewel case is 
+					// rectangular with lots of white space and looks 
+					// like crap when displayed on the web site.  
+					// We're going to crop it to a square before scaling.
+					image = image.getSubimage(
+							0,  // start X 
+							0,  // start Y
+							image.getWidth(), 
+							image.getWidth());
+					
 				}
 				catch (FileNotFoundException fnfe) {
 					LOG.error("Unexpected FileNotFoundException encountered while "

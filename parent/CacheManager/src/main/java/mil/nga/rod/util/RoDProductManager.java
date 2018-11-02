@@ -294,13 +294,9 @@ public class RoDProductManager {
 				count++;
 				try {
 					
-					// Go get the raw Product record.
-					List<Product> records = ProductFactory.getInstance()
-											.getProducts(key);
-					
-					if ((records != null) && (records.size() > 0)) {
-						Product product = records.get(0);
-						if (isUpdateRequired(product)) {
+					Product product = ProductFactory.getInstance().getProduct(key);
+					if (product != null) {
+						if (isUpdateRequired(product)) {	
 							
 							// Get the on-disk information (size, hash, etc.)
 							QueryRequestAccelerator accelerator = 
@@ -327,9 +323,8 @@ public class RoDProductManager {
 						}
 					}
 					else {
-						LOGGER.error("Unable to retrieve Product record for "
-								+ "key => [ "
-								+ key
+						LOGGER.error("Unable to find product with key value => [ "
+								+ key 
 								+ " ].");
 						errorCount++;
 					}

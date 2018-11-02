@@ -103,6 +103,16 @@ public class PDFImageProcessor extends ImageProcessor
 				if ((doc != null) && (doc.getNumberOfPages() > 0)) {
 					PDFRenderer renderer = new PDFRenderer(doc);
 					image = renderer.renderImage(0);
+					
+					// The artwork used in the CD/DVD jewel case is 
+					// rectangular with lots of white space and looks 
+					// like crap when displayed on the web site.  
+					// We're going to crop it to a square before scaling.
+					image = image.getSubimage(
+							0,  // start X 
+							0,  // start Y
+							image.getWidth(), 
+							image.getWidth());
 				}
 				else {
 					LOG.error("Unable to open the target PDF document.  The "
