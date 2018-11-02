@@ -227,9 +227,9 @@ body {
 						             onClick="PrimeFaces.monitorDownload(start, stop);" >
 			            <p:fileDownload value="#{artworkDownloadBean.getFile(product)}" />
 				    </p:commandButton>
-				        <p:tooltip for="artworkDownloadButton" 
-				                   value="Download artwork and supporting files as a zip file."
-				                   position="top" />
+				    <p:tooltip for="artworkDownloadButton" 
+				               value="Download artwork and supporting files as a zip file."
+				               position="top" />
 				</p:column>
 				<p:column headerText="Product Download">
 					<p:commandButton id="productDownloadButton" value="Download" ajax="false"
