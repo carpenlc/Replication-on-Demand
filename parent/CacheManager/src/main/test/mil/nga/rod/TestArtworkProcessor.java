@@ -71,7 +71,7 @@ public class TestArtworkProcessor {
 			ArtworkProcessor processor = new ArtworkProcessor();
 			processor.process(art);
 			
-			//System.out.println(processor.getBaseUrl());
+			System.out.println("Done");
 			//System.out.println(processor.getBaseOutputPath());
 			//System.out.println(processor.getOutputPath());
 			//System.out.println(processor.getBaseFilename());

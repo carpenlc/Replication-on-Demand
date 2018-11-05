@@ -178,10 +178,12 @@ public class CacheManager {
 							.deserializeToRoDProduct(serializedProduct);
 					
 					if (product != null) {
+						
 						RoDProduct productDS = 
 								RoDProductRecordFactory
 									.getInstance()
 									.getProduct(key);
+						
 						if (productDS != null) {
 							if ((productDS.getHash() != null) && 
 									(productDS.getHash().isEmpty())) {
