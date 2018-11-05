@@ -183,16 +183,25 @@ public class CacheManager {
 									.getInstance()
 									.getProduct(key);
 						if (productDS != null) {
-							if (!productDS.getHash()
-									.equalsIgnoreCase(product.getHash())) {
-								// Simply replace the existing cache record
-								// with a serialized version of the current 
-								// record from the datastore.
-								RedisCacheManager.getInstance().put(
-										key,
-										JSONSerializer.getInstance().serialize(
-												productDS));
-								updatedRecs++;
+							if ((productDS.getHash() != null) && 
+									(productDS.getHash().isEmpty())) {
+								if (!productDS.getHash()
+										.equalsIgnoreCase(product.getHash())) {
+									// Simply replace the existing cache record
+									// with a serialized version of the current 
+									// record from the datastore.
+									RedisCacheManager.getInstance().put(
+											key,
+											JSONSerializer.getInstance().serialize(
+													productDS));
+									updatedRecs++;
+								}
+							}
+							else {
+								LOGGER.warn("Hash for RoDProduct record with "
+										+ "key => [ "
+										+ productDS.getKey()
+										+ " ] is null or empty.");
 							}
 						}
 						else {
