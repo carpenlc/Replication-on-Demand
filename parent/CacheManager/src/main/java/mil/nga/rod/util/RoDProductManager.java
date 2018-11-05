@@ -56,7 +56,7 @@ public class RoDProductManager {
      * @throws IOException Thrown if there are issues accessing the on-disk 
      * file.
      */
-    public boolean isUpdateRequired(Product record) throws IOException {
+    public boolean isUpdateRequired(RoDProduct record) throws IOException {
         
         boolean needsUpdate = false;
         
@@ -294,10 +294,15 @@ public class RoDProductManager {
 				count++;
 				try {
 					
-					Product product = ProductFactory.getInstance().getProduct(key);
-					if (product != null) {
-						if (isUpdateRequired(product)) {	
-							
+					// The file sizes stored in the Product table are unreliable.
+					// Use the file sized from the ROD_PRODUCT table.
+					RoDProduct rProduct = RoDProductRecordFactory
+											.getInstance()
+											.getProduct(key);
+					
+					if (rProduct != null) {
+						if (isUpdateRequired(rProduct)) {	
+							Product product = ProductFactory.getInstance().getProduct(key);
 							// Get the on-disk information (size, hash, etc.)
 							QueryRequestAccelerator accelerator = 
 									AcceleratorRecordFactory
