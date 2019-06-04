@@ -227,7 +227,7 @@ public class RoDProductService implements RoDProductServiceI, Serializable {
 			}
 			if (datasource != null) {
 				try {
-					products = cache.getProducts();
+					products = datasource.getProducts();
 				}
 				catch (NoResultException nre) {
 					LOG.error("The backing datasource is empty.");
