@@ -412,7 +412,7 @@ public class AcceleratorJDBCRecordFactory
     }
     
     /**
-     * IUpdate an existing query request accelerator record in the backing 
+     * Update an existing query request accelerator record in the backing 
      * data store.   
      * @param record The record to insert.
      */
