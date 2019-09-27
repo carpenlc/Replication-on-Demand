@@ -77,14 +77,23 @@ public class FilteredProductTypeView
      * the internal lists that are displayed in the target web page.
      */
     @PostConstruct
-    public void initialize() throws ServiceUnavailableException {
+    public void initialize() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Constructor called.");
         }
-        products = super.loadAllProducts();
-        availableProductTypes = super.loadProductTypes();
-        //availableCountryNames = super.loadCountries();
-        //availableAORs = super.loadAORCodes();
+        try {
+	        products = super.loadAllProducts();
+	        availableProductTypes = super.loadProductTypes();
+	        //availableCountryNames = super.loadCountries();
+	        //availableAORs = super.loadAORCodes();
+		}
+		catch (ServiceUnavailableException sue) {
+			LOGGER.error("Unable to load products from the target data "
+					+ "source.  ServiceUnavailableException raised.  "
+					+ "error message => [ "
+					+ sue.getMessage()
+					+ " ].");
+		}
     }
     
     /**

@@ -84,13 +84,22 @@ public class ProductTypeView
      * the internal lists that are displayed in the target web page.
      */
     @PostConstruct
-    public void initialize() throws ServiceUnavailableException {
+    public void initialize() {
         //productTypes = initProductTypes();
         //aorCodes = initAorCodes();
         //countries = initCountries();
-        allProducts = initProducts();
-        filteredProducts = allProducts;
-        logicalOperator = "AND";
+    	try {
+	        allProducts = initProducts();
+	        filteredProducts = allProducts;
+	        logicalOperator = "AND";
+    	}
+    	catch (ServiceUnavailableException sue) {
+    		LOGGER.error("Unable to load products from the target data "
+    				+ "source.  ServiceUnavailableException raised.  "
+    				+ "error message => [ "
+    				+ sue.getMessage()
+    				+ " ].");
+    	}
     }
     
     /**
