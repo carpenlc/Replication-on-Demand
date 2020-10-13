@@ -23,7 +23,7 @@
         <application.version>1.0-SNAPSHOT</application.version>
         <encoding>UTF-8</encoding>
         <ejb.ejbVersion>3.1</ejb.ejbVersion>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <jedis.version>2.9.0</jedis.version>
         <jdk.version>1.8</jdk.version>
         <javaee.version>7.0</javaee.version>
