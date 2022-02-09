@@ -33,7 +33,7 @@
         <primefaces.version>6.0</primefaces.version>
         <commons.codec.version>1.10</commons.codec.version>
         <java-image-scaling.version>0.8.6</java-image-scaling.version>
-        <hibernate-core.version>5.3.6.Final</hibernate-core.version>
+        <hibernate-core.version>5.4.24.Final</hibernate-core.version>
         <commons.codec.version>1.10</commons.codec.version>
         <commons.pool-2.version>2.4.2</commons.pool-2.version>
         <pdfbox.version>2.0.17</pdfbox.version>
